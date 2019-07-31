@@ -19,6 +19,7 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(SwaggerDocument));
 app.get('/', (req, res) => {
   res.status(200).json({ status: 200, message: 'Welcome to Authors Haven' });
 });
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(SwaggerDocument));
 
 app.use((req, res) => {
   res.status(404).json({ status: 404, error: 'route not found' });
