@@ -4,6 +4,7 @@
   "description": "A Social platform for the creative at heart",
   "main": "index.js",
   "scripts": {
+    "build": "rm -rf build && babel -d ./build ./src -s",
     "test": "NODE_ENV=test mocha  --require @babel/register  ./src/tests/*.js --exit",
     "dev": "nodemon --exec babel-node ./src/index.js"
   },
