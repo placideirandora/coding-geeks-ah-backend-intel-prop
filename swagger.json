@@ -9,7 +9,7 @@
             "url": "https://opensource.org/licenses/MIT"
         }
     },
-    "basePath": "/api",
+    "basePath": "/",
     "tags": [],
     "schemes": [
         "http",
@@ -21,6 +21,31 @@
     "produces": [
         "application/json"
     ],
-    "paths": {}
+    "paths": {
+        "/": {
+            "get": {
+                "parameters": [],
+                "tags": [
+                    "Blog"
+                ],
+                "summary": "Welcome to Authors Haven",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "properties": {
+                                "status": {
+                                    "type": "integer"
+                                },
+                                "message": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
     
 }
