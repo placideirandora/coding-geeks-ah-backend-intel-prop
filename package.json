@@ -5,8 +5,12 @@
   "main": "index.js",
   "scripts": {
     "build": "rm -rf build && babel -d ./build ./src -s",
+    "start": "node ./build/index.js",
     "test": "NODE_ENV=test mocha  --require @babel/register  ./src/tests/*.js --exit",
     "dev": "nodemon --exec babel-node ./src/index.js"
+  },
+  "engines": {
+    "node": "10.16.0"
   },
   "author": "Andela Simulations Programme",
   "license": "MIT",
