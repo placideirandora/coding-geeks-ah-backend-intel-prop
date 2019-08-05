@@ -37,5 +37,7 @@ node_modules
 #  dotenv
 .env
 
+build
+
 # nyc_output
 .nyc_output
