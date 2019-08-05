@@ -4,9 +4,10 @@
   "description": "A Social platform for the creative at heart",
   "main": "index.js",
   "scripts": {
+    "dev": "nodemon --exec babel-node ./src/index.js",
+    "coverage": "nyc npm test && nyc report --reporter=text-lcov | coveralls",
     "build": "rm -rf build && babel -d ./build ./src -s",
-    "test": "NODE_ENV=test mocha  --require @babel/register  ./src/tests/*.js --exit",
-    "dev": "nodemon --exec babel-node ./src/index.js"
+    "test": "NODE_ENV=test mocha  --require @babel/register  ./src/tests/*.js --exit"
   },
   "author": "Andela Simulations Programme",
   "license": "MIT",
@@ -40,11 +41,13 @@
     "@babel/preset-env": "^7.5.5",
     "chai": "^4.2.0",
     "chai-http": "^4.3.0",
+    "coveralls": "^3.0.5",
     "eslint": "^6.1.0",
     "eslint-config-airbnb-base": "^13.2.0",
     "eslint-plugin-import": "^2.18.2",
     "mocha": "^6.2.0",
     "morgan": "^1.9.1",
-    "nodemon": "^1.19.1"
+    "nodemon": "^1.19.1",
+    "nyc": "^14.1.1"
   }
 }
