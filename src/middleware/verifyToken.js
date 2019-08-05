@@ -1,4 +1,3 @@
-/* eslint-disable import/prefer-default-export */
 import jwt from 'jsonwebtoken';
 
 /**
@@ -6,7 +5,7 @@ import jwt from 'jsonwebtoken';
  * - Gets token from req.params and verifies from requests
  */
 
-export const verifyToken = (req, res, next) => {
+const verifyToken = (req, res, next) => {
   const token = req.headers.authorization;
   if (!token || typeof token === 'undefined') {
     res.status(401).json({ status: 401, error: 'Please login or register' });
@@ -15,10 +14,10 @@ export const verifyToken = (req, res, next) => {
       if (error) {
         return res.status(403).json({ status: 403, error: `${error.message}` });
       }
-      req.id = decoded.id;
-      req.email = decoded.email;
-      req.role = decoded.role;
+      req.userData = decoded;
     });
     next();
   }
 };
+
+export default verifyToken;
