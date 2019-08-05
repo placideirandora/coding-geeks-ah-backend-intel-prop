@@ -1,0 +1,51 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "version": "1.0.0",
+        "title": "Authors Haven",
+        "description": "Authors Haven is Social platform for the creative at heart",
+        "license": {
+            "name": "MIT",
+            "url": "https://opensource.org/licenses/MIT"
+        }
+    },
+    "basePath": "/",
+    "tags": [],
+    "schemes": [
+        "http",
+        "https"
+    ],
+    "consumes": [
+        "application/json"
+    ],
+    "produces": [
+        "application/json"
+    ],
+    "paths": {
+        "/": {
+            "get": {
+                "parameters": [],
+                "tags": [
+                    "Blog"
+                ],
+                "summary": "Welcome to Authors Haven",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "properties": {
+                                "status": {
+                                    "type": "integer"
+                                },
+                                "message": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+    
+}
