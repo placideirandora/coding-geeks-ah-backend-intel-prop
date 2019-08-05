@@ -8,7 +8,7 @@
     "coverage": "nyc npm test && nyc report --reporter=text-lcov | coveralls",
     "build": "rm -rf build && babel -d ./build ./src -s",
     "start": "npm run build && node ./build/index.js",
-    "dev": "nodemon --exec babel-node ./src/index.js"
+    "dev": "nodemon --exec babel-node ./src/index.js",
     "test": "NODE_ENV=test mocha  --require @babel/register  ./src/tests/*.js --exit"
   },
   "engines": {
