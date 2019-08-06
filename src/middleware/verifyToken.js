@@ -1,13 +1,8 @@
 import jwt from 'jsonwebtoken';
 
-/**
- * @method verifyToken
- * - Gets token from req.params and verifies from requests
- */
-
 const verifyToken = (req, res, next) => {
   const token = req.headers.authorization;
-  if (!token || typeof token === 'undefined') {
+  if (!token) {
     res.status(401).json({ status: 401, error: 'Please login or register' });
   } else {
     jwt.verify(token, process.env.SECRET_KEY, (error, decoded) => {
