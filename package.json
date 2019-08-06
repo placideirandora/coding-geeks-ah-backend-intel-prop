@@ -8,7 +8,7 @@
     "coverage": "nyc npm test && nyc report --reporter=text-lcov | coveralls",
     "build": "rm -rf build && babel -d ./build ./src -s",
     "start": "npm run build && node ./build/index.js",
-    "test": "NODE_ENV=test mocha  --require @babel/register  ./src/tests/*.js --exit"
+    "test": "cross-env NODE_ENV=test mocha  --require @babel/register  ./src/tests/*.js --exit"
   },
   "engines": {
     "node": "10.16.0"
@@ -19,6 +19,7 @@
     "bcrypt": "^3.0.6",
     "body-parser": "^1.19.0",
     "cors": "^2.8.4",
+    "cross-env": "^5.2.0",
     "dotenv": "^8.0.0",
     "ejs": "^2.6.1",
     "errorhandler": "^1.5.0",
@@ -51,7 +52,7 @@
     "chai": "^4.2.0",
     "chai-http": "^4.3.0",
     "coveralls": "^3.0.5",
-    "eslint": "^6.1.0",
+    "eslint": "^4.19.1",
     "eslint-config-airbnb-base": "^13.2.0",
     "eslint-plugin-import": "^2.18.2",
     "mocha": "^6.2.0",
