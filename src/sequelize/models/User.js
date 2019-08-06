@@ -36,7 +36,11 @@ export default (sequelize, DataTypes) => {
   },
   {
     timestamps: false,
+<<<<<<< HEAD
   });
+=======
+  },);
+>>>>>>> feat(signup endpoint): user should signup
   User.associate = () => {
     // Association definitions here
   };
