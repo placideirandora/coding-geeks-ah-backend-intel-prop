@@ -8,11 +8,15 @@
     "coverage": "nyc npm test && nyc report --reporter=text-lcov | coveralls",
     "build": "rm -rf build && babel -d ./build ./src -s",
     "start": "npm run build && node ./build/index.js",
+<<<<<<< HEAD
     "pretest": "cross-env NODE_ENV=test npm run down && NODE_ENV=test npm run migrate  && NODE_ENV=test npm run seed",
     "test": "cross-env NODE_ENV=test nyc --reporter=text mocha  --require @babel/register --require @babel/polyfill  ./src/tests/*.js --timeout 1600 --exit",
     "down": "cross-env NODE_ENV=test sequelize db:migrate:undo",
     "migrate": "cross-env NODE_ENV=test sequelize db:migrate",
     "seed": "sequelize db:seed:all"
+=======
+    "test": "cross-env NODE_ENV=test mocha  --require @babel/register  ./src/tests/*.js --exit"
+>>>>>>> fix(testing bug): tests not runnig
   },
   "engines": {
     "node": "10.16.0"
