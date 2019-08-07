@@ -1,6 +1,6 @@
 import { config } from 'dotenv';
 import { User } from '../sequelize/models';
-import { hashedPassword } from '../helpers/auth';
+import { hashedPassword, genToken } from '../helpers/auth';
 
 config();
 
@@ -23,25 +23,28 @@ class Authentication {
       if (user) {
         return res.status(409).json({
           status: 'failed',
-          message: `Email ${email} already exists`
+          error: `Email ${email} already exists`
         });
       }
 
       if (name) {
         return res.status(409).json({
           status: 'failed',
-          message: `userName ${userName} already taken`
+          error: `userName ${userName} already taken`
         });
       }
 
       req.body.password = hashedPassword(password);
 
       const createdUser = await User.create(req.body);
+      const userToken = genToken(createdUser, process.env.SECRET_KEY);
 
       return res.status(201).json({
         status: 'success',
         message: 'User created',
         data: {
+          token: userToken,
+          id: createdUser.id,
           firstName: createdUser.firstName,
           lastName: createdUser.lastName,
           userName: createdUser.userName,
@@ -50,7 +53,7 @@ class Authentication {
         }
       });
     } catch (err) {
-      console.log(err);
+      // console.log(err);
     }
   }
 }

@@ -36,7 +36,7 @@ export default (sequelize, DataTypes) => {
   },
   {
     timestamps: false,
-  },);
+  });
   User.associate = () => {
     // Association definitions here
   };

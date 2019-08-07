@@ -45,6 +45,124 @@
                     }
                 }
             }
+        },
+        "/api/v1/users": {
+            "post": {
+                "tags": [
+                    "Users"
+                ],
+                "description": "Create new user in system",
+                "parameters": [{
+                    "name": "user",
+                    "in": "body",
+                    "description": "User that we want to create",
+                    "schema": {
+                        "required": [
+                            "firstName",
+                            "lastName",
+                            "userName",
+                            "email",
+                            "password",
+                            "confirmPassword"
+                        ],
+                        "properties": {
+                            "firstName": {
+                                "type": "string"
+                            },
+                            "lastName": {
+                                "type": "string"
+                            },
+                            "userName": {
+                                "type": "string"
+                            },
+                            "email": {
+                                "type": "string"
+                            },
+                            "password": {
+                                "type": "string"
+                            },
+                            "confirmPassword": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                }],
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Successfully created new User",
+                        "schema": {
+                            "properties": {
+                                "status": {
+                                    "type": "string"
+                                },
+                                "message": {
+                                    "type": "string"
+                                },
+                                "data": {
+                                    "$ref": "#/definitions/User"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Missing fields or invalid value",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+
+                    "409": {
+                        "description": "User already exist",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "User": {
+            "properties": {
+                "token": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "firstName": {
+                    "type": "string"
+                },
+                "lastName": {
+                    "type": "string"
+                },
+                "userName": {
+                    "type": "string",
+                    "uniqueItems": true
+                },
+                "email": {
+                    "type": "string",
+                    "uniqueItems": true
+                },
+                "role": {
+                    "type": "string"
+                }
+
+            }
+        },
+        "Error": {
+            "properties": {
+                "status": {
+                    "type": "integer"
+                },
+                "error": {
+                    "type": "string"
+                }
+
+            }
         }
     }
     

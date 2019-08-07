@@ -29,7 +29,12 @@ app.use((req, res) => {
 });
 
 app.use((error, req, res, next) => {
-  res.status(500).json({ status: 500, error: error.message, next });
+  res.status(500)
+    .json({
+      status: 500,
+      error: 'Oops! Hang on! The problem is on our side. We are working on it',
+      next
+    });
 });
 
 const PORT = process.env.PORT || 3000;

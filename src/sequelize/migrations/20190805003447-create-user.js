@@ -1,4 +1,4 @@
-export const up = (queryInterface, Sequelize) => queryInterface.createTable('User', {
+export const up = (queryInterface, Sequelize) => queryInterface.createTable('Users', {
   id: {
     allowNull: false,
     autoIncrement: true,
@@ -36,4 +36,4 @@ export const up = (queryInterface, Sequelize) => queryInterface.createTable('Use
   timestamps: false,
 },);
 
-export const down = queryInterface => queryInterface.dropTable('User');
+export const down = queryInterface => queryInterface.dropTable('Users');

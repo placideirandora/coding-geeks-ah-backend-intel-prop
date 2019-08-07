@@ -8,6 +8,7 @@ export default {
      * @param {object} next
      * @returns {object} validation oject
      */
+
   signupValidation(req, res, next) {
     const userSchema = Joi.object().keys({
       firstName: Joi.string()
@@ -29,26 +30,36 @@ export default {
         .email({ minDomainAtoms: 2 })
         .required(),
       password: Joi.string()
-        // eslint-disable-next-line no-useless-escape
-        .regex(/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/)
-        .required(),
-      confirmPassword: Joi.string()
-        .regex(/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/)
-        .valid(Joi.ref('password'))
         .required()
-        .strict()
+        .regex(/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/)
+        .error((errors) => {
+          errors.forEach((err) => {
+            switch (err.type) {
+              case 'string.regex.base':
+                err.message = 'password must be at least 8 characters containing at least a number, Upper and lower cases';
+                break;
+              default:
+                break;
+            }
+          });
+          return errors;
+        }),
+
+      confirmPassword: Joi.string()
+        .valid(Joi.ref('password')).error(() => 'Passwords must much')
     });
 
     const options = {
       language: {
-        key: '{{key}} '
+        key: '{{key}} ',
+
       }
     };
     const { error } = Joi.validate(req.body, userSchema, options);
     if (error) {
-      res.status(400).json({
-        status: 'failled',
-        message: error.details[0].message
+      return res.status(400).json({
+        status: 'failed',
+        error: error.details[0].message
       });
     }
     next();

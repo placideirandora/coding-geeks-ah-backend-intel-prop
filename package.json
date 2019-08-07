@@ -8,7 +8,11 @@
     "coverage": "nyc npm test && nyc report --reporter=text-lcov | coveralls",
     "build": "rm -rf build && babel -d ./build ./src -s",
     "start": "npm run build && node ./build/index.js",
-    "test": "cross-env NODE_ENV=test mocha  --require @babel/register  ./src/tests/*.js --exit"
+    "pretest": "cross-env NODE_ENV=test npm run down && NODE_ENV=test npm run migrate  && NODE_ENV=test npm run seed",
+    "test": "cross-env NODE_ENV=test nyc --reporter=text mocha  --require @babel/register --require @babel/polyfill  ./src/tests/*.js --no-timeout --exit",
+    "down": "cross-env NODE_ENV=test sequelize db:migrate:undo",
+    "migrate": "cross-env NODE_ENV=test sequelize db:migrate",
+    "seed": "sequelize db:seed:all"
   },
   "engines": {
     "node": "10.16.0"
@@ -47,6 +51,7 @@
     "@babel/cli": "^7.5.5",
     "@babel/core": "^7.5.5",
     "@babel/node": "^7.5.5",
+    "@babel/polyfill": "^7.4.4",
     "@babel/preset-env": "^7.5.5",
     "@babel/register": "^7.5.5",
     "chai": "^4.2.0",
@@ -56,6 +61,7 @@
     "eslint-config-airbnb-base": "^13.2.0",
     "eslint-plugin-import": "^2.18.2",
     "mocha": "^6.2.0",
-    "nodemon": "^1.19.1"
+    "nodemon": "^1.19.1",
+    "nyc": "^14.1.1"
   }
 }
