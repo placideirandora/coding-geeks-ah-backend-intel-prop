@@ -6,7 +6,6 @@ export default {
     email: 'jamal@gmail.com',
     password: 'Jamal123',
     confirmPassword: 'Jamal123'
-<<<<<<< HEAD
   },
   missingFirstName: {
     lastName: 'Kadhuwa',
@@ -154,7 +153,4 @@ export default {
     password: 'Jamal123',
     confirmPassword: 'Jamal123'
   },
-=======
-  }
->>>>>>> fix(testing bug): tests not runnig
 };

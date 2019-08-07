@@ -37,10 +37,14 @@ export default (sequelize, DataTypes) => {
   {
     timestamps: false,
 <<<<<<< HEAD
+<<<<<<< HEAD
   });
 =======
   },);
 >>>>>>> feat(signup endpoint): user should signup
+=======
+  });
+>>>>>>> feat(User validation): Validate user upon registration
   User.associate = () => {
     // Association definitions here
   };

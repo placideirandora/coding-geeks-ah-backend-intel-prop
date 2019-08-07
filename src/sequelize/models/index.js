@@ -1,4 +1,5 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 const fs = require('fs');
 const path = require('path');
 const Sequelize = require('sequelize');
@@ -11,6 +12,14 @@ const fs = require('fs');
 const path = require('path');
 const Sequelize = require('sequelize');
 >>>>>>> feat(signup endpoint): user should signup
+=======
+const fs = require('fs');
+const path = require('path');
+const Sequelize = require('sequelize');
+const dotenv = require('dotenv');
+
+dotenv.config();
+>>>>>>> feat(User validation): Validate user upon registration
 
 const basename = path.basename(__filename);
 const env = process.env.NODE_ENV || 'development';
@@ -29,11 +38,16 @@ if (config.use_env_variable) {
 fs
   .readdirSync(__dirname)
 <<<<<<< HEAD
+<<<<<<< HEAD
   .filter(file => (file.indexOf('.') !== 0) && (file !== basename)
   && (file.slice(-3) === '.js'))
 =======
   .filter(file => (file.indexOf('.') !== 0) && (file !== basename) && (file.slice(-3) === '.js'))
 >>>>>>> feat(signup endpoint): user should signup
+=======
+  .filter(file => (file.indexOf('.') !== 0) && (file !== basename)
+  && (file.slice(-3) === '.js'))
+>>>>>>> feat(User validation): Validate user upon registration
   .forEach((file) => {
     const model = sequelize.import(path.join(__dirname, file));
     db[model.name] = model;

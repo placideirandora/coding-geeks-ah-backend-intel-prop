@@ -1,8 +1,4 @@
-<<<<<<< HEAD
 export const up = (queryInterface, Sequelize) => queryInterface.createTable('Users', {
-=======
-export const up = (queryInterface, Sequelize) => queryInterface.createTable('User', {
->>>>>>> feat(signup endpoint): user should signup
   id: {
     allowNull: false,
     autoIncrement: true,
@@ -40,8 +36,4 @@ export const up = (queryInterface, Sequelize) => queryInterface.createTable('Use
   timestamps: false,
 },);
 
-<<<<<<< HEAD
 export const down = queryInterface => queryInterface.dropTable('Users');
-=======
-export const down = queryInterface => queryInterface.dropTable('User');
->>>>>>> feat(signup endpoint): user should signup
