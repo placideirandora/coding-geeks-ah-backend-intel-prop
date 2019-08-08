@@ -64,7 +64,7 @@ export default {
         .alphanum()
         .min(2)
         .required()
-        .regex(/^[A-Za-z]+[A-Z-a-z-0-9]$/)
+        .regex(/^[A-Za-z]+[A-Z-a-z-0-9]*$/)
         .error((errors) => {
           errors.forEach((err) => {
             // eslint-disable-next-line default-case
