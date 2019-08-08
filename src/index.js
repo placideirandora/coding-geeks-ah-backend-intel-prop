@@ -2,14 +2,18 @@ import swaggerUi from 'swagger-ui-express';
 import express from 'express';
 import morgan from 'morgan';
 import bodyParser from 'body-parser';
+import passport from 'passport';
 import SwaggerDocument from '../swagger.json';
 import db from './sequelize/models';
 import router from './routes/routes';
+import passConfig from './config/passport/passport';
 
 const app = express();
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
+app.use(passport.initialize());
+passConfig(passport);
 
 app.use(morgan('dev'));
 
@@ -29,12 +33,11 @@ app.use((req, res) => {
 });
 
 app.use((error, req, res, next) => {
-  res.status(500)
-    .json({
-      status: 500,
-      error: error.message,
-      next
-    });
+  res.status(500).json({
+    status: 500,
+    error: error.message,
+    next
+  });
 });
 
 const PORT = process.env.PORT || 3000;

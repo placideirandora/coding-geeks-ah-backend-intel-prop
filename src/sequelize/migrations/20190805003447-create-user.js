@@ -32,6 +32,11 @@ export const up = (queryInterface, Sequelize) => queryInterface.createTable('Use
     type: Sequelize.STRING,
     defaultValue: 'user',
   },
+  status: {
+    allowNull: false,
+    type: Sequelize.STRING,
+    defaultValue: 'inactive'
+  },
 }, {
   timestamps: false,
 });

@@ -1,4 +1,5 @@
 import Joi from 'joi';
+import { join } from 'path';
 
 export default {
   firstName: Joi.string()
@@ -83,6 +84,10 @@ export default {
   email: Joi.string()
     .email({ minDomainAtoms: 2 })
     .required(),
+
+  loginPassword: Joi.string()
+    .required(),
+
 
   password: Joi.string()
     .required()
