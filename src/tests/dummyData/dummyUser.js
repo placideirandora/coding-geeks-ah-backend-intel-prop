@@ -7,6 +7,14 @@ export default {
     password: 'Jamal123',
     confirmPassword: 'Jamal123'
   },
+  firstNumFirstName: {
+    firstName: '1Jamal',
+    lastName: 'Kadhuwa',
+    userName: 'Kaduzi',
+    email: 'jamal@gmail.com',
+    password: 'Jamal123',
+    confirmPassword: 'Jamal123'
+  },
   missingFirstName: {
     lastName: 'Kadhuwa',
     userName: 'Kaduzi',
@@ -15,7 +23,7 @@ export default {
     confirmPassword: 'Jamal123'
   },
   lessFirstName: {
-    firstName: 'Ja',
+    firstName: 'J',
     lastName: 'Kadhuwa',
     userName: 'Kaduzi',
     email: 'jamal@gmail.com',
@@ -38,6 +46,14 @@ export default {
     password: 'Jamal123',
     confirmPassword: 'Jamal123'
   },
+  firstNumLastName: {
+    firstName: 'Jamal',
+    lastName: '2Kadhuwa',
+    userName: 'Kaduzi',
+    email: 'jamal@gmail.com',
+    password: 'Jamal.123',
+    confirmPassword: 'Jamal.123'
+  },
   missingLastName: {
     firstName: 'Jamal',
     userName: 'Kaduzi',
@@ -47,7 +63,7 @@ export default {
   },
   lessLastName: {
     firstName: 'Jamal',
-    lastName: 'Ka',
+    lastName: 'K',
     userName: 'Kaduzi',
     email: 'jamal@gmail.com',
     password: 'Jamal123',
@@ -69,6 +85,14 @@ export default {
     password: 'Jamal123',
     confirmPassword: 'Jamal123'
   },
+  firstNumUserName: {
+    firstName: 'Jamal',
+    lastName: 'Kadhuwa',
+    userName: '3Kaduzi',
+    email: 'jamal@gmail.com',
+    password: 'Jamal123',
+    confirmPassword: 'Jamal123'
+  },
   missingUserName: {
     firstName: 'Jamal',
     lastName: 'Kadhuwa',
@@ -79,7 +103,7 @@ export default {
   lessUserName: {
     firstName: 'Jamal',
     lastName: 'Kadhua',
-    userName: 'Ka',
+    userName: 'K',
     email: 'jamal@gmail.com',
     password: 'Jamal123',
     confirmPassword: 'Jamal123'
@@ -126,7 +150,7 @@ export default {
     lastName: 'Kadhuwa',
     userName: 'Kadhu',
     email: 'jamal@gmail.com',
-    password: 'Jamal123',
+    password: 'Jama.l123',
     confirmPassword: 'Jamal12'
   },
   validUser: {
@@ -134,23 +158,38 @@ export default {
     lastName: 'Kadhuwa',
     userName: 'Kadhut',
     email: 'kadhut@gmail.com',
-    password: 'Jamal123',
-    confirmPassword: 'Jamal123'
+    password: 'Jamal.123',
+    confirmPassword: 'Jamal.123'
   },
   existingEmail: {
     firstName: 'Jamal',
     lastName: 'Kadhuwa',
     userName: 'Kadhut',
     email: 'kadhut@gmail.com',
-    password: 'Jamal123',
-    confirmPassword: 'Jamal123'
+    password: 'Jamal.123',
+    confirmPassword: 'Jamal.123'
   },
   existingUserName: {
     firstName: 'Jamal',
     lastName: 'Kadhuwa',
     userName: 'Kadhut',
     email: 'kad@gmail.com',
-    password: 'Jamal123',
-    confirmPassword: 'Jamal123'
+    password: 'Jamal.123',
+    confirmPassword: 'Jamal.123'
+  },
+  missingConfirm: {
+    firstName: 'Jamal',
+    lastName: 'Kadhuwa',
+    userName: 'Kaduzi',
+    email: 'jamal@gmail.com',
+    password: 'Jamal.123'
+  },
+  numConfirmPassword: {
+    firstName: 'Jamal',
+    lastName: 'Kadhuwa',
+    userName: 'Kaduzi',
+    email: 'jamal@gmail.com',
+    password: 'Jamal.123',
+    confirmPassword: 1
   },
 };

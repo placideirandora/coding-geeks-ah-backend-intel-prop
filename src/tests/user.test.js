@@ -18,7 +18,24 @@ describe('POST /api/v1/users', () => {
         expect(res).have.status(400);
         expect(res).to.be.an('object');
         expect(res.body).to.have.keys('status', 'error');
-        expect(res.body.error).to.deep.equal('firstName must only contain alpha-numeric characters');
+        expect(res.body.error).to.deep.equal('First name must contain only alpha-numeric characters');
+        expect(res.body.status).to.deep.equal('failed');
+        done();
+      });
+  });
+});
+
+describe('POST /api/v1/users', () => {
+  it('Should return error if user tries to signup with an invalid firstName', (done) => {
+    chai.request(app)
+      .post('/api/v1/users')
+      .send(dummyUser.firstNumFirstName)
+      .end((err, res) => {
+        if (err) done(err);
+        expect(res).have.status(400);
+        expect(res).to.be.an('object');
+        expect(res.body).to.have.keys('status', 'error');
+        expect(res.body.error).to.deep.equal('First name cannot begin with a number');
         expect(res.body.status).to.deep.equal('failed');
         done();
       });
@@ -35,7 +52,7 @@ describe('POST /api/v1/users', () => {
         expect(res).have.status(400);
         expect(res).to.be.an('object');
         expect(res.body).to.have.keys('status', 'error');
-        expect(res.body.error).to.deep.equal('firstName is required');
+        expect(res.body.error).to.deep.equal('First name is required');
         expect(res.body.status).to.deep.equal('failed');
         done();
       });
@@ -52,7 +69,7 @@ describe('POST /api/v1/users', () => {
         expect(res).have.status(400);
         expect(res).to.be.an('object');
         expect(res.body).to.have.keys('status', 'error');
-        expect(res.body.error).to.deep.equal('firstName length must be at least 4 characters long');
+        expect(res.body.error).to.deep.equal('First name must be at least 2 characters long');
         expect(res.body.status).to.deep.equal('failed');
         done();
       });
@@ -69,7 +86,7 @@ describe('POST /api/v1/users', () => {
         expect(res).have.status(400);
         expect(res).to.be.an('object');
         expect(res.body).to.have.keys('status', 'error');
-        expect(res.body.error).to.deep.equal('firstName must be a string');
+        expect(res.body.error).to.deep.equal('First name must be a string');
         expect(res.body.status).to.deep.equal('failed');
         done();
       });
@@ -86,7 +103,26 @@ describe('POST /api/v1/users', () => {
         expect(res).have.status(400);
         expect(res).to.be.an('object');
         expect(res.body).to.have.keys('status', 'error');
-        expect(res.body.error).to.deep.equal('lastName must only contain alpha-numeric characters');
+        expect(res.body.error)
+          .to.deep
+          .equal('Last name must contain only alpha numeric characters');
+        expect(res.body.status).to.deep.equal('failed');
+        done();
+      });
+  });
+});
+
+describe('POST /api/v1/users', () => {
+  it('Should return error if user tries to signup with an invalid Last name', (done) => {
+    chai.request(app)
+      .post('/api/v1/users')
+      .send(dummyUser.firstNumLastName)
+      .end((err, res) => {
+        if (err) done(err);
+        expect(res).have.status(400);
+        expect(res).to.be.an('object');
+        expect(res.body).to.have.keys('status', 'error');
+        expect(res.body.error).to.deep.equal('Last name cannot begin with a number');
         expect(res.body.status).to.deep.equal('failed');
         done();
       });
@@ -103,7 +139,7 @@ describe('POST /api/v1/users', () => {
         expect(res).have.status(400);
         expect(res).to.be.an('object');
         expect(res.body).to.have.keys('status', 'error');
-        expect(res.body.error).to.deep.equal('lastName is required');
+        expect(res.body.error).to.deep.equal('Last name is required');
         expect(res.body.status).to.deep.equal('failed');
         done();
       });
@@ -120,7 +156,7 @@ describe('POST /api/v1/users', () => {
         expect(res).have.status(400);
         expect(res).to.be.an('object');
         expect(res.body).to.have.keys('status', 'error');
-        expect(res.body.error).to.deep.equal('lastName length must be at least 4 characters long');
+        expect(res.body.error).to.deep.equal('Last name must be at least 2 characters long');
         expect(res.body.status).to.deep.equal('failed');
         done();
       });
@@ -137,7 +173,7 @@ describe('POST /api/v1/users', () => {
         expect(res).have.status(400);
         expect(res).to.be.an('object');
         expect(res.body).to.have.keys('status', 'error');
-        expect(res.body.error).to.deep.equal('lastName must be a string');
+        expect(res.body.error).to.deep.equal('Last name must be a string');
         expect(res.body.status).to.deep.equal('failed');
         done();
       });
@@ -154,7 +190,24 @@ describe('POST /api/v1/users', () => {
         expect(res).have.status(400);
         expect(res).to.be.an('object');
         expect(res.body).to.have.keys('status', 'error');
-        expect(res.body.error).to.deep.equal('userName must only contain alpha-numeric characters');
+        expect(res.body.error).to.deep.equal('User name must contain only alpha-numeric characters');
+        expect(res.body.status).to.deep.equal('failed');
+        done();
+      });
+  });
+});
+
+describe('POST /api/v1/users', () => {
+  it('Should return error if user tries to signup with an invalid User name', (done) => {
+    chai.request(app)
+      .post('/api/v1/users')
+      .send(dummyUser.firstNumUserName)
+      .end((err, res) => {
+        if (err) done(err);
+        expect(res).have.status(400);
+        expect(res).to.be.an('object');
+        expect(res.body).to.have.keys('status', 'error');
+        expect(res.body.error).to.deep.equal('User name cannot begin with a number');
         expect(res.body.status).to.deep.equal('failed');
         done();
       });
@@ -171,7 +224,7 @@ describe('POST /api/v1/users', () => {
         expect(res).have.status(400);
         expect(res).to.be.an('object');
         expect(res.body).to.have.keys('status', 'error');
-        expect(res.body.error).to.deep.equal('userName is required');
+        expect(res.body.error).to.deep.equal('User name is required');
         expect(res.body.status).to.deep.equal('failed');
         done();
       });
@@ -188,7 +241,7 @@ describe('POST /api/v1/users', () => {
         expect(res).have.status(400);
         expect(res).to.be.an('object');
         expect(res.body).to.have.keys('status', 'error');
-        expect(res.body.error).to.deep.equal('userName length must be at least 3 characters long');
+        expect(res.body.error).to.deep.equal('User name must be at least 2 characters long');
         expect(res.body.status).to.deep.equal('failed');
         done();
       });
@@ -205,7 +258,7 @@ describe('POST /api/v1/users', () => {
         expect(res).have.status(400);
         expect(res).to.be.an('object');
         expect(res.body).to.have.keys('status', 'error');
-        expect(res.body.error).to.deep.equal('userName must be a string');
+        expect(res.body.error).to.deep.equal('User name must be a string');
         expect(res.body.status).to.deep.equal('failed');
         done();
       });
@@ -258,7 +311,7 @@ describe('POST /api/v1/users', () => {
         expect(res.body).to.have.keys('status', 'error');
         expect(res.body.error)
           .to.deep
-          .equal('password must be at least 8 characters containing at least a number, Upper and lower cases');
+          .equal('Password must be at least 8 characters with at least a number, Upper and lower cases special character');
         expect(res.body.status).to.deep.equal('failed');
         done();
       });
@@ -276,6 +329,40 @@ describe('POST /api/v1/users', () => {
         expect(res).to.be.an('object');
         expect(res.body).to.have.keys('status', 'error');
         expect(res.body.error).to.deep.equal('password is required');
+        expect(res.body.status).to.deep.equal('failed');
+        done();
+      });
+  });
+});
+
+describe('POST /api/v1/users', () => {
+  it('Should return error if user tries to signup with invalid confirm password type', (done) => {
+    chai.request(app)
+      .post('/api/v1/users')
+      .send(dummyUser.numConfirmPassword)
+      .end((err, res) => {
+        if (err) done(err);
+        expect(res).have.status(400);
+        expect(res).to.be.an('object');
+        expect(res.body).to.have.keys('status', 'error');
+        expect(res.body.error).to.deep.equal('Confirm password must be a string');
+        expect(res.body.status).to.deep.equal('failed');
+        done();
+      });
+  });
+});
+
+describe('POST /api/v1/users', () => {
+  it('Should return error if user tries to signup with missing confirm', (done) => {
+    chai.request(app)
+      .post('/api/v1/users')
+      .send(dummyUser.missingConfirm)
+      .end((err, res) => {
+        if (err) done(err);
+        expect(res).have.status(400);
+        expect(res).to.be.an('object');
+        expect(res.body).to.have.keys('status', 'error');
+        expect(res.body.error).to.deep.equal('Confirm password is required');
         expect(res.body.status).to.deep.equal('failed');
         done();
       });

@@ -1,8 +1,6 @@
 import { config } from 'dotenv';
 import { User } from '../sequelize/models';
 import { hashedPassword, genToken } from '../helpers/auth';
-import { hashedPassword } from '../helpers/auth';
-import { hashedPassword, genToken } from '../helpers/auth';
 
 config();
 
@@ -39,7 +37,7 @@ class Authentication {
       req.body.password = hashedPassword(password);
 
       const createdUser = await User.create(req.body);
-      const userToken = genToken(createdUser, process.env.SECRET_KEY);
+      const userToken = genToken(createdUser);
 
       return res.status(201).json({
         status: 'success',
@@ -47,7 +45,6 @@ class Authentication {
         data: {
           token: userToken,
           id: createdUser.id,
-          token: userToken,
           firstName: createdUser.firstName,
           lastName: createdUser.lastName,
           userName: createdUser.userName,

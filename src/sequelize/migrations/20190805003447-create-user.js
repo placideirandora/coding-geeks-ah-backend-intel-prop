@@ -34,6 +34,6 @@ export const up = (queryInterface, Sequelize) => queryInterface.createTable('Use
   },
 }, {
   timestamps: false,
-},);
+});
 
 export const down = queryInterface => queryInterface.dropTable('Users');
