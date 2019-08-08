@@ -397,7 +397,7 @@ describe('POST /api/v1/users', () => {
         expect(res).to.be.an('object');
         expect(res.body).to.have.keys('status', 'message', 'data');
         expect(res.body.status).to.deep.equal('success');
-        expect(res.body.message).to.deep.equal('User created');
+        expect(res.body.message).to.deep.equal('User created. Please, Check your email for a verification link.');
         expect(res.body.data).to.have.keys('token', 'id', 'firstName', 'lastName', 'userName', 'email', 'role');
         done();
       });

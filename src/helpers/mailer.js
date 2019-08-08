@@ -1,7 +1,7 @@
-import dotenv from 'dotenv';
+import { config } from 'dotenv';
 import mailer from '@sendgrid/mail';
 
-dotenv.config();
+config();
 
 const sendEmail = async (action, to, token) => {
   const {
@@ -9,7 +9,7 @@ const sendEmail = async (action, to, token) => {
   } = process.env;
   mailer.setApiKey(SENDGRID_API_KEY);
   const subjectVerify = 'Welcome to Authors Haven';
-  const contentVerify = '<h2>Congratulations on your new Authors Haven account!</h2><p style="font-size: 1rem;">Please confirm your email address by visiting the following link with <strong>Postman</strong>:</p>';
+  const contentVerify = '<h2>Congratulations on your new Authors Haven account!</h2><p style="font-size: 1rem;">Please confirm your email address by visiting the following link:</p>';
   const linkVerify = `${APP_URL}/${token}`;
 
   if (action === 'verify-email') {
