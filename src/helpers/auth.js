@@ -23,5 +23,15 @@ const hashedPassword = password => bcrypt.hashSync(password, 10);
  * @return {object} password
  */
 const unhashedPassword = (hashedPass, compare) => bcrypt.compareSync(hashedPass, compare);
+/**
+ * 
+ * @param {*} user 
+ */
+export const genResetToken = user => jwt.sign(
+  { email: user.email },
+  process.env.SECRET_KEY,
+  { expiresIn: '1h' }
+);
 
-export { genToken, hashedPassword, unhashedPassword };
+
+export { genToken, hashedPassword, unhashedPassword, genResetToken };
