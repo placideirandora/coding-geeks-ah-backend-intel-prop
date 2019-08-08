@@ -13,7 +13,6 @@ export default {
   signupValidation(req, res, next) {
     const userSchema = Joi.object().keys({
       firstName: Joi.string()
-        .alphanum()
         .min(2)
         .required()
         .regex(/^[A-Za-z]*$/)
@@ -22,13 +21,10 @@ export default {
             // eslint-disable-next-line default-case
             switch (err.type) {
               case 'string.regex.base':
-                err.message = 'First name cannot begin with a number';
+                err.message = 'First name cannot contain number or special characters';
                 break;
               case 'any.required':
                 err.message = 'First name is required';
-                break;
-              case 'string.alphanum':
-                err.message = 'First name must contain only alpha-numeric characters';
                 break;
               case 'string.min':
                 err.message = 'First name must be at least 2 characters long';
@@ -41,7 +37,6 @@ export default {
           return errors;
         }),
       lastName: Joi.string()
-        .alphanum()
         .min(2)
         .required()
         .regex(/^[A-Za-z]*$/)
@@ -50,13 +45,10 @@ export default {
             // eslint-disable-next-line default-case
             switch (err.type) {
               case 'string.regex.base':
-                err.message = 'Last name cannot begin with a number';
+                err.message = 'Last name cannot contain number or special characters';
                 break;
               case 'any.required':
                 err.message = 'Last name is required';
-                break;
-              case 'string.alphanum':
-                err.message = 'Last name must contain only alpha numeric characters';
                 break;
               case 'string.min':
                 err.message = 'Last name must be at least 2 characters long';
@@ -72,7 +64,7 @@ export default {
         .alphanum()
         .min(2)
         .required()
-        .regex(/^[A-Za-z]*$/)
+        .regex(/^[A-Za-z]+[A-Z-a-z-0-9]$/)
         .error((errors) => {
           errors.forEach((err) => {
             // eslint-disable-next-line default-case
