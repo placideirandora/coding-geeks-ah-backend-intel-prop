@@ -1,7 +1,7 @@
 import { config } from 'dotenv';
 import { User } from '../sequelize/models';
 import { hashedPassword, genToken } from '../helpers/auth';
-import { sendEmail } from '../helpers/mailer';
+import sendEmail from '../helpers/mailer';
 
 config();
 
@@ -23,14 +23,12 @@ class Authentication {
 
       if (user) {
         return res.status(409).json({
-          status: 'failed',
           error: `Email ${email} already exists`
         });
       }
 
       if (name) {
         return res.status(409).json({
-          status: 'failed',
           error: `userName ${userName} already taken`
         });
       }
@@ -44,7 +42,6 @@ class Authentication {
       await sendEmail(action, createdUser.email, userToken);
 
       return res.status(201).json({
-        status: 'success',
         message: 'User created. Please, Check your email for a verification link.',
         data: {
           token: userToken,

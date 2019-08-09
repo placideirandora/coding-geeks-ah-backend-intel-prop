@@ -395,8 +395,7 @@ describe('POST /api/v1/users', () => {
         if (err) done(err);
         expect(res).have.status(201);
         expect(res).to.be.an('object');
-        expect(res.body).to.have.keys('status', 'message', 'data');
-        expect(res.body.status).to.deep.equal('success');
+        expect(res.body).to.have.keys('message', 'data');
         expect(res.body.message).to.deep.equal('User created. Please, Check your email for a verification link.');
         expect(res.body.data).to.have.keys('token', 'id', 'firstName', 'lastName', 'userName', 'email', 'role');
         done();
@@ -413,8 +412,7 @@ describe('POST /api/v1/users', () => {
         if (err) done(err);
         expect(res).have.status(409);
         expect(res).to.be.an('object');
-        expect(res.body).to.have.keys('status', 'error');
-        expect(res.body.status).to.deep.equal('failed');
+        expect(res.body).to.have.keys('error');
         expect(res.body.error).to.deep.equal('Email kadhut@gmail.com already exists');
         done();
       });
@@ -430,8 +428,7 @@ describe('POST /api/v1/users', () => {
         if (err) done(err);
         expect(res).have.status(409);
         expect(res).to.be.an('object');
-        expect(res.body).to.have.keys('status', 'error');
-        expect(res.body.status).to.deep.equal('failed');
+        expect(res.body).to.have.keys('error');
         expect(res.body.error).to.deep.equal('userName Kadhut already taken');
         done();
       });
