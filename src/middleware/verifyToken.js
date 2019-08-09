@@ -1,7 +1,7 @@
 import jwt from 'jsonwebtoken';
 
 const verifyToken = (req, res, next) => {
-  const token = req.headers.authorization;
+  const token = req.headers.authorization || req.params.token;
   if (!token) {
     res.status(401).json({ status: 401, error: 'Please login or register' });
   } else {
@@ -10,8 +10,8 @@ const verifyToken = (req, res, next) => {
         return res.status(403).json({ status: 403, error: `${error.message}` });
       }
       req.userData = decoded;
+      next();
     });
-    next();
   }
 };
 

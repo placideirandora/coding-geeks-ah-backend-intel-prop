@@ -3,6 +3,7 @@ import chai from 'chai';
 import app from '../index';
 import dummy from './dummyData';
 import { genToken } from '../helpers/auth';
+import { getMaxListeners } from 'cluster';
 
 chai.use(chaiHttp);
 const { expect } = chai;
@@ -464,7 +465,7 @@ describe('POST /api/v1/users', () => {
           expect(res).have.status(404);
           expect(res).to.be.an('object');
           expect(res.body).to.have.keys('errors');
-          expect(res.body.errors).to.deep.equal('email not found..');
+          expect(res.body.errors).to.deep.equal('User with email: hareraloston1@gmail.com not found..');
           done();
         });
     });
