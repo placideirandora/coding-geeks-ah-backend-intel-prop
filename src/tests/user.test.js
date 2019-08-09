@@ -18,7 +18,8 @@ describe('POST /api/v1/users', () => {
         expect(res).have.status(400);
         expect(res).to.be.an('object');
         expect(res.body).to.have.keys('status', 'error');
-        expect(res.body.error).to.deep.equal('First name must contain only alpha-numeric characters');
+        expect(res.body.error)
+          .to.deep.equal('First name cannot contain number or special characters');
         expect(res.body.status).to.deep.equal('failed');
         done();
       });
@@ -35,7 +36,8 @@ describe('POST /api/v1/users', () => {
         expect(res).have.status(400);
         expect(res).to.be.an('object');
         expect(res.body).to.have.keys('status', 'error');
-        expect(res.body.error).to.deep.equal('First name cannot begin with a number');
+        expect(res.body.error)
+          .to.deep.equal('First name cannot contain number or special characters');
         expect(res.body.status).to.deep.equal('failed');
         done();
       });
@@ -105,7 +107,7 @@ describe('POST /api/v1/users', () => {
         expect(res.body).to.have.keys('status', 'error');
         expect(res.body.error)
           .to.deep
-          .equal('Last name must contain only alpha numeric characters');
+          .equal('Last name cannot contain number or special characters');
         expect(res.body.status).to.deep.equal('failed');
         done();
       });
@@ -122,7 +124,8 @@ describe('POST /api/v1/users', () => {
         expect(res).have.status(400);
         expect(res).to.be.an('object');
         expect(res.body).to.have.keys('status', 'error');
-        expect(res.body.error).to.deep.equal('Last name cannot begin with a number');
+        expect(res.body.error)
+          .to.deep.equal('Last name cannot contain number or special characters');
         expect(res.body.status).to.deep.equal('failed');
         done();
       });
@@ -156,7 +159,8 @@ describe('POST /api/v1/users', () => {
         expect(res).have.status(400);
         expect(res).to.be.an('object');
         expect(res.body).to.have.keys('status', 'error');
-        expect(res.body.error).to.deep.equal('Last name must be at least 2 characters long');
+        expect(res.body.error)
+          .to.deep.equal('Last name must be at least 2 characters long');
         expect(res.body.status).to.deep.equal('failed');
         done();
       });
