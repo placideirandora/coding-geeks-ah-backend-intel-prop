@@ -1,6 +1,8 @@
 
 import Joi from 'joi';
+import rules from '../helpers/schema';
 
+const { validationRules } = rules;
 export default {
   /**
      * @description validates request body before registration
@@ -12,6 +14,7 @@ export default {
 
   signupValidation(req, res, next) {
     const userSchema = Joi.object().keys({
+<<<<<<< HEAD
       firstName: Joi.string()
         .min(2)
         .required()
@@ -127,6 +130,14 @@ export default {
           });
           return errors;
         }),
+=======
+      firstName: validationRules.firstName,
+      lastName: validationRules.lastName,
+      userName: validationRules.userName,
+      email: validationRules.email,
+      password: validationRules.password,
+      confirmPassword: validationRules.confirmPassword,
+>>>>>>> feat(reset password): implement ttl feedbacks
     });
 
     const options = {
@@ -136,6 +147,49 @@ export default {
       }
     };
     const { error } = Joi.validate(req.body, userSchema, options);
+    if (error) {
+      return res.status(400).json({
+        status: 'failed',
+        error: error.details[0].message
+      });
+    }
+    next();
+  },
+
+  emailValidation(req, res, next) {
+    const emailSchema = Joi.object().keys({
+      email: validationRules.email,
+    });
+
+    const options = {
+      language: {
+        key: '{{key}} ',
+
+      }
+    };
+    const { error } = Joi.validate(req.body, emailSchema, options);
+    if (error) {
+      return res.status(400).json({
+        status: 'failed',
+        error: error.details[0].message
+      });
+    }
+    next();
+  },
+
+  passwordValidation(req, res, next) {
+    const passwordSchema = Joi.object().keys({
+      password: validationRules.password,
+      confirmPassword: validationRules.confirmPassword,
+    });
+
+    const options = {
+      language: {
+        key: '{{key}} ',
+
+      }
+    };
+    const { error } = Joi.validate(req.body, passwordSchema, options);
     if (error) {
       return res.status(400).json({
         status: 'failed',

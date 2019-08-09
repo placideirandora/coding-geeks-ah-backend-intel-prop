@@ -1,14 +1,12 @@
 import express from 'express';
 import Validation from '../middleware/validation';
 import UserAuth from '../controllers/userController';
-import emailValidatator from '../middleware/emailValidation';
-import pwdValidator from '../middleware/passwordValidation';
-import resetPwd from '../middleware/resetPassword';
+import verifyToken from '../middleware/verifyToken';
 
 const router = express.Router();
 
 router.post('/api/v1/users', Validation.signupValidation, UserAuth.signup);
-router.post('/api/v1/send-email', emailValidatator.emailValidation, UserAuth.sendEmail);
-router.post('/api/v1/reset-password/:token', resetPwd, pwdValidator.passwordValidation, UserAuth.resetPassword);
+router.post('/api/v1/send-email', Validation.emailValidation, UserAuth.emailSender);
+router.post('/api/v1/reset-password/:token', verifyToken, Validation.passwordValidation, UserAuth.resetPassword);
 
 export default router;

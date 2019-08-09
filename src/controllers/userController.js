@@ -2,7 +2,7 @@ import { config } from 'dotenv';
 import bcrypt from 'bcrypt';
 import { User } from '../sequelize/models';
 import { hashedPassword, genToken } from '../helpers/auth';
-import { sendEmail } from '../helpers/mailer';
+import sendEmail from '../helpers/mailer';
 
 config();
 
@@ -64,12 +64,12 @@ class Authentication {
    * @param  {object} res
    * @return {object} return an object containing the confirmation message
    */
-  static async sendEmail(req, res) {
+  static async emailSender(req, res) {
     const { email } = req.body;
     const result = await User.findOne({ where: { email } });
     if (!result) {
       return res.status(404).json({
-        errors: 'email not found..'
+        errors: `User with email: ${email} not found..`
       });
     }
 
