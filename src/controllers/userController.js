@@ -1,4 +1,5 @@
 import { config } from 'dotenv';
+import bcrypt from 'bcrypt';
 import { User } from '../sequelize/models';
 import { hashedPassword, genToken } from '../helpers/auth';
 import sendEmail from '../helpers/mailer';
@@ -56,6 +57,47 @@ class Authentication {
     } catch (err) {
       // console.log(err);
     }
+  }
+
+  /**
+   * @param  {object} req
+   * @param  {object} res
+   * @return {object} return an object containing the confirmation message
+   */
+  static async emailSender(req, res) {
+    const { email } = req.body;
+    const result = await User.findOne({ where: { email } });
+    if (!result) {
+      return res.status(404).json({
+        errors: `User with email: ${email} not found..`
+      });
+    }
+
+    const userToken = genToken(result);
+    const action = 'reset-password';
+
+    await sendEmail(action, email, userToken);
+
+    return res.status(200).json({
+      message: 'Email sent, please check your email'
+    });
+  }
+
+  /**
+   *
+   * @param {*} req
+   * @param {*} res
+   * @returns {object} update the password of the user
+   */
+  static async resetPassword(req, res) {
+    const { password } = req.body;
+
+    const { email } = req.userData;
+    const hashedPwd = bcrypt.hashSync(password, 10);
+    await User.update({ password: hashedPwd }, { where: { email } });
+    return res.status(200).json({
+      message: 'You have reset your password Successfully!'
+    });
   }
 }
 

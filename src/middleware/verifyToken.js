@@ -10,8 +10,8 @@ const verifyToken = (req, res, next) => {
         return res.status(403).json({ status: 403, error: `${error.message}` });
       }
       req.userData = decoded;
+      next();
     });
-    next();
   }
 };
 

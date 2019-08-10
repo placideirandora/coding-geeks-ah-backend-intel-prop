@@ -2,11 +2,14 @@ import chaiHttp from 'chai-http';
 import chai from 'chai';
 import app from '../index';
 import dummy from './dummyData';
-
+import { genToken } from '../helpers/auth';
+import { getMaxListeners } from 'cluster';
 
 chai.use(chaiHttp);
 const { expect } = chai;
 const { dummyUser } = dummy;
+
+const userToken = genToken(dummyUser.validUser);
 
 describe('POST /api/v1/users', () => {
   it('Should return error if user tries to signup with an invalid firstName', (done) => {
@@ -18,7 +21,8 @@ describe('POST /api/v1/users', () => {
         expect(res).have.status(400);
         expect(res).to.be.an('object');
         expect(res.body).to.have.keys('status', 'error');
-        expect(res.body.error).to.deep.equal('First name must contain only alpha-numeric characters');
+        expect(res.body.error)
+          .to.deep.equal('First name cannot contain number or special characters');
         expect(res.body.status).to.deep.equal('failed');
         done();
       });
@@ -35,7 +39,8 @@ describe('POST /api/v1/users', () => {
         expect(res).have.status(400);
         expect(res).to.be.an('object');
         expect(res.body).to.have.keys('status', 'error');
-        expect(res.body.error).to.deep.equal('First name cannot begin with a number');
+        expect(res.body.error)
+          .to.deep.equal('First name cannot contain number or special characters');
         expect(res.body.status).to.deep.equal('failed');
         done();
       });
@@ -105,7 +110,7 @@ describe('POST /api/v1/users', () => {
         expect(res.body).to.have.keys('status', 'error');
         expect(res.body.error)
           .to.deep
-          .equal('Last name must contain only alpha numeric characters');
+          .equal('Last name cannot contain number or special characters');
         expect(res.body.status).to.deep.equal('failed');
         done();
       });
@@ -122,7 +127,8 @@ describe('POST /api/v1/users', () => {
         expect(res).have.status(400);
         expect(res).to.be.an('object');
         expect(res.body).to.have.keys('status', 'error');
-        expect(res.body.error).to.deep.equal('Last name cannot begin with a number');
+        expect(res.body.error)
+          .to.deep.equal('Last name cannot contain number or special characters');
         expect(res.body.status).to.deep.equal('failed');
         done();
       });
@@ -156,7 +162,8 @@ describe('POST /api/v1/users', () => {
         expect(res).have.status(400);
         expect(res).to.be.an('object');
         expect(res.body).to.have.keys('status', 'error');
-        expect(res.body.error).to.deep.equal('Last name must be at least 2 characters long');
+        expect(res.body.error)
+          .to.deep.equal('Last name must be at least 2 characters long');
         expect(res.body.status).to.deep.equal('failed');
         done();
       });
@@ -412,8 +419,14 @@ describe('POST /api/v1/users', () => {
         if (err) done(err);
         expect(res).have.status(409);
         expect(res).to.be.an('object');
+<<<<<<< HEAD
         expect(res.body).to.have.keys('error');
         expect(res.body.error).to.deep.equal('Email kadhut@gmail.com already exists');
+=======
+        expect(res.body).to.have.keys('status', 'error');
+        expect(res.body.status).to.deep.equal('failed');
+        expect(res.body.error).to.deep.equal('Email hareraloston@gmail.com already exists');
+>>>>>>> 92d6003bc62251c09180c3ea5a5b6287ad589ed2
         done();
       });
   });
@@ -432,5 +445,165 @@ describe('POST /api/v1/users', () => {
         expect(res.body.error).to.deep.equal('userName Kadhut already taken');
         done();
       });
+  });
+  // Test for user reset password
+  describe('POST /api/v1/send-email', () => {
+    it('Should send email to the user with an existing Email', (done) => {
+      chai.request(app)
+        .post('/api/v1/send-email')
+        .send(dummyUser.emailForSend)
+        .end((err, res) => {
+          if (err) done(err);
+          expect(res).have.status(200);
+          expect(res).to.be.an('object');
+          expect(res.body).to.have.keys('message');
+          expect(res.body.message).to.deep.equal('Email sent, please check your email');
+          done();
+        });
+    });
+  });
+  describe('POST /api/v1/send-email', () => {
+    it('Should not send email to the user if Email does no exist', (done) => {
+      chai.request(app)
+        .post('/api/v1/send-email')
+        .send(dummyUser.unexestingEmailForSend)
+        .end((err, res) => {
+          if (err) done(err);
+          expect(res).have.status(404);
+          expect(res).to.be.an('object');
+          expect(res.body).to.have.keys('errors');
+          expect(res.body.errors).to.deep.equal('User with email: hareraloston1@gmail.com not found..');
+          done();
+        });
+    });
+  });
+  describe('POST /api/v1/send-email', () => {
+    it('Should not send email to the user if Email is invalid', (done) => {
+      chai.request(app)
+        .post('/api/v1/send-email')
+        .send(dummyUser.invalidEmailForSend)
+        .end((err, res) => {
+          if (err) done(err);
+          expect(res).have.status(400);
+          expect(res).to.be.an('object');
+          expect(res.body).to.have.keys('status', 'error');
+          expect(res.body.error).to.deep.equal('email must be a valid email');
+          expect(res.body.status).to.deep.equal('failed');
+          done();
+        });
+    });
+  });
+  describe('POST /api/v1/reset-password/:token', () => {
+    it('Should reset password of the user up on valid data', (done) => {
+      chai.request(app)
+        .post(`/api/v1/reset-password/${userToken}`)
+        .send(dummyUser.resetPassword)
+        .end((err, res) => {
+          if (err) done(err);
+          expect(res).have.status(200);
+          expect(res).to.be.an('object');
+          expect(res.body).to.have.keys('message');
+          expect(res.body.message).to.deep.equal('You have reset your password Successfully!');
+          done();
+        });
+    });
+  });
+  describe('POST /api/v1/reset-password/:token', () => {
+    it('Should not reset password of the user if token is invalid', (done) => {
+      chai.request(app)
+        .post('/api/v1/reset-password/invalidtoken')
+        .send(dummyUser.resetPassword)
+        .end((err, res) => {
+          if (err) done(err);
+          expect(res).have.status(403);
+          expect(res).to.be.an('object');
+          expect(res.body).to.have.keys('status', 'error');
+          expect(res.body.error).to.deep.equal('jwt malformed');
+          expect(res.body.status).to.deep.equal(403);
+          done();
+        });
+    });
+  });
+  describe('POST /api/v1/reset-password/:token', () => {
+    it('Should return error if user tries to reset password with invalid password', (done) => {
+      chai.request(app)
+        .post(`/api/v1/reset-password/${userToken}`)
+        .send(dummyUser.invalidResetPassword)
+        .end((err, res) => {
+          if (err) done(err);
+          expect(res).have.status(400);
+          expect(res).to.be.an('object');
+          expect(res.body).to.have.keys('status', 'error');
+          expect(res.body.error)
+            .to.deep
+            .equal('Password must be at least 8 characters with at least a number, Upper and lower cases special character');
+          expect(res.body.status).to.deep.equal('failed');
+          done();
+        });
+    });
+  });
+  describe('POST /api/v1/reset-password/:token', () => {
+    it('Should return error if user tries to reset password without password', (done) => {
+      chai.request(app)
+        .post(`/api/v1/reset-password/${userToken}`)
+        .send(dummyUser.resetMissingPassword)
+        .end((err, res) => {
+          if (err) done(err);
+          expect(res).have.status(400);
+          expect(res).to.be.an('object');
+          expect(res.body).to.have.keys('status', 'error');
+          expect(res.body.error).to.deep.equal('password is required');
+          expect(res.body.status).to.deep.equal('failed');
+          done();
+        });
+    });
+  });
+  describe('POST /api/v1/reset-password/:token', () => {
+    it('Should return error if user tries to reset password password not matching', (done) => {
+      chai.request(app)
+        .post(`/api/v1/reset-password/${userToken}`)
+        .send(dummyUser.resetPasswordUnmatch)
+        .end((err, res) => {
+          if (err) done(err);
+          expect(res).have.status(400);
+          expect(res).to.be.an('object');
+          expect(res.body).to.have.keys('status', 'error');
+          expect(res.body.error).to.deep.equal('Passwords must much');
+          expect(res.body.status).to.deep.equal('failed');
+          done();
+        });
+    });
+  });
+  describe('POST /api/v1/reset-password/:token', () => {
+    it('Should return error if user tries to reset password without confirmin password', (done) => {
+      chai.request(app)
+        .post(`/api/v1/reset-password/${userToken}`)
+        .send(dummyUser.resetMissingConfirmPassword)
+        .end((err, res) => {
+          if (err) done(err);
+          expect(res).have.status(400);
+          expect(res).to.be.an('object');
+          expect(res.body).to.have.keys('status', 'error');
+          expect(res.body.error).to.deep.equal('Confirm password is required');
+          expect(res.body.status).to.deep.equal('failed');
+          done();
+        });
+    });
+  });
+  describe('POST /api/v1/reset-password/:token', () => {
+    it('Should return error if user tries to reset password with Invalid confirmin password', (done) => {
+      chai.request(app)
+        .post(`/api/v1/reset-password/${userToken}`)
+        .send(dummyUser.numresetConfirmPassword)
+        .end((err, res) => {
+          if (err) done(err);
+          expect(res).have.status(400);
+          expect(res).to.be.an('object');
+          expect(res.body).to.have.keys('status', 'error');
+          expect(res.body.error).to.deep.equal('Confirm password must be a string');
+          expect(res.body.status).to.deep.equal('failed');
+          done();
+        });
+    });
   });
 });
