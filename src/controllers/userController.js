@@ -60,9 +60,25 @@ class Authentication {
   }
 
   /**
+   * @param {object} req
+   * @param {object} res
+   * @returns {object} returns an object containing a response
+   */
+  static async verifyEmail(req, res) {
+    const userEmail = req.userData.email;
+    const registeredUser = await User.findOne({ where: { email: userEmail } });
+    if (registeredUser) {
+      User.update({ verified: true }, { where: { email: userEmail } });
+      return res.status(200).json({
+        message: `You have successfully verified your email: ${userEmail}. You can now sign into your account!`
+      });
+    }
+  }
+
+  /**
    * @param  {object} req
    * @param  {object} res
-   * @return {object} return an object containing the confirmation message
+   * @returns {object} return an object containing the confirmation message
    */
   static async emailSender(req, res) {
     const { email } = req.body;
@@ -84,7 +100,6 @@ class Authentication {
   }
 
   /**
-   *
    * @param {*} req
    * @param {*} res
    * @returns {object} update the password of the user

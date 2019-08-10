@@ -3,7 +3,6 @@ import chai from 'chai';
 import app from '../index';
 import dummy from './dummyData';
 import { genToken } from '../helpers/auth';
-import { getMaxListeners } from 'cluster';
 
 chai.use(chaiHttp);
 const { expect } = chai;
@@ -419,14 +418,8 @@ describe('POST /api/v1/users', () => {
         if (err) done(err);
         expect(res).have.status(409);
         expect(res).to.be.an('object');
-<<<<<<< HEAD
         expect(res.body).to.have.keys('error');
-        expect(res.body.error).to.deep.equal('Email kadhut@gmail.com already exists');
-=======
-        expect(res.body).to.have.keys('status', 'error');
-        expect(res.body.status).to.deep.equal('failed');
         expect(res.body.error).to.deep.equal('Email hareraloston@gmail.com already exists');
->>>>>>> 92d6003bc62251c09180c3ea5a5b6287ad589ed2
         done();
       });
   });
