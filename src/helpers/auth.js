@@ -24,4 +24,7 @@ const hashedPassword = password => bcrypt.hashSync(password, 10);
  */
 const unhashedPassword = (hashedPass, compare) => bcrypt.compareSync(hashedPass, compare);
 
-export { genToken, hashedPassword, unhashedPassword };
+
+export {
+  genToken, hashedPassword, unhashedPassword
+};

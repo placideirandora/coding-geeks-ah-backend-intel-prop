@@ -122,6 +122,124 @@
                     }
                 }
             }
+        },
+        "/api/v1/send-email": {
+            "post": {
+                "tags": [
+                    "Users"
+                ],
+                "description": "Send email to the user",
+                "parameters": [{
+                    "name": "user",
+                    "in": "body",
+                    "description": "User that want to reset password",
+                    "schema": {
+                        "required": [
+                            "email"
+                        ],
+                        "properties": {
+                            "email": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                }],
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successfully email sent to user",
+                        "schema": {
+                            "properties": {
+                                "message": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Missing fields or invalid value",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+
+                    "404": {
+                        "description": "User not found",
+                        "schema": {
+                            "properties":{
+                                "errors":{
+                                    "type":"string"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/reset-password/{token}": {
+            "post": {
+                "tags": [
+                    "Users"
+                ],
+                "description": "User reset password",
+                "parameters": [
+                    {
+                        "name": "token",
+                        "in": "path",
+                        "description": "token",
+                        "required":true,
+                        "type":"string"
+                    },
+                    {
+                    "name": "user",
+                    "in": "body",
+                    "description": "User that want to reset password",
+                    "schema": {
+                        "required": [
+                            "password",
+                            "confirmPassword"
+                        ],
+                        "properties": {
+                            "password": {
+                                "type": "string"
+                            },
+                            "confirmPassword": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                }],
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successfully user reset password",
+                        "schema": {
+                            "properties": {
+                                "message": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Missing fields or invalid value",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+
+                    "404": {
+                        "description": "User not found",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                }
+            }
         }
     },
     "definitions": {

@@ -1,3 +1,6 @@
+import { getMaxListeners } from "cluster";
+import { genToken } from "../../helpers/auth";
+
 export default {
   invalidFirstName: {
     firstName: 'Jamal*',
@@ -157,7 +160,7 @@ export default {
     firstName: 'Jamal',
     lastName: 'Kadhuwa',
     userName: 'Kadhut',
-    email: 'kadhut@gmail.com',
+    email: 'hareraloston@gmail.com',
     password: 'Jamal.123',
     confirmPassword: 'Jamal.123'
   },
@@ -165,7 +168,7 @@ export default {
     firstName: 'Jamal',
     lastName: 'Kadhuwa',
     userName: 'Kadhut',
-    email: 'kadhut@gmail.com',
+    email: 'hareraloston@gmail.com',
     password: 'Jamal.123',
     confirmPassword: 'Jamal.123'
   },
@@ -189,6 +192,35 @@ export default {
     lastName: 'Kadhuwa',
     userName: 'Kaduzi',
     email: 'jamal@gmail.com',
+    password: 'Jamal.123',
+    confirmPassword: 1
+  },
+  emailForSend: {
+    email: 'hareraloston@gmail.com',
+  },
+  unexestingEmailForSend: {
+    email: 'hareraloston1@gmail.com',
+  },
+  invalidEmailForSend: {
+    email: 'hareraloston1@gmail',
+  },
+  resetPassword: {
+    password: 'Jamal.123',
+    confirmPassword: 'Jamal.123'
+  },
+  invalidResetPassword: {
+    password: 'jamal.123',
+    confirmPassword: 'Jamal.123'
+  },
+  resetMissingPassword: {},
+  resetPasswordUnmatch: {
+    password: 'Jamal.123',
+    confirmPassword: 'Jamal123'
+  },
+  resetMissingConfirmPassword: {
+    password: 'Jamal.123'
+  },
+  numresetConfirmPassword: {
     password: 'Jamal.123',
     confirmPassword: 1
   },
