@@ -1,8 +1,11 @@
 import chaiHttp from 'chai-http';
 import chai from 'chai';
+import { getMaxListeners } from 'cluster';
 import app from '../index';
 import dummy from './dummyData';
-import { genToken } from '../helpers/auth';
+import { User } from '../sequelize/models';
+import { genToken, hashedPassword } from '../helpers/auth';
+
 
 chai.use(chaiHttp);
 const { expect } = chai;
@@ -408,7 +411,6 @@ describe('POST /api/v1/users', () => {
       });
   });
 });
-
 describe('POST /api/v1/users', () => {
   it('Sould return error if user tries to signup with an existing email', (done) => {
     chai.request(app)
@@ -602,6 +604,48 @@ describe('POST /api/v1/reset-password/:token', () => {
 });
 // Login Tests
 describe('POST /api/v1/login', () => {
+  before(() => {
+    const { password } = dummyUser.newUser;
+    dummyUser.newUser.password = hashedPassword(password);
+    User.create(dummyUser.newUser);
+  });
+  it('Should return with user information when correct credentials are supplied and account is verified', (done) => {
+    chai
+      .request(app)
+      .post('/api/v1/login')
+      .send({
+        email: 'jamal@gmail12.com',
+        password: 'Jamal1230!',
+      })
+      .end((err, res) => {
+        if (err) done(err);
+        expect(res).have.status(200);
+        expect(res).to.be.an('object');
+        expect(res.body).to.have.key('message', 'data');
+        expect(res.body.data).to.be.an('object');
+        expect(res.body.data).to.have.keys('token', 'username', 'email');
+        expect(res.body.data).to.have.property('token').to.be.a('string');
+        expect(res.body.message).to.deep.equal('Welcome, you are successfully logged in');
+        done();
+      });
+  });
+});
+describe('POST /api/v1/login', () => {
+  it('Should return error message when user introduces undefined field', () => {
+    chai
+      .request(app)
+      .post('/api/v1/login')
+      .send({
+        email: 'hareraloston@gmail.com',
+        password: 'Jamal.123',
+        status: 'done'
+      })
+      .end((err, res) => {
+        expect(res).have.status(400);
+        expect(res.body).to.have.key('error');
+        expect(res.body.error).to.deep.equal('status is not allowed');
+      });
+  });
   it('Should output error if user provides no email', () => {
     chai
       .request(app)

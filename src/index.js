@@ -23,7 +23,6 @@ app.use(router);
 
 app.get('/', (req, res) => {
   res.status(200).json({
-    status: 200,
     message: 'Welcome to Authors Haven'
   });
 });
@@ -34,7 +33,6 @@ app.use((req, res) => {
 
 app.use((error, req, res, next) => {
   res.status(500).json({
-    status: 500,
     error: error.message,
     next
   });

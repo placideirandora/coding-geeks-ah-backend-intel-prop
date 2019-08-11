@@ -231,6 +231,6 @@ export default {
     email: 'jamal@gmail12.com',
     password: 'Jamal1230!',
     confirmPassword: 'Jamal1230!',
-    status: 'active'
+    verified: true
   }
 };

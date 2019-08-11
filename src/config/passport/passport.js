@@ -12,6 +12,13 @@ const passportConfig = () => {
         passwordField: 'password',
         passReqToCallback: true
       },
+      /**
+       * @param {object} req
+       * @param {object} email
+       * @param {object} password
+       * @param {object} done
+      * @returns {object} logged in user information or error.
+      */
       async (req, email, password, done) => {
         try {
           ({ email, password } = req.body);
@@ -23,7 +30,7 @@ const passportConfig = () => {
           if (!user || !unhashedPassword(password, user.password)) {
             return done({ message: 'Incorrect email or password' });
           }
-          if (user.status !== 'active') {
+          if (!user.verified) {
             return done({
               message:
                 'Please verify your account first. Visit your email to verify'
