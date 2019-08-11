@@ -240,8 +240,37 @@
                     }
                 }
             }
-        }
-    },
+        },
+        "/api/v1/verify-email/{token}": {
+            "post": {
+                "tags": [
+                    "Users"
+                ],
+                "description": "User email verification link",
+                "parameters": [
+                    {
+                        "name": "token",
+                        "in": "path",
+                        "description": "token",
+                        "required":true,
+                        "type":"string"
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "200": {
+                      "description": "Email verified successfully"
+                    },
+                    "403": {
+                      "description": "Invalid token or signature"
+                    }
+                  }
+                }
+            }
+        },
+
     "definitions": {
         "User": {
             "properties": {

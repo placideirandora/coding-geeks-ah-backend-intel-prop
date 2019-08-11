@@ -24,14 +24,12 @@ class Authentication {
 
       if (user) {
         return res.status(409).json({
-          status: 'failed',
           error: `Email ${email} already exists`
         });
       }
 
       if (name) {
         return res.status(409).json({
-          status: 'failed',
           error: `userName ${userName} already taken`
         });
       }
@@ -40,10 +38,12 @@ class Authentication {
 
       const createdUser = await User.create(req.body);
       const userToken = genToken(createdUser);
+      const action = 'verify-email';
+
+      await sendEmail(action, createdUser.email, userToken);
 
       return res.status(201).json({
-        status: 'success',
-        message: 'User created',
+        message: 'User created. Please, Check your email for a verification link.',
         data: {
           token: userToken,
           id: createdUser.id,
@@ -60,9 +60,25 @@ class Authentication {
   }
 
   /**
+   * @param {object} req
+   * @param {object} res
+   * @returns {object} returns an object containing a response
+   */
+  static async verifyEmail(req, res) {
+    const userEmail = req.userData.email;
+    const registeredUser = await User.findOne({ where: { email: userEmail } });
+    if (registeredUser) {
+      User.update({ verified: true }, { where: { email: userEmail } });
+      return res.status(200).json({
+        message: `You have successfully verified your email: ${userEmail}. You can now sign into your account!`
+      });
+    }
+  }
+
+  /**
    * @param  {object} req
    * @param  {object} res
-   * @return {object} return an object containing the confirmation message
+   * @returns {object} return an object containing the confirmation message
    */
   static async emailSender(req, res) {
     const { email } = req.body;
@@ -84,7 +100,6 @@ class Authentication {
   }
 
   /**
-   *
    * @param {*} req
    * @param {*} res
    * @returns {object} update the password of the user

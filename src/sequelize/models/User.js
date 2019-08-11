@@ -33,6 +33,11 @@ export default (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       defaultValue: 'user',
     },
+    verified: {
+      allowNull: false,
+      type: DataTypes.BOOLEAN,
+      defaultValue: false,
+    },
   },
   {
     timestamps: false,
