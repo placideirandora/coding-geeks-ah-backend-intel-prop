@@ -1,6 +1,5 @@
 import chaiHttp from 'chai-http';
 import chai from 'chai';
-import { getMaxListeners } from 'cluster';
 import app from '../index';
 import dummy from './dummyData';
 import { User } from '../sequelize/models';

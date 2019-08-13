@@ -1,5 +1,5 @@
+/* eslint-disable default-case */
 import Joi from 'joi';
-import { join } from 'path';
 
 export default {
   firstName: Joi.string()
@@ -120,6 +120,45 @@ export default {
             break;
           case 'string.base':
             err.message = 'Confirm password must be a string';
+            break;
+        }
+      });
+      return errors;
+    }),
+  bio: Joi.string()
+    .min(20)
+    .error((errors) => {
+      errors.forEach((err) => {
+        switch (err.type) {
+          case 'string.min':
+            err.message = 'bio must be at least 20 characters long';
+            break;
+          case 'string.base':
+            err.message = 'bio must be a string';
+            break;
+        }
+      });
+      return errors;
+    }),
+  username: Joi.string()
+    .alphanum()
+    .min(2)
+    .regex(/^[A-Za-z]+[A-Z-a-z-0-9]*$/)
+    .error((errors) => {
+      errors.forEach((err) => {
+        // eslint-disable-next-line default-case
+        switch (err.type) {
+          case 'string.regex.base':
+            err.message = 'User name cannot begin with a number';
+            break;
+          case 'string.alphanum':
+            err.message = 'User name must contain only alpha-numeric characters';
+            break;
+          case 'string.min':
+            err.message = 'User name must be at least 2 characters long';
+            break;
+          case 'string.base':
+            err.message = 'User name must be a string';
             break;
         }
       });
