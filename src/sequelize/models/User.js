@@ -40,6 +40,14 @@ export default (sequelize, DataTypes) => {
         type: DataTypes.BOOLEAN,
         defaultValue: false,
       },
+      bio: {
+        allowNull: true,
+        type: DataTypes.STRING,
+      },
+      image: {
+        allowNull: true,
+        type: DataTypes.STRING,
+      },
     },
     {
       timestamps: false,

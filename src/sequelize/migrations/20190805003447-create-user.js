@@ -32,6 +32,14 @@ export const up = (queryInterface, Sequelize) => queryInterface.createTable('Use
     type: Sequelize.STRING,
     defaultValue: 'user',
   },
+  bio: {
+    allowNull: true,
+    type: Sequelize.STRING,
+  },
+  image: {
+    allowNull: true,
+    type: Sequelize.STRING,
+  },
   verified: {
     allowNull: false,
     type: Sequelize.BOOLEAN,

@@ -1,6 +1,3 @@
-import { getMaxListeners } from "cluster";
-import { genToken } from "../../helpers/auth";
-
 export default {
   invalidFirstName: {
     firstName: 'Jamal*',
@@ -232,5 +229,35 @@ export default {
     password: 'Jamal1230!',
     confirmPassword: 'Jamal1230!',
     verified: true
+  },
+  validProfile: {
+    firstName: 'Jamal',
+    lastName: 'Kadhuwa',
+    userName: 'Kadhut',
+    bio: 'adfgkehguhvfdkhkjdhndgfshgfsidhghdiuhgodhighdfughudfhgiufdghguhgfdhdf',
+    email: 'hareraloston@gmail.com',
+  },
+  updateProfile: {
+    userName: 'kaka21',
+    bio: 'adfgkehguhvfdkhkjdhndgfshgfsidhghdiuhgodhighdfughudfhgiufdghguhgfdhdf',
+  },
+  invalidProfile1: {
+    userName: 123,
+    bio: 'fddhdh'
+  },
+  invalidProfile2: {
+    userName: 'a',
+  },
+  invalidProfile3: {
+    userName: 'raymond!',
+  },
+  invalidProfile4: {
+    userName: '43raymond',
+  },
+  invalidProfile5: {
+    bio: 123,
+  },
+  invalidProfile6: {
+    bio: 'fdavfdyd',
   }
 };
