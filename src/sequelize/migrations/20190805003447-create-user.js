@@ -45,8 +45,16 @@ export const up = (queryInterface, Sequelize) => queryInterface.createTable('Use
     type: Sequelize.BOOLEAN,
     defaultValue: false
   },
+  createdAt: {
+    allowNull: true,
+    type: Sequelize.DATE,
+  },
+  updatedAt: {
+    allowNull: true,
+    type: Sequelize.DATE,
+  },
 }, {
-  timestamps: false,
+  timestamps: true,
 });
 
 export const down = queryInterface => queryInterface.dropTable('Users');

@@ -9,7 +9,7 @@ const canEditProfile = async (req, res, next) => {
 
   if (trueUsername !== suggestedUsername) {
     return res.status(403).send({
-      error: 'sorry! you can not edit the profile that is not yours'
+      error: 'Sorry! You cannot edit the profile that is not yours'
     });
   }
   next();

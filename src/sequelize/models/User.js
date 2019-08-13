@@ -48,9 +48,17 @@ export default (sequelize, DataTypes) => {
         allowNull: true,
         type: DataTypes.STRING,
       },
+      createdAt: {
+        allowNull: true,
+        type: DataTypes.DATE,
+      },
+      updatedAt: {
+        allowNull: true,
+        type: DataTypes.DATE,
+      },
     },
     {
-      timestamps: false,
+      timestamps: true,
     }
   );
 
