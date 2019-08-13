@@ -37,6 +37,7 @@ describe('GET /api/v1/profiles', () => {
         expect(res).to.be.an('object');
         expect(res.body).to.have.keys('message');
         expect(res.body.message).to.deep.equal('Profile for Kadhutiiii not found');
+<<<<<<< HEAD
         done();
       });
   });
@@ -68,6 +69,8 @@ describe('GET /api/v1/profiles', () => {
         expect(res.body).to.be.an('object');
         expect(res.body).to.have.keys('message', 'data');
         expect(res.body.data[0]).to.have.keys('userName', 'bio', 'image');
+=======
+>>>>>>> [Fixes #167484590] implementing feedback
         done();
       });
   });

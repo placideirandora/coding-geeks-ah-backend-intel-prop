@@ -110,7 +110,7 @@ class Profile {
           email: updateProfile[1].email,
           bio: updateProfile[1].bio,
           image: updateProfile[1].image,
-          upadatedAt: updateProfile[1].upadatedAt,
+          upadatedAt: updateProfile[1].updatedAt,
         };
         res.status(200).json({
           message: 'Successfully updated the profile',
