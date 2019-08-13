@@ -4,9 +4,9 @@ import { User } from '../sequelize/models';
 
 config();
 cloudinary.config({
-  cloud_name: process.env.cloudinaryName,
-  api_key: process.env.cloudinaryApiKey,
-  api_secret: process.env.cloudinarySecretKey,
+  cloud_name: process.env.CLOUDINARY_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_SECRET_KEY,
 });
 
 /**
@@ -20,16 +20,16 @@ class Profile {
        * @returns {object} return object containing user profile
        */
   static async user(req, res) {
-    const { userName } = req.params;
+    const userName = req.params.username;
     try {
       const userfound = await User.findOne({ where: { userName } });
       if (!userfound) {
         return res.status(404).json({
-          message: `profile for ${userName} not found`,
+          message: `Profile for ${userName} not found`,
         });
       }
       res.status(200).json({
-        message: 'successfully retrieved a user profile',
+        message: 'Successfully retrieved a user profile',
         data: {
           userName: userfound.userName,
           bio: userfound.bio,
@@ -68,7 +68,7 @@ class Profile {
           const usernamefound = await User.findOne({ where: { userName: inputUsername } });
           if (usernamefound) {
             return res.status(409).json({
-              message: 'sorry! the profile username taken, try another one'
+              message: 'Sorry! The profile username taken, try another one'
             });
           }
         }
@@ -97,7 +97,7 @@ class Profile {
           upadatedAt: updateProfile[1].upadatedAt,
         };
         res.status(200).json({
-          message: 'successfully updated the profile',
+          message: 'Successfully updated the profile',
           data: newProfile,
         });
       } catch (error) {

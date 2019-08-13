@@ -21,7 +21,7 @@ describe('GET /api/v1/profiles', () => {
         expect(res).have.status(200);
         expect(res).to.be.an('object');
         expect(res.body).to.have.keys('message', 'data');
-        expect(res.body.message).to.deep.equal('successfully retrieved a user profile');
+        expect(res.body.message).to.deep.equal('Successfully retrieved a user profile');
         expect(res.body.data).to.have.keys('userName', 'bio', 'image');
         done();
       });
@@ -34,7 +34,7 @@ describe('GET /api/v1/profiles', () => {
         expect(res).have.status(404);
         expect(res).to.be.an('object');
         expect(res.body).to.have.keys('message');
-        expect(res.body.message).to.deep.equal('profile for Kadhutiiii not found');
+        expect(res.body.message).to.deep.equal('Profile for Kadhutiiii not found');
         done();
       });
   });
@@ -51,7 +51,7 @@ describe('PUT /api/v1/profiles', () => {
         expect(res).have.status(403);
         expect(res).to.be.an('object');
         expect(res.body).to.have.keys('error');
-        expect(res.body.error).to.deep.equal('sorry! you can not edit the profile that is not yours');
+        expect(res.body.error).to.deep.equal('Sorry! You cannot edit the profile that is not yours');
         done();
       });
   });
