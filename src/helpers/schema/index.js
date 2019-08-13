@@ -1,5 +1,11 @@
 import validationRules from './validationRules';
 
-export default {
-  validationRules,
+const options = {
+  language: {
+    key: '{{key}} '
+  }
+};
+
+export {
+  validationRules, options,
 };

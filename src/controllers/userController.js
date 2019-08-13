@@ -1,5 +1,6 @@
 import { config } from 'dotenv';
 import bcrypt from 'bcrypt';
+import passport from 'passport';
 import { User } from '../sequelize/models';
 import { hashedPassword, genToken } from '../helpers/auth';
 import sendEmail from '../helpers/mailer';
@@ -11,11 +12,11 @@ config();
  */
 class Authentication {
   /**
-     * @description user signup
-     * @param {object} req
-     * @param {object} res
-     * @returns {object} signed up user
-     */
+   * @description user signup
+   * @param {object} req
+   * @param {object} res
+   * @returns {object} signed up user
+   */
   static async signup(req, res) {
     try {
       const { email, userName, password } = req.body;
@@ -113,6 +114,30 @@ class Authentication {
     return res.status(200).json({
       message: 'You have reset your password Successfully!'
     });
+  }
+
+  /**
+   * @description user login
+   * @param {object} req
+   * @param {object} res
+   * @returns {object} logged in user
+   */
+  static login(req, res) {
+    passport.authenticate('local', (err, user) => {
+      if (err) {
+        return res.status(401).json({
+          error: err.message
+        });
+      }
+      res.status(200).json({
+        message: 'Welcome, you are successfully logged in',
+        data: {
+          token: genToken(user),
+          username: user.userName,
+          email: user.email
+        }
+      });
+    })(req, res);
   }
 }
 

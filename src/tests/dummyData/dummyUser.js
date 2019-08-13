@@ -224,4 +224,13 @@ export default {
     password: 'Jamal.123',
     confirmPassword: 1
   },
+  newUser: {
+    firstName: 'Musinda',
+    lastName: 'Kadhuwa',
+    userName: 'Kaduzichi',
+    email: 'jamal@gmail12.com',
+    password: 'Jamal1230!',
+    confirmPassword: 'Jamal1230!',
+    verified: true
+  }
 };

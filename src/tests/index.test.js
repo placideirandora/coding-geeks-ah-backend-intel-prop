@@ -11,7 +11,7 @@ describe('Test for a url not found', () => {
       .request(app)
       .get('/404/error')
       .end((err, res) => {
-        res.body.should.have.status(404);
+        res.should.have.status(404);
         res.body.error.should.equal('route not found');
       });
   });
@@ -23,7 +23,7 @@ describe('Test the base url / for author-haven', () => {
       .request(app)
       .get('/')
       .end((err, res) => {
-        res.body.should.have.status(200);
+        res.should.have.status(200);
         res.body.should.be.an('object');
         res.body.message.should.equal('Welcome to Authors Haven');
       });
