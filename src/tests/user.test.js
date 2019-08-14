@@ -11,7 +11,13 @@ chai.use(chaiHttp);
 const { expect } = chai;
 const { dummyUser } = dummy;
 
-const userToken = genToken(dummyUser.validUser);
+const userToken = genToken(dummyUser.newUserForFollow);
+
+before(() => {
+  const { password } = dummyUser.newUser;
+  dummyUser.newUser.password = hashedPassword(password);
+  User.create(dummyUser.newUser);
+});
 
 describe('POST /api/v1/users', () => {
   it('Should return error if user tries to signup with an invalid firstName', (done) => {
@@ -604,11 +610,6 @@ describe('POST /api/v1/reset-password/:token', () => {
 });
 // Login Tests
 describe('POST /api/v1/login', () => {
-  before(() => {
-    const { password } = dummyUser.newUser;
-    dummyUser.newUser.password = hashedPassword(password);
-    User.create(dummyUser.newUser);
-  });
   it('Should return with user information when correct credentials are supplied and account is verified', (done) => {
     chai
       .request(app)
@@ -716,6 +717,55 @@ describe('POST /api/v1/login', () => {
         expect(res).have.status(401);
         expect(res.body).to.have.key('error');
         expect(res.body.error).to.deep.equal('Please verify your account first. Visit your email to verify');
+      });
+  });
+});
+// Test for folow and unfollow each other
+describe('POST /api/v1/:userName/follow', () => {
+  it('User Should follow other user', (done) => {
+    chai.request(app)
+      .post('/api/v1/Kaduzichi/follow')
+      .set('Authorization', userToken)
+      .end((err, res) => {
+        expect(res).have.status(201);
+        expect(res).to.be.an('object');
+        done();
+      });
+  });
+});
+describe('Get /api/v1/:userName/following', () => {
+  it('User Should see the list of whom he follows', (done) => {
+    chai.request(app)
+      .get('/api/v1/eubule/following')
+      .set('Authorization', userToken)
+      .end((err, res) => {
+        expect(res).have.status(200);
+        expect(res).to.be.an('object');
+        done();
+      });
+  });
+});
+describe('Get /api/v1/:userName/followers', () => {
+  it('User Should see the list of whom follows him', (done) => {
+    chai.request(app)
+      .get('/api/v1/Kaduzichi/followers')
+      .set('Authorization', userToken)
+      .end((err, res) => {
+        expect(res).have.status(200);
+        expect(res).to.be.an('object');
+        done();
+      });
+  });
+});
+describe('Get /api/v1/:userName/unfollow', () => {
+  it('User Should be able to unfollow each other', (done) => {
+    chai.request(app)
+      .delete('/api/v1/Kaduzichi/unfollow')
+      .set('Authorization', userToken)
+      .end((err, res) => {
+        expect(res).have.status(200);
+        expect(res).to.be.an('object');
+        done();
       });
   });
 });

@@ -299,6 +299,210 @@
                 }
             }
         },
+        "/api/v1/{username}/follow": {
+            "post": {
+                "tags": [
+                    "Users"
+                ],
+                "description": "User follow each other",
+                "parameters": [
+                    {
+                        "name": "username",
+                        "in": "path",
+                        "description": "username",
+                        "required":true,
+                        "type":"string"
+                    },
+                    {
+                        "name": "Authorization",
+                        "in": "header",
+                        "description": "The user token",
+                        "required":true,
+                        "type":"string"
+                    }],
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Successfully follow user",
+                        "schema": {
+                            "properties": {
+                                "message": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Missing fields or invalid value",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+
+                    "404": {
+                        "description": "User not found",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/{username}/unfollow": {
+            "delete": {
+                "tags": [
+                    "Users"
+                ],
+                "description": "User unfollow each other",
+                "parameters": [
+                    {
+                        "name": "username",
+                        "in": "path",
+                        "description": "username",
+                        "required":true,
+                        "type":"string"
+                    },
+                    {
+                        "name": "Authorization",
+                        "in": "header",
+                        "description": "The user token",
+                        "required":true,
+                        "type":"string"
+                    }],
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successfully unfollowed user",
+                        "schema": {
+                            "properties": {
+                                "message": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Missing fields or invalid value",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+
+                    "404": {
+                        "description": "User not found",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/{username}/following": {
+            "get": {
+                "tags": [
+                    "Users"
+                ],
+                "description": "User can see a list of those he follows",
+                "parameters": [
+                    {
+                        "name": "username",
+                        "in": "path",
+                        "description": "username",
+                        "required":true,
+                        "type":"string"
+                    },
+                    {
+                        "name": "Authorization",
+                        "in": "header",
+                        "description": "The user token",
+                        "required":true,
+                        "type":"string"
+                    }],
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Successfully retrieve the list followers",
+                        "schema": {
+                            "properties": {
+                                "message": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Missing fields or invalid value",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+
+                    "404": {
+                        "description": "User not found",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/{username}/followers": {
+            "get": {
+                "tags": [
+                    "Users"
+                ],
+                "description": "User can see a list of those follow him",
+                "parameters": [
+                    {
+                        "name": "username",
+                        "in": "path",
+                        "description": "username",
+                        "required":true,
+                        "type":"string"
+                    },
+                    {
+                        "name": "Authorization",
+                        "in": "header",
+                        "description": "The user token",
+                        "required":true,
+                        "type":"string"
+                    }],
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Successfully retrieve the list followers",
+                        "schema": {
+                            "properties": {
+                                "message": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Missing fields or invalid value",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+
+                    "404": {
+                        "description": "User not found",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                }
+            }
+        },
         "/api/v1/verify-email/{token}": {
             "post": {
                 "tags": [
