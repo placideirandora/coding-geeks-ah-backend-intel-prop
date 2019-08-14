@@ -76,6 +76,37 @@ describe('GET /api/v1/profiles', () => {
   });
 });
 
+describe('GET /api/v1/profiles', () => {
+  it('Should return an error message if user tries to fetch user profiles before they log in', (done) => {
+    chai.request(app)
+      .get('/api/v1/profiles')
+      .end((err, res) => {
+        if (err) done(err);
+        expect(res).to.have.status(401);
+        expect(res.body).to.be.an('object');
+        expect(res.body).to.have.keys('error');
+        expect(res.body.error).to.deep.equal('Please log in or Register');
+        done();
+      });
+  });
+});
+
+describe('GET /api/v1/profiles', () => {
+  it('Should A list of profiles if  user is identified', (done) => {
+    chai.request(app)
+      .get('/api/v1/profiles')
+      .set('Authorization', userToken)
+      .end((err, res) => {
+        if (err) done(err);
+        expect(res).to.have.status(200);
+        expect(res.body).to.be.an('object');
+        expect(res.body).to.have.keys('message', 'data');
+        expect(res.body.data[0]).to.have.keys('userName', 'bio', 'image');
+        done();
+      });
+  });
+});
+
 describe('PUT /api/v1/profiles', () => {
   it('should get an error when there is a wrong input profile name', (done) => {
     chai
