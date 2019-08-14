@@ -42,6 +42,27 @@ class Profile {
   }
 
   /**
+   * @description fetch all the profiles
+   * @param {object} req
+   * @param {object} res
+   * @returns {object} all available profiles
+   */
+  static async fetchProfiles(req, res) {
+    try {
+      const users = await User.findAll({
+        where: { role: 'user' },
+        attributes: ['userName', 'bio', 'image']
+      });
+      res.status(200).json({
+        message: `${users.length} Users found`,
+        data: users
+      });
+    } catch (err) {
+      // console.log(err);
+    }
+  }
+
+  /**
        * @description update user profile
        * @param {object} req
        * @param {object} res
@@ -53,16 +74,11 @@ class Profile {
       filename = req.files.image.path;
     }
 
-    cloudinary.v2.uploader.upload(filename, { tags: 'Authors-haven' }, async (err, image) => {
+    cloudinary.v2.uploader.upload(filename, async (err, image) => {
       try {
         const userName = req.params.username;
         const user = await User.findOne({ where: { userName } });
         const oldURL = user.image;
-        if (!user) {
-          return res.status(400).json({
-            message: 'User not found',
-          });
-        }
         const inputUsername = req.body.userName;
         if (inputUsername) {
           const usernamefound = await User.findOne({ where: { userName: inputUsername } });

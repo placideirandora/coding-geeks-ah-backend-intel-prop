@@ -327,8 +327,7 @@
                   }
                 }
             },
-
-      "/api/v1/profiles/{username}": {
+       "/api/v1/profiles/{username}": {
         "put": {
           "tags": [
             "Profile"
@@ -356,7 +355,7 @@
                 "paramType": "body",
                 "dataType": "file",
                 "schema": {
-                  "$ref": "#/definitions/profile"
+                  "$ref": "#/definitions/Profile"
                 }
             }
           ],
@@ -414,9 +413,61 @@
                 }
             }
           }
-      }
-        },
+       },
+        
+       "/api/v1/profiles": {
+        "get": {
+            "tags": [
+              "Profile"
+            ],
+            "summary": "All profiles",
+            "description": "Fetch all user profiles",
+            "parameters": [
+              {
+                "name": "Authorization",
+                "in": "header",
+                "description": "User token",
+                "required":false,
+                "type":"string"
+              }
+            ],
+            "produces": [
+              "application/json"
+            ],
+            "responses": {
+                "200": {
+                    "description": "Successfully retrieved all profiles",
+                    "schema": {
+                        "properties": {
+                            "status": {
+                                "type": "integer"
+                            },
+                            "data": {
+                                "type": "array",
+                                "$ref": "#/definitions/Profile"
+                            }
+                        }
+                    }
+                },
+                "401": {
+                    "description": "User is not authenticated",
+                    "schema": {
+                        "properties": {
+                            "error": {
+                                "type": "string"
+                            },
+                            "me": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
+            }
+          }
+       }
 
+        },
+        
     "definitions": {
         "User": {
             "properties": {
@@ -446,7 +497,7 @@
 
             }
         },
-        "profile": {
+        "Profile": {
             "properties": {
                 "username": {
                     "type":"string"
@@ -455,7 +506,7 @@
                     "type":"string"
                 },
                 "image": {
-                    "type": "file"
+                    "type": "string"
                 }
             }
         },

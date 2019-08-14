@@ -12,6 +12,12 @@ const { dummyUser } = dummy;
 
 const userToken = genToken(dummyUser.validUser);
 
+before(() => {
+  const { password } = dummyUser.newUser;
+  dummyUser.newUser.password = hashedPassword(password);
+  User.create(dummyUser.newUser);
+});
+
 describe('POST /api/v1/users', () => {
   it('Should return error if user tries to signup with an invalid firstName', (done) => {
     chai.request(app)
@@ -603,11 +609,6 @@ describe('POST /api/v1/reset-password/:token', () => {
 });
 // Login Tests
 describe('POST /api/v1/login', () => {
-  before(() => {
-    const { password } = dummyUser.newUser;
-    dummyUser.newUser.password = hashedPassword(password);
-    User.create(dummyUser.newUser);
-  });
   it('Should return with user information when correct credentials are supplied and account is verified', (done) => {
     chai
       .request(app)

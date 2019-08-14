@@ -3,7 +3,7 @@ import jwt from 'jsonwebtoken';
 const verifyToken = (req, res, next) => {
   const token = req.headers.authorization || req.params.token;
   if (!token) {
-    res.status(401).json({ status: 401, error: 'Please login or register' });
+    res.status(401).json({ error: 'Please log in or Register' });
   } else {
     jwt.verify(token, process.env.SECRET_KEY, (error, decoded) => {
       if (error) {
