@@ -327,7 +327,7 @@
                   }
                 }
             },
-       "/api/v1/profiles/{username}": {
+      "/api/v1/profiles/{username}": {
         "put": {
           "tags": [
             "Profile"
@@ -379,6 +379,41 @@
                 "description": "Error: Server Error"
               }
           }
+        },
+        "get": {
+            "tags": [
+              "Profile"
+            ],
+            "summary": "get the user profile",
+            "description": "get the user profile",
+            "parameters": [
+              {
+                "name": "username",
+                "in": "path",
+                "description": "put your username here",
+                "required":true,
+                "type":"string"
+              }
+            ],
+            "produces": [
+              "application/json"
+            ],
+            "responses": {
+              "200": {
+                  "description": "success: when a purchase order is sucessfully updated"
+                },
+                "404": {
+                  "description": "Error: user profile not found"
+                },
+                "401": {
+                  "description": " unauthorized"
+                },
+                "500": {
+                  "description": "Server Error"
+                }
+            }
+          }
+      }
         },
         "get": {
             "tags": [
@@ -497,6 +532,7 @@
 
             }
         },
+
         "Profile": {
             "properties": {
                 "username": {

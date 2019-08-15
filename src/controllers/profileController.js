@@ -63,18 +63,18 @@ class Profile {
   }
 
   /**
-       * @description update user profile
-       * @param {object} req
-       * @param {object} res
-       * @returns {object} return object containing updated user profile
-       */
+   * @description update user profile
+   * @param {object} req
+   * @param {object} res
+   * @returns {object} return object containing updated user profile
+   */
   static async editProfile(req, res) {
     let filename = '';
     if (req.files.image) {
       filename = req.files.image.path;
     }
 
-    cloudinary.v2.uploader.upload(filename, async (err, image) => {
+    cloudinary.v2.uploader.upload(filename, { tags: 'Authors-haven' }, async (err, image) => {
       try {
         const userName = req.params.username;
         const user = await User.findOne({ where: { userName } });

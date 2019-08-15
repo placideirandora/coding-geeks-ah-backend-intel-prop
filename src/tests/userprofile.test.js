@@ -252,6 +252,7 @@ describe('PUT /api/v1/profiles', () => {
         done();
       });
   });
+
   it('should return error id user tries to update with and existing user name', (done) => {
     chai
       .request(app)
