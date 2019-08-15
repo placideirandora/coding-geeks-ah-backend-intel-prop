@@ -32,13 +32,29 @@ export const up = (queryInterface, Sequelize) => queryInterface.createTable('Use
     type: Sequelize.STRING,
     defaultValue: 'user',
   },
+  bio: {
+    allowNull: true,
+    type: Sequelize.STRING,
+  },
+  image: {
+    allowNull: true,
+    type: Sequelize.STRING,
+  },
   verified: {
     allowNull: false,
     type: Sequelize.BOOLEAN,
     defaultValue: false
   },
+  createdAt: {
+    allowNull: true,
+    type: Sequelize.DATE,
+  },
+  updatedAt: {
+    allowNull: true,
+    type: Sequelize.DATE,
+  },
 }, {
-  timestamps: false,
+  timestamps: true,
 });
 
 export const down = queryInterface => queryInterface.dropTable('Users');

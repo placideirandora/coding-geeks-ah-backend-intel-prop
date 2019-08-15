@@ -40,9 +40,25 @@ export default (sequelize, DataTypes) => {
         type: DataTypes.BOOLEAN,
         defaultValue: false,
       },
+      bio: {
+        allowNull: true,
+        type: DataTypes.STRING,
+      },
+      image: {
+        allowNull: true,
+        type: DataTypes.STRING,
+      },
+      createdAt: {
+        allowNull: true,
+        type: DataTypes.DATE,
+      },
+      updatedAt: {
+        allowNull: true,
+        type: DataTypes.DATE,
+      },
     },
     {
-      timestamps: false,
+      timestamps: true,
     }
   );
 
