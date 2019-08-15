@@ -18,7 +18,6 @@ before(() => {
   User.create(dummyUser.newUser);
 });
 
-
 describe('POST /api/v1/users', () => {
   it('Should return error if user tries to signup with an invalid firstName', (done) => {
     chai.request(app)
