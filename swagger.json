@@ -530,7 +530,95 @@
                     }
                   }
                 }
+            },
+
+      "/api/v1/profiles/{username}": {
+        "put": {
+          "tags": [
+            "Profile"
+          ],
+          "summary": "update the user profile",
+          "description": "update the user profile",
+          "parameters": [
+            {
+                "name":"Authorization",
+                "in": "header",
+                "description" :"The user token",
+                "required":true
+              
+              },
+            {
+              "name": "username",
+              "in": "path",
+              "description": "put your username here",
+              "required":true,
+              "type":"string"
+            },
+            {
+                "name": "username",
+                "in": "body",
+                "paramType": "body",
+                "dataType": "file",
+                "schema": {
+                  "$ref": "#/definitions/profile"
+                }
             }
+          ],
+          "produces": [
+            "application/json"
+          ],
+          "responses": {
+            "200": {
+                "description": "success: when a purchase order is sucessfully updated"
+              },
+              "404": {
+                "description": "Error: user profile not found"
+              },
+              "403": {
+                "description": "Error: forbiden"
+              },
+              "401": {
+                "description": " Error: unauthorized"
+              },
+              "500": {
+                "description": "Error: Server Error"
+              }
+          }
+        },
+        "get": {
+            "tags": [
+              "Profile"
+            ],
+            "summary": "get the user profile",
+            "description": "get the user profile",
+            "parameters": [
+              {
+                "name": "username",
+                "in": "path",
+                "description": "put your username here",
+                "required":true,
+                "type":"string"
+              }
+            ],
+            "produces": [
+              "application/json"
+            ],
+            "responses": {
+              "200": {
+                  "description": "success: when a purchase order is sucessfully updated"
+                },
+                "404": {
+                  "description": "Error: user profile not found"
+                },
+                "401": {
+                  "description": " unauthorized"
+                },
+                "500": {
+                  "description": "Server Error"
+                }
+            }
+          }
+      }
         },
 
     "definitions": {
@@ -560,6 +648,19 @@
                     "type": "string"
                 }
 
+            }
+        },
+        "profile": {
+            "properties": {
+                "username": {
+                    "type":"string"
+                },
+                "bio": {
+                    "type":"string"
+                },
+                "image": {
+                    "type": "file"
+                }
             }
         },
         "Login": {
