@@ -58,7 +58,7 @@ describe('GET /api/v1/profiles', () => {
 });
 
 describe('GET /api/v1/profiles', () => {
-  it('Should A list of profiles if  user is identified', (done) => {
+  it('Should return a list of profiles if the user is identified', (done) => {
     chai.request(app)
       .get('/api/v1/profiles')
       .set('Authorization', userToken)
@@ -67,6 +67,7 @@ describe('GET /api/v1/profiles', () => {
         expect(res).to.have.status(200);
         expect(res.body).to.be.an('object');
         expect(res.body).to.have.keys('message', 'data');
+        expect(res.body.message).to.deep.equal('2 Users found');
         expect(res.body.data[0]).to.have.keys('userName', 'bio', 'image');
         done();
       });
@@ -83,22 +84,6 @@ describe('GET /api/v1/profiles', () => {
         expect(res.body).to.be.an('object');
         expect(res.body).to.have.keys('error');
         expect(res.body.error).to.deep.equal('Please log in or Register');
-        done();
-      });
-  });
-});
-
-describe('GET /api/v1/profiles', () => {
-  it('Should A list of profiles if  user is identified', (done) => {
-    chai.request(app)
-      .get('/api/v1/profiles')
-      .set('Authorization', userToken)
-      .end((err, res) => {
-        if (err) done(err);
-        expect(res).to.have.status(200);
-        expect(res.body).to.be.an('object');
-        expect(res.body).to.have.keys('message', 'data');
-        expect(res.body.data[0]).to.have.keys('userName', 'bio', 'image');
         done();
       });
   });

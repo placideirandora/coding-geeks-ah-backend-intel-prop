@@ -37,7 +37,7 @@ class Profile {
         }
       });
     } catch (error) {
-      // console.log(error);
+      throw (error);
     }
   }
 
@@ -58,7 +58,7 @@ class Profile {
         data: users
       });
     } catch (err) {
-      // console.log(err);
+      throw (err);
     }
   }
 
@@ -117,7 +117,7 @@ class Profile {
           data: newProfile,
         });
       } catch (error) {
-        // console.log(error)
+        throw (error);
       }
     });
   }
