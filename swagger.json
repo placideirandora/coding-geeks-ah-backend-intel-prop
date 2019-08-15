@@ -236,6 +236,7 @@
                 }
             }
         },
+
         "/api/v1/reset-password/{token}": {
             "post": {
                 "tags": [
@@ -412,7 +413,7 @@
                   "description": "Server Error"
                 }
             }
-      }
+          
         }
        },
         
