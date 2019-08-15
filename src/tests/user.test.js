@@ -573,7 +573,7 @@ describe('POST /api/v1/reset-password/:token', () => {
   });
 });
 // Login Tests
-describe('POST /api/v1/login', () => {
+describe('POST /api/v1/users/login', () => {
   before(async () => {
     const { password } = dummyUser.newUser;
     dummyUser.newUser.password = hashedPassword(password);
@@ -582,7 +582,7 @@ describe('POST /api/v1/login', () => {
   it('Should return with user information when correct credentials are supplied and account is verified', (done) => {
     chai
       .request(app)
-      .post('/api/v1/login')
+      .post('/api/v1/users/login')
       .send({
         email: 'jamal@gmail12.com',
         password: 'Jamal1230!',
@@ -600,11 +600,11 @@ describe('POST /api/v1/login', () => {
       });
   });
 });
-describe('POST /api/v1/login', () => {
+describe('POST /api/v1/users/login', () => {
   it('Should return error message when user introduces undefined field', () => {
     chai
       .request(app)
-      .post('/api/v1/login')
+      .post('/api/v1/users/login')
       .send({
         email: 'hareraloston@gmail.com',
         password: 'Jamal.123',
@@ -619,7 +619,7 @@ describe('POST /api/v1/login', () => {
   it('Should output error if user provides no email', () => {
     chai
       .request(app)
-      .post('/api/v1/login')
+      .post('/api/v1/users/login')
       .send({
         email: '',
         password: 'Jamal1230!'
@@ -633,7 +633,7 @@ describe('POST /api/v1/login', () => {
   it('Should output error if user provides no password', () => {
     chai
       .request(app)
-      .post('/api/v1/login')
+      .post('/api/v1/users/login')
       .send({
         email: 'jamal@gmail12.com',
         password: ''
@@ -648,7 +648,7 @@ describe('POST /api/v1/login', () => {
   it('Should output error message when password provided is incorrect', () => {
     chai
       .request(app)
-      .post('/api/v1/login')
+      .post('/api/v1/users/login')
       .send({
         email: 'jamal@gmail12.com',
         password: 'Jamal12301'
@@ -663,7 +663,7 @@ describe('POST /api/v1/login', () => {
   it('Should output error message when email provided is incorrect', () => {
     chai
       .request(app)
-      .post('/api/v1/login')
+      .post('/api/v1/users/login')
       .send({
         email: 'jamalmoh@gmail12.com',
         password: 'Jamal1230'
@@ -677,7 +677,7 @@ describe('POST /api/v1/login', () => {
   it('Should return error message when user account is not verified', () => {
     chai
       .request(app)
-      .post('/api/v1/login')
+      .post('/api/v1/users/login')
       .send({
         email: 'hareraloston@gmail.com',
         password: 'Jamal.123',

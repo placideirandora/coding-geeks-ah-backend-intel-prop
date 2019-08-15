@@ -97,4 +97,20 @@ export default {
     }
     next();
   },
+  createArticleValidation(req, res, next) {
+    const createArticleSchema = Joi.object().keys({
+      title: validationRules.title,
+      description: validationRules.description,
+      body: validationRules.body,
+      category: validationRules.category,
+      tags: validationRules.tags,
+    });
+    const { error } = Joi.validate(req.body, createArticleSchema, options);
+    if (error) {
+      return res.status(400).json({
+        error: error.details[0].message.replace(/\\|(")/g, '')
+      });
+    }
+    next();
+  },
 };

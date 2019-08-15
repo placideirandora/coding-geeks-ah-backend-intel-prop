@@ -15,12 +15,6 @@
         "http",
         "https"
     ],
-    "consumes": [
-        "application/json"
-    ],
-    "produces": [
-        "application/json"
-    ],
     "paths": {
         "/": {
             "get": {
@@ -123,7 +117,7 @@
                 }
             }
         },
-        "/api/v1/login": {
+        "/api/v1/users/login": {
             "post": {
                 "tags": [
                     "Users"
@@ -725,6 +719,132 @@
                 }
             }
           }
+       },
+       "/api/v1/articles": {
+        "post": {
+            "tags": [
+                "Articles"
+            ],
+            "description": "Authenticated user can create articles",
+            "parameters": [
+                {
+                        "name":"Authorization",
+                        "in": "header",
+                        "description" :"The user token",
+                        "required":true
+                      
+                 },
+                {
+                "name": "title",
+                "in": "formData",
+                "description": "",
+                "type": "string",
+                "required": true
+                },
+                {
+                "name": "description",
+                "in": "formData",
+                "description": "",
+                "type": "string",
+                "required": true
+                    },
+                {
+                "name": "body",
+                "in": "formData",
+                "description": "",
+                "type": "string",
+                "required": true
+               },
+                {
+                "name": "tagList",
+                "in": "formData",
+                "description": "",
+                "type": "string",
+                "required": false
+                },
+                {
+                "name": "category",
+                "in": "formData",
+                "description": "",
+                "type": "string",
+                "required": false
+                    },
+                {
+                    "name": "image",
+                    "in": "formData",
+                    "description": "",
+                    "type": "file",
+                    "required": false
+                        }
+
+                        ],
+            "responses": {
+                "201": {
+                    "description": "Article created successfully",
+                    "schema": {
+                        "properties": {
+                            "message": {
+                                "type": "string"
+                            },
+                            "data": {
+                                "$ref": "#/definitions/Articles"
+                            }
+                        }
+                    }
+                },
+                "400": {
+                    "description": "Missing fields or invalid value",
+                    "schema": {
+                        "$ref": "#/definitions/Error"
+                    }
+                },
+
+                "403": {
+                    "description": "Wrong token",
+                    "schema": {
+                        "$ref": "#/definitions/Error"
+                    }
+                }
+            }
+        },
+        "get": {
+            "tags": [
+              "Articles"
+            ],
+            "description": "Fetch all user articles",
+            "produces": [
+              "application/json"
+            ],
+            "responses": {
+                "200": {
+                    "description": "Successfully retrieved all articles",
+                    "schema": {
+                        "properties": {
+                            "status": {
+                                "type": "integer"
+                            },
+                            "data": {
+                                "type": "array",
+                                "$ref": "#/definitions/Articles"
+                            }
+                        }
+                    }
+                },
+                "401": {
+                    "description": "User is not authenticated",
+                    "schema": {
+                        "properties": {
+                            "error": {
+                                "type": "string"
+                            },
+                            "me": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
+            }
+          }
        }
 
         },
@@ -800,6 +920,42 @@
                 }
         }
     },
+    "Articles": {
+        "properties": {
+            "title": {
+                "type": "string"
+            },
+            "description": {
+                "type": "string"
+            },
+            "body": {
+                "type": "string"
+            },
+            "category": {
+                "type": "string"
+            },
+            "images": {
+                "type": "string"
+            },
+            "tagList": {
+                "type": "string"
+            },
+            "author": {
+                "authorId": {
+                    "type": "string"
+                },
+                "userName": {
+                    "type": "string"
+                },
+                "bio": {
+                    "type": "string"
+                },
+                "image": {
+                    "type": "string"
+                }
+            }
+    }
+},
         "Error": {
             "properties": {
                 "status": {

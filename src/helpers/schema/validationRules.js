@@ -164,4 +164,49 @@ export default {
       });
       return errors;
     }),
+
+  title: Joi.string()
+    .required()
+    .min(10)
+    .error((errors) => {
+      errors.forEach((err) => {
+        switch (err.type) {
+          case 'string.min':
+            err.message = 'Title must have atleast 10 characters';
+            break;
+        }
+      });
+      return errors;
+    }),
+
+  description: Joi.string()
+    .required()
+    .min(10)
+    .error((errors) => {
+      errors.forEach((err) => {
+        switch (err.type) {
+          case 'any.required':
+            err.message = 'Description is required';
+            break;
+          case 'string.min':
+            err.message = 'Description must have at least 10 characters';
+            break;
+        }
+      });
+      return errors;
+    }),
+  body: Joi.string()
+    .required()
+    .error((errors) => {
+      errors.forEach((err) => {
+        switch (err.type) {
+          case 'any.required':
+            err.message = 'Body is required';
+            break;
+        }
+      });
+      return errors;
+    }),
+  category: Joi.string(),
+  tags: Joi.string()
 };
