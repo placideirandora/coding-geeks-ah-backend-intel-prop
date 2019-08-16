@@ -37,16 +37,37 @@ class Profile {
         }
       });
     } catch (error) {
-      // console.log(error);
+      throw (error);
     }
   }
 
   /**
-       * @description update user profile
-       * @param {object} req
-       * @param {object} res
-       * @returns {object} return object containing updated user profile
-       */
+   * @description fetch all the profiles
+   * @param {object} req
+   * @param {object} res
+   * @returns {object} all available profiles
+   */
+  static async fetchProfiles(req, res) {
+    try {
+      const users = await User.findAll({
+        where: { role: 'user' },
+        attributes: ['userName', 'bio', 'image']
+      });
+      res.status(200).json({
+        message: `${users.length} Users found`,
+        data: users
+      });
+    } catch (err) {
+      throw (err);
+    }
+  }
+
+  /**
+   * @description update user profile
+   * @param {object} req
+   * @param {object} res
+   * @returns {object} return object containing updated user profile
+   */
   static async editProfile(req, res) {
     let filename = '';
     if (req.files.image) {
@@ -58,11 +79,6 @@ class Profile {
         const userName = req.params.username;
         const user = await User.findOne({ where: { userName } });
         const oldURL = user.image;
-        if (!user) {
-          return res.status(400).json({
-            message: 'User not found',
-          });
-        }
         const inputUsername = req.body.userName;
         if (inputUsername) {
           const usernamefound = await User.findOne({ where: { userName: inputUsername } });
@@ -101,7 +117,7 @@ class Profile {
           data: newProfile,
         });
       } catch (error) {
-        // console.log(error)
+        throw (error);
       }
     });
   }

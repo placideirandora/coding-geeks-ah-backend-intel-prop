@@ -251,6 +251,10 @@ export default {
     userName: 'kaka21',
     bio: 'adfgkehguhvfdkhkjdhndgfshgfsidhghdiuhgodhighdfughudfhgiufdghguhgfdhdf',
   },
+  profileUpdate: {
+    userName: 'ericProf',
+    bio: 'I am a software developper at Andela. I love watching soccer and preaching',
+  },
   invalidProfile1: {
     userName: 123,
     bio: 'fddhdh'
