@@ -23,7 +23,6 @@ export default {
     const { error } = Joi.validate(req.body, userSchema, options);
     if (error) {
       return res.status(400).json({
-        status: 'failed',
         error: error.details[0].message
       });
     }
@@ -38,7 +37,6 @@ export default {
     const { error } = Joi.validate(req.body, emailSchema, options);
     if (error) {
       return res.status(400).json({
-        status: 'failed',
         error: error.details[0].message
       });
     }
@@ -54,7 +52,6 @@ export default {
     const { error } = Joi.validate(req.body, passwordSchema, options);
     if (error) {
       return res.status(400).json({
-        status: 'failed',
         error: error.details[0].message
       });
     }

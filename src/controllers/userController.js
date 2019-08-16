@@ -46,7 +46,6 @@ class Authentication {
       return res.status(201).json({
         message: 'User created. Please, Check your email for a verification link.',
         data: {
-          token: userToken,
           id: createdUser.id,
           firstName: createdUser.firstName,
           lastName: createdUser.lastName,
@@ -86,7 +85,7 @@ class Authentication {
     const result = await User.findOne({ where: { email } });
     if (!result) {
       return res.status(404).json({
-        errors: `User with email: ${email} not found..`
+        error: `User with email: ${email} not found..`
       });
     }
 

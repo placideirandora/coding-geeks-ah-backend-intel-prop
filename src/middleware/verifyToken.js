@@ -7,7 +7,7 @@ const verifyToken = (req, res, next) => {
   } else {
     jwt.verify(token, process.env.SECRET_KEY, (error, decoded) => {
       if (error) {
-        return res.status(403).json({ status: 403, error: `${error.message}` });
+        return res.status(403).json({ error: `${error.message}` });
       }
       req.userData = decoded;
       next();
