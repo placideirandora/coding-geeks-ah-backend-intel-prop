@@ -22,9 +22,9 @@ router.post('/api/v1/send-email', Validation.emailValidation, UserAuth.emailSend
 router.post('/api/v1/reset-password/:token', verifyToken, Validation.passwordValidation, UserAuth.resetPassword);
 router.post('/api/v1/login', Validation.loginValidation, UserAuth.login);
 
-router.post('/api/v1/:userName/follow', verifyToken, UserFollow.followUser);
-router.delete('/api/v1/:userName/unfollow', verifyToken, UserFollow.unFollowUser);
-router.get('/api/v1/:userName/following', verifyToken, UserFollow.getFollowingList);
-router.get('/api/v1/:userName/followers', verifyToken, UserFollow.getFollowersList);
+router.post('/api/v1/profiles/:userName/follow', verifyToken, UserFollow.followUser);
+router.delete('/api/v1/profiles/:userName/unfollow', verifyToken, UserFollow.unFollowUser);
+router.get('/api/v1/profiles/:userName/following', verifyToken, UserFollow.getFollowingList);
+router.get('/api/v1/profiles/:userName/followers', verifyToken, UserFollow.getFollowersList);
 
 export default router;

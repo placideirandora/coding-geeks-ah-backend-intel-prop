@@ -8,27 +8,28 @@ config();
 class Following {
   /**
    *
-   * @param {*} req
-   * @param {*} res
+   * @param {object} req
+   * @param {object} res
    * @returns {object} return object containg data
    */
   static async followUser(req, res) {
     const { userName } = req.params;
     const userId = req.userData.id;
 
-    const checkUser = await User.findOne({ where: { userName } });
-    const { id } = checkUser;
-    const checkFollower = await Follow.findOne({ where: { follower: userId, following: id } });
+    const checkUser = await User.findOne({ where: { userName, verified: true } });
 
     if (!checkUser) {
       return res.status(404).json({
-        error: `User name ${userName} not exists`
+        error: `User name ${userName} does not exist`
       });
     }
 
+    const { id } = checkUser;
+    const checkFollower = await Follow.findOne({ where: { follower: userId, following: id } });
+
     if (checkFollower) {
       return res.status(409).json({
-        error: `User name ${userName} already followed`
+        error: `You have already followed ${userName}`
       });
     }
 
@@ -50,8 +51,8 @@ class Following {
 
   /**
    *
-   * @param {*} req
-   * @param {*} res
+   * @param {object} req
+   * @param {object} res
    * @returns {object} return object containg message
    */
   static async unFollowUser(req, res) {
@@ -62,7 +63,7 @@ class Following {
 
     if (!getUserId) {
       return res.status(404).json({
-        error: `User name ${userName} not exists`
+        error: `User name ${userName} does not exist`
       });
     }
 
@@ -83,8 +84,8 @@ class Following {
 
   /**
    *
-   * @param {*} req
-   * @param {*} res
+   * @param {object} req
+   * @param {object} res
    * @returns {object} return object containg data
    *
    */
@@ -96,7 +97,7 @@ class Following {
 
     if (!getUserId) {
       return res.status(404).json({
-        error: `User name ${userName} not exists`
+        error: `User name ${userName} does not exist`
       });
     }
 
@@ -105,7 +106,7 @@ class Following {
 
     if (followingList.length === 0) {
       return res.status(404).json({
-        message: 'No followers'
+        message: 'You are currently not following anyone'
       });
     }
 
@@ -124,8 +125,8 @@ class Following {
 
   /**
    *
-   * @param {*} req
-   * @param {*} res
+   * @param {object} req
+   * @param {object} res
    * @returns {object} return object containg data
    *
    */
@@ -137,7 +138,7 @@ class Following {
 
     if (!getUser) {
       return res.status(404).json({
-        error: `User name ${userName} not exists`
+        error: `User name ${userName} does not exist`
       });
     }
 
@@ -146,7 +147,7 @@ class Following {
 
     if (followersList.length === 0) {
       return res.status(404).json({
-        message: 'No followers'
+        message: 'You currently have no followers.'
       });
     }
 

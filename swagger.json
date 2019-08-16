@@ -300,10 +300,10 @@
                 }
             }
         },
-        "/api/v1/{username}/follow": {
+        "/api/v1/profiles/{username}/follow": {
             "post": {
                 "tags": [
-                    "Users"
+                    "Profile"
                 ],
                 "description": "User follow each other",
                 "parameters": [
@@ -351,10 +351,10 @@
                 }
             }
         },
-        "/api/v1/{username}/unfollow": {
+        "/api/v1/profiles/{username}/unfollow": {
             "delete": {
                 "tags": [
-                    "Users"
+                    "Profile"
                 ],
                 "description": "User unfollow each other",
                 "parameters": [
@@ -402,10 +402,10 @@
                 }
             }
         },
-        "/api/v1/{username}/following": {
+        "/api/v1/profiles/{username}/following": {
             "get": {
                 "tags": [
-                    "Users"
+                    "Profile"
                 ],
                 "description": "User can see a list of those he follows",
                 "parameters": [
@@ -453,10 +453,10 @@
                 }
             }
         },
-        "/api/v1/{username}/followers": {
+        "/api/v1/profiles/{username}/followers": {
             "get": {
                 "tags": [
-                    "Users"
+                    "Profile"
                 ],
                 "description": "User can see a list of those follow him",
                 "parameters": [
