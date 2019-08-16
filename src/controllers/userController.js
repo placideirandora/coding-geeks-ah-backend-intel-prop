@@ -145,17 +145,13 @@ class Authentication {
    * @param {object} res
    * @returns {object} logged out user
    */
-  static async signoutUser(req, res) {
+  static async logout(req, res) {
     const token = req.headers.authorization;
     const identifier = token.match(/\d+/g).join(''); // Extract numbers only from token to be used to uniquely identify a token in db
-    const invalidToken = bcrypt.hashSync(token, 10);
-    const schema = { identifier, invalidToken };
-    const rejectedToken = await DroppedToken.create(schema);
+    await DroppedToken.create({ identifier });
 
     return res.status(200).json({
-      status: 200,
       message: 'Successfully logged out.',
-      data: rejectedToken
     });
   }
 }

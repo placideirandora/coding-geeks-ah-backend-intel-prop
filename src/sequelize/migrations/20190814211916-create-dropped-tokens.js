@@ -10,10 +10,6 @@ export const up = (queryInterface, Sequelize) => queryInterface.createTable('Dro
     unique: true,
     type: Sequelize.STRING
   },
-  invalidToken: {
-    allowNull: false,
-    type: Sequelize.STRING
-  },
   createdAt: {
     allowNull: false,
     type: Sequelize.DATE

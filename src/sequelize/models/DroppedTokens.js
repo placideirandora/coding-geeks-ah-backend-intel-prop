@@ -6,10 +6,6 @@ export default (sequelize, DataTypes) => {
         type: DataTypes.STRING,
         allowNull: false
       },
-      invalidToken: {
-        type: DataTypes.STRING,
-        allowNull: false
-      },
     }
   );
   DroppedToken.associate = () => {

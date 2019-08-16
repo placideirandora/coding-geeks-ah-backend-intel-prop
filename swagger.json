@@ -181,6 +181,51 @@
                 }
             }
         },
+        "/api/v1/users/signout": {
+            "post": {
+                "tags": [
+                    "Users"
+                ],
+                "description": "Logout a user in system",
+                "parameters": [{
+                    "name": "Authorization",
+                    "in": "header",
+                    "description": "Token of the user wants to logout"
+                }],
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successfully logged out",
+                        "schema": {
+                            "properties": {
+                                "message": {
+                                    "type": "string"
+                                },
+                                "data": {
+                                    "$ref": "#/definitions/Error"
+                                }
+                            }
+                        }
+                    },
+
+                    "401": {
+                        "description": "You are already logged out",
+                        "schema": {
+                            "properties": {
+                                "message": {
+                                    "type": "string"
+                                }
+                            },
+                            "data": {
+                                "$ref": "#/definitions/Error"
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/api/v1/send-email": {
             "post": {
                 "tags": [
@@ -346,18 +391,28 @@
             {
               "name": "username",
               "in": "path",
-              "description": "put your username here",
+              "description": "your current username",
               "required":true,
               "type":"string"
             },
             {
                 "name": "username",
-                "in": "body",
+                "description": "username you want to change to",
+                "in": "forrmData",
                 "paramType": "body",
-                "dataType": "file",
-                "schema": {
-                  "$ref": "#/definitions/Profile"
-                }
+                "type": "string"
+            },
+            {
+                "name": "bio",
+                "description": "biograpaphy",
+                "in": "forrmData",
+                "paramType": "body",
+                "type": "string"
+            },
+            {
+                "name": "image",
+                "in": "forrmData",
+                "type": "file"
             }
           ],
           "produces": [
@@ -365,7 +420,7 @@
           ],
           "responses": {
             "200": {
-                "description": "success: when a purchase order is sucessfully updated"
+                "description": "success: when a profile is sucessfully updated"
               },
               "404": {
                 "description": "Error: user profile not found"
@@ -401,7 +456,7 @@
             ],
             "responses": {
               "200": {
-                  "description": "success: when a purchase order is sucessfully updated"
+                  "description": "success: when a profile is sucessfully retrieved"
                 },
                 "404": {
                   "description": "Error: user profile not found"
@@ -510,6 +565,19 @@
                 },
                 "image": {
                     "type": "string"
+                }
+            }
+        },
+        "Signout": {
+            "properties": {
+                "token": {
+                    "type":"string"
+                },
+                "username": {
+                    "type":"string"
+                },
+                "email": {
+                    "type": "file"
                 }
             }
         },

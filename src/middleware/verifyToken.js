@@ -10,12 +10,11 @@ const verifyToken = async (req, res, next) => {
       if (token) {
         const identifier = token.match(/\d+/g).join('');
         const droppedToken = await DroppedToken.findOne({ where: { identifier }, logging: false });
-        const rejectedToken = droppedToken;
 
         // Return user logged out message
-        if (rejectedToken) {
+        if (droppedToken) {
           return res.status(401).send({
-            message: 'You are logged out!'
+            message: 'You are already logged out!'
           });
         }
       }

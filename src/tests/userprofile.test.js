@@ -293,7 +293,7 @@ describe('PUT /api/v1/profiles', () => {
 describe('/Signout feature', () => {
   it('should logout a user', (done) => {
     chai.request(app)
-      .post('/api/v1/signout')
+      .post('/api/v1/users/logout')
       .set('Authorization', userToken)
       .end((error, res) => {
         expect(res.status).to.be.equal(200);
@@ -310,7 +310,7 @@ describe('/Signout feature', () => {
       .attach('image', fs.readFileSync('src/tests/dummyData/avatar.jpg'), 'avatar.jpg')
       .end((error, res) => {
         expect(res.status).to.be.equal(401);
-        expect(res.body).to.have.deep.property('message', 'You are logged out!');
+        expect(res.body).to.have.deep.property('message', 'You are already logged out!');
         done();
       });
   });
