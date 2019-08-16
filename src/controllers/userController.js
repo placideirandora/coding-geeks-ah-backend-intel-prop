@@ -139,6 +139,54 @@ class Authentication {
       });
     })(req, res);
   }
+
+  /**
+   * @param {object} req
+   * @param {object} res
+   * @returns {object} returns an object containing a facebook profile
+   */
+  static async facebookLogin(req, res) {
+    res.status(200).json({
+      message: 'Welcome, You have successfully logged in with Facebook!',
+      data: {
+        token: genToken(req.user),
+        username: req.user.userName,
+        email: req.user.email
+      }
+    });
+  }
+
+  /**
+   * @param {object} req
+   * @param {object} res
+   * @returns {object} returns an object containing a google profile
+   */
+  static async googleLogin(req, res) {
+    res.status(200).json({
+      message: 'Welcome, You have successfully logged in with Google!',
+      data: {
+        token: genToken(req.user),
+        username: req.user.userName,
+        email: req.user.email
+      }
+    });
+  }
+
+  /**
+   * @param {object} req
+   * @param {object} res
+   * @returns {object} returns an object containing a google profile
+   */
+  static async twitterLogin(req, res) {
+    res.status(200).json({
+      message: 'Welcome, You have successfully logged in with Twitter!',
+      data: {
+        token: genToken(req.user),
+        username: req.user.userName,
+        email: req.user.email
+      }
+    });
+  }
 }
 
 export default Authentication;

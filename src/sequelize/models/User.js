@@ -9,25 +9,23 @@ export default (sequelize, DataTypes) => {
         type: DataTypes.INTEGER
       },
       firstName: {
-        allowNull: false,
+        allowNull: true,
         type: DataTypes.STRING,
       },
       lastName: {
-        allowNull: false,
+        allowNull: true,
         type: DataTypes.STRING,
       },
       userName: {
         allowNull: false,
         type: DataTypes.STRING,
-        unique: true,
       },
       email: {
-        allowNull: false,
+        allowNull: true,
         type: DataTypes.STRING,
-        unique: true,
       },
       password: {
-        allowNull: false,
+        allowNull: true,
         type: DataTypes.STRING,
       },
       role: {
@@ -36,9 +34,17 @@ export default (sequelize, DataTypes) => {
         defaultValue: 'user',
       },
       verified: {
-        allowNull: false,
+        allowNull: true,
         type: DataTypes.BOOLEAN,
         defaultValue: false,
+      },
+      socialid: {
+        allowNull: true,
+        type: DataTypes.STRING
+      },
+      platform: {
+        allowNull: true,
+        type: DataTypes.STRING
       },
     },
     {
