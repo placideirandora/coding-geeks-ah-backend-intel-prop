@@ -1,7 +1,7 @@
 import { config } from 'dotenv';
 import bcrypt from 'bcrypt';
 import passport from 'passport';
-import { User } from '../sequelize/models';
+import { User, DroppedToken } from '../sequelize/models';
 import { hashedPassword, genToken } from '../helpers/auth';
 import sendEmail from '../helpers/mailer';
 
@@ -137,6 +137,22 @@ class Authentication {
         }
       });
     })(req, res);
+  }
+
+  /**
+   * @description user logout
+   * @param {object} req
+   * @param {object} res
+   * @returns {object} logged out user
+   */
+  static async logout(req, res) {
+    const token = req.headers.authorization;
+    const identifier = token.match(/\d+/g).join(''); // Extract numbers only from token to be used to uniquely identify a token in db
+    await DroppedToken.create({ identifier });
+
+    return res.status(200).json({
+      message: 'Successfully logged out.',
+    });
   }
 }
 

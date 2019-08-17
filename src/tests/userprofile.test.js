@@ -289,3 +289,29 @@ describe('PUT /api/v1/profiles', () => {
       });
   });
 });
+
+describe('/Signout feature', () => {
+  it('should logout a user', (done) => {
+    chai.request(app)
+      .post('/api/v1/users/logout')
+      .set('Authorization', userToken)
+      .end((error, res) => {
+        expect(res.status).to.be.equal(200);
+        expect(res.body).to.have.deep.property('message', 'Successfully logged out.');
+        done();
+      });
+  });
+
+  it('should should return error if logged out user tries to access protected routes', (done) => {
+    chai.request(app)
+      .put('/api/v1/profiles/Kadhut')
+      .set('Authorization', userToken)
+      .field(dummyUser.updateProfile)
+      .attach('image', fs.readFileSync('src/tests/dummyData/avatar.jpg'), 'avatar.jpg')
+      .end((error, res) => {
+        expect(res.status).to.be.equal(401);
+        expect(res.body).to.have.deep.property('message', 'You are already logged out!');
+        done();
+      });
+  });
+});

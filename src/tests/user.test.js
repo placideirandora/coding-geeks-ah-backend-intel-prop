@@ -489,7 +489,7 @@ describe('POST /api/v1/reset-password/:token', () => {
 describe('POST /api/v1/reset-password/:token', () => {
   it('Should not reset password of the user if token is invalid', (done) => {
     chai.request(app)
-      .post('/api/v1/reset-password/invalidtoken')
+      .post('/api/v1/reset-password/DQyMn0.spxg5wNgLosMvKOTsqNpoTnzitdxvBD7y9-fbC1elpc')
       .send(dummyUser.resetPassword)
       .end((err, res) => {
         if (err) done(err);
