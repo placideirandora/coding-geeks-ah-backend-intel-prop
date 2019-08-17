@@ -1,6 +1,7 @@
 import express from 'express';
 import connectmultiparty from 'connect-multiparty';
 import Validation from '../middleware/validation';
+import ContentType from '../middleware/contentType';
 import UserAuth from '../controllers/userController';
 import verifyToken from '../middleware/verifyToken';
 import UserFollow from '../controllers/followController';
@@ -23,7 +24,7 @@ router.post('/api/v1/send-email', Validation.emailValidation, UserAuth.emailSend
 router.post('/api/v1/reset-password/:token', verifyToken, Validation.passwordValidation, UserAuth.resetPassword);
 router.post('/api/v1/users/logout', [verifyToken], UserAuth.logout);
 router.post('/api/v1/users/login', Validation.loginValidation, UserAuth.login);
-router.post('/api/v1/articles', [verifyToken, connectMulti, Validation.createArticleValidation, Validation.imageValidation], Article.createArticle);
+router.post('/api/v1/articles', [verifyToken, connectMulti, Validation.createArticleValidation, ContentType, Validation.imageValidation], Article.createArticle);
 router.get('/api/v1/articles', Article.getAllArticles);
 
 router.post('/api/v1/profiles/:userName/follow', verifyToken, UserFollow.followUser);

@@ -22,13 +22,21 @@ class ArticleController {
       }
       const { title } = req.body;
       const payload = req.body;
-      payload.tagList = req.body.tags.split(/[ ,]+/);
+      if (req.body.tags) {
+        payload.tagList = req.body.tags.split(/[ ,]+/);
+      }
       payload.images = await uploadImage(req.files.image);
       payload.slug = slugGen(title);
       payload.authorId = id;
       const article = await Article.create(payload);
       const {
-        slug, description, body, category, images, tagList, authorId
+        slug,
+        description,
+        body,
+        category,
+        images,
+        tagList,
+        authorId
       } = article;
       if (article) {
         return res.status(201).json({
@@ -47,12 +55,11 @@ class ArticleController {
               image: author.image,
               following: author.following
             }
-
-          },
+          }
         });
       }
     } catch (err) {
-      // console.log(err);
+      throw (err);
     }
   }
 
@@ -61,7 +68,7 @@ class ArticleController {
    * @param {object} req
    * @param {object} res
    * @return {object} return object with all articles
-  */
+   */
   static async getAllArticles(req, res) {
     try {
       const articles = await Article.findAll({
@@ -83,7 +90,7 @@ class ArticleController {
         articles
       });
     } catch (err) {
-      // console.log(err);
+      throw (err);
     }
   }
 }

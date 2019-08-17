@@ -44,6 +44,23 @@ describe('POST AND GET /api/v1/articles', () => {
         done();
       });
   });
+  it('Should return error if wrong content-type is used', (done) => {
+    chai
+      .request(app)
+      .post('/api/v1/articles')
+      .set('content-type', 'application/json')
+      .set('Authorization', userToken)
+      .send(dummyArticle.validArticle)
+      .end((err, res) => {
+        if (err) done(err);
+        expect(res).have.status(415);
+        expect(res.body).to.have.keys('error');
+        expect(res.body.error).to.deep.equal(
+          'Wrong content-type. Please change it to multipart/form-data and try again.'
+        );
+        done();
+      });
+  });
   it('Should return error if provided token is invalid', (done) => {
     chai
       .request(app)

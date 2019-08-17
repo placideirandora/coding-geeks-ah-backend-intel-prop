@@ -165,7 +165,7 @@ export default {
       return errors;
     }),
 
-  title: Joi.string()
+  title: Joi.string().trim()
     .required()
     .min(10)
     .error((errors) => {
@@ -179,7 +179,7 @@ export default {
       return errors;
     }),
 
-  description: Joi.string()
+  description: Joi.string().trim()
     .required()
     .min(10)
     .error((errors) => {
@@ -195,7 +195,7 @@ export default {
       });
       return errors;
     }),
-  body: Joi.string()
+  body: Joi.string().trim()
     .required()
     .error((errors) => {
       errors.forEach((err) => {
