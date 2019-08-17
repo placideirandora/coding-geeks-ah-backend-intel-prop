@@ -45,10 +45,26 @@ export default (sequelize, DataTypes) => {
       platform: {
         allowNull: true,
         type: DataTypes.STRING
+        },
+      bio: {
+        allowNull: true,
+        type: DataTypes.STRING,
+      },
+      image: {
+        allowNull: true,
+        type: DataTypes.STRING,
+      },
+      createdAt: {
+        allowNull: true,
+        type: DataTypes.DATE,
+      },
+      updatedAt: {
+        allowNull: true,
+        type: DataTypes.DATE,
       },
     },
     {
-      timestamps: false,
+      timestamps: true,
     }
   );
 

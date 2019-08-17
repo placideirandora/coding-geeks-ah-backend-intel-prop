@@ -1,6 +1,5 @@
 import chaiHttp from 'chai-http';
 import chai from 'chai';
-import { getMaxListeners } from 'cluster';
 import app from '../index';
 import dummy from './dummyData';
 import { User } from '../sequelize/models';
@@ -13,6 +12,12 @@ const { dummyUser } = dummy;
 
 const userToken = genToken(dummyUser.validUser);
 
+before(() => {
+  const { password } = dummyUser.newUser;
+  dummyUser.newUser.password = hashedPassword(password);
+  User.create(dummyUser.newUser);
+});
+
 describe('POST /api/v1/users', () => {
   it('Should return error if user tries to signup with an invalid firstName', (done) => {
     chai.request(app)
@@ -22,10 +27,9 @@ describe('POST /api/v1/users', () => {
         if (err) done(err);
         expect(res).have.status(400);
         expect(res).to.be.an('object');
-        expect(res.body).to.have.keys('status', 'error');
+        expect(res.body).to.have.keys('error');
         expect(res.body.error)
           .to.deep.equal('First name cannot contain number or special characters');
-        expect(res.body.status).to.deep.equal('failed');
         done();
       });
   });
@@ -40,10 +44,9 @@ describe('POST /api/v1/users', () => {
         if (err) done(err);
         expect(res).have.status(400);
         expect(res).to.be.an('object');
-        expect(res.body).to.have.keys('status', 'error');
+        expect(res.body).to.have.keys('error');
         expect(res.body.error)
           .to.deep.equal('First name cannot contain number or special characters');
-        expect(res.body.status).to.deep.equal('failed');
         done();
       });
   });
@@ -58,9 +61,8 @@ describe('POST /api/v1/users', () => {
         if (err) done(err);
         expect(res).have.status(400);
         expect(res).to.be.an('object');
-        expect(res.body).to.have.keys('status', 'error');
+        expect(res.body).to.have.keys('error');
         expect(res.body.error).to.deep.equal('First name is required');
-        expect(res.body.status).to.deep.equal('failed');
         done();
       });
   });
@@ -75,9 +77,8 @@ describe('POST /api/v1/users', () => {
         if (err) done(err);
         expect(res).have.status(400);
         expect(res).to.be.an('object');
-        expect(res.body).to.have.keys('status', 'error');
+        expect(res.body).to.have.keys('error');
         expect(res.body.error).to.deep.equal('First name must be at least 2 characters long');
-        expect(res.body.status).to.deep.equal('failed');
         done();
       });
   });
@@ -92,9 +93,8 @@ describe('POST /api/v1/users', () => {
         if (err) done(err);
         expect(res).have.status(400);
         expect(res).to.be.an('object');
-        expect(res.body).to.have.keys('status', 'error');
+        expect(res.body).to.have.keys('error');
         expect(res.body.error).to.deep.equal('First name must be a string');
-        expect(res.body.status).to.deep.equal('failed');
         done();
       });
   });
@@ -109,11 +109,10 @@ describe('POST /api/v1/users', () => {
         if (err) done(err);
         expect(res).have.status(400);
         expect(res).to.be.an('object');
-        expect(res.body).to.have.keys('status', 'error');
+        expect(res.body).to.have.keys('error');
         expect(res.body.error)
           .to.deep
           .equal('Last name cannot contain number or special characters');
-        expect(res.body.status).to.deep.equal('failed');
         done();
       });
   });
@@ -128,10 +127,9 @@ describe('POST /api/v1/users', () => {
         if (err) done(err);
         expect(res).have.status(400);
         expect(res).to.be.an('object');
-        expect(res.body).to.have.keys('status', 'error');
+        expect(res.body).to.have.keys('error');
         expect(res.body.error)
           .to.deep.equal('Last name cannot contain number or special characters');
-        expect(res.body.status).to.deep.equal('failed');
         done();
       });
   });
@@ -146,9 +144,8 @@ describe('POST /api/v1/users', () => {
         if (err) done(err);
         expect(res).have.status(400);
         expect(res).to.be.an('object');
-        expect(res.body).to.have.keys('status', 'error');
+        expect(res.body).to.have.keys('error');
         expect(res.body.error).to.deep.equal('Last name is required');
-        expect(res.body.status).to.deep.equal('failed');
         done();
       });
   });
@@ -163,10 +160,9 @@ describe('POST /api/v1/users', () => {
         if (err) done(err);
         expect(res).have.status(400);
         expect(res).to.be.an('object');
-        expect(res.body).to.have.keys('status', 'error');
+        expect(res.body).to.have.keys('error');
         expect(res.body.error)
           .to.deep.equal('Last name must be at least 2 characters long');
-        expect(res.body.status).to.deep.equal('failed');
         done();
       });
   });
@@ -181,9 +177,8 @@ describe('POST /api/v1/users', () => {
         if (err) done(err);
         expect(res).have.status(400);
         expect(res).to.be.an('object');
-        expect(res.body).to.have.keys('status', 'error');
+        expect(res.body).to.have.keys('error');
         expect(res.body.error).to.deep.equal('Last name must be a string');
-        expect(res.body.status).to.deep.equal('failed');
         done();
       });
   });
@@ -198,9 +193,8 @@ describe('POST /api/v1/users', () => {
         if (err) done(err);
         expect(res).have.status(400);
         expect(res).to.be.an('object');
-        expect(res.body).to.have.keys('status', 'error');
+        expect(res.body).to.have.keys('error');
         expect(res.body.error).to.deep.equal('User name must contain only alpha-numeric characters');
-        expect(res.body.status).to.deep.equal('failed');
         done();
       });
   });
@@ -215,9 +209,8 @@ describe('POST /api/v1/users', () => {
         if (err) done(err);
         expect(res).have.status(400);
         expect(res).to.be.an('object');
-        expect(res.body).to.have.keys('status', 'error');
+        expect(res.body).to.have.keys('error');
         expect(res.body.error).to.deep.equal('User name cannot begin with a number');
-        expect(res.body.status).to.deep.equal('failed');
         done();
       });
   });
@@ -232,9 +225,8 @@ describe('POST /api/v1/users', () => {
         if (err) done(err);
         expect(res).have.status(400);
         expect(res).to.be.an('object');
-        expect(res.body).to.have.keys('status', 'error');
+        expect(res.body).to.have.keys('error');
         expect(res.body.error).to.deep.equal('User name is required');
-        expect(res.body.status).to.deep.equal('failed');
         done();
       });
   });
@@ -249,9 +241,8 @@ describe('POST /api/v1/users', () => {
         if (err) done(err);
         expect(res).have.status(400);
         expect(res).to.be.an('object');
-        expect(res.body).to.have.keys('status', 'error');
+        expect(res.body).to.have.keys('error');
         expect(res.body.error).to.deep.equal('User name must be at least 2 characters long');
-        expect(res.body.status).to.deep.equal('failed');
         done();
       });
   });
@@ -266,9 +257,8 @@ describe('POST /api/v1/users', () => {
         if (err) done(err);
         expect(res).have.status(400);
         expect(res).to.be.an('object');
-        expect(res.body).to.have.keys('status', 'error');
+        expect(res.body).to.have.keys('error');
         expect(res.body.error).to.deep.equal('User name must be a string');
-        expect(res.body.status).to.deep.equal('failed');
         done();
       });
   });
@@ -283,9 +273,8 @@ describe('POST /api/v1/users', () => {
         if (err) done(err);
         expect(res).have.status(400);
         expect(res).to.be.an('object');
-        expect(res.body).to.have.keys('status', 'error');
+        expect(res.body).to.have.keys('error');
         expect(res.body.error).to.deep.equal('email must be a valid email');
-        expect(res.body.status).to.deep.equal('failed');
         done();
       });
   });
@@ -300,9 +289,8 @@ describe('POST /api/v1/users', () => {
         if (err) done(err);
         expect(res).have.status(400);
         expect(res).to.be.an('object');
-        expect(res.body).to.have.keys('status', 'error');
+        expect(res.body).to.have.keys('error');
         expect(res.body.error).to.deep.equal('email is required');
-        expect(res.body.status).to.deep.equal('failed');
         done();
       });
   });
@@ -317,11 +305,10 @@ describe('POST /api/v1/users', () => {
         if (err) done(err);
         expect(res).have.status(400);
         expect(res).to.be.an('object');
-        expect(res.body).to.have.keys('status', 'error');
+        expect(res.body).to.have.keys('error');
         expect(res.body.error)
           .to.deep
           .equal('Password must be at least 8 characters with at least a number, Upper and lower cases special character');
-        expect(res.body.status).to.deep.equal('failed');
         done();
       });
   });
@@ -336,9 +323,8 @@ describe('POST /api/v1/users', () => {
         if (err) done(err);
         expect(res).have.status(400);
         expect(res).to.be.an('object');
-        expect(res.body).to.have.keys('status', 'error');
+        expect(res.body).to.have.keys('error');
         expect(res.body.error).to.deep.equal('password is required');
-        expect(res.body.status).to.deep.equal('failed');
         done();
       });
   });
@@ -353,9 +339,8 @@ describe('POST /api/v1/users', () => {
         if (err) done(err);
         expect(res).have.status(400);
         expect(res).to.be.an('object');
-        expect(res.body).to.have.keys('status', 'error');
+        expect(res.body).to.have.keys('error');
         expect(res.body.error).to.deep.equal('Confirm password must be a string');
-        expect(res.body.status).to.deep.equal('failed');
         done();
       });
   });
@@ -370,9 +355,8 @@ describe('POST /api/v1/users', () => {
         if (err) done(err);
         expect(res).have.status(400);
         expect(res).to.be.an('object');
-        expect(res.body).to.have.keys('status', 'error');
+        expect(res.body).to.have.keys('error');
         expect(res.body.error).to.deep.equal('Confirm password is required');
-        expect(res.body.status).to.deep.equal('failed');
         done();
       });
   });
@@ -387,9 +371,8 @@ describe('POST /api/v1/users', () => {
         if (err) done(err);
         expect(res).have.status(400);
         expect(res).to.be.an('object');
-        expect(res.body).to.have.keys('status', 'error');
+        expect(res.body).to.have.keys('error');
         expect(res.body.error).to.deep.equal('Passwords must much');
-        expect(res.body.status).to.deep.equal('failed');
         done();
       });
   });
@@ -406,7 +389,7 @@ describe('POST /api/v1/users', () => {
         expect(res).to.be.an('object');
         expect(res.body).to.have.keys('message', 'data');
         expect(res.body.message).to.deep.equal('User created. Please, Check your email for a verification link.');
-        expect(res.body.data).to.have.keys('token', 'id', 'firstName', 'lastName', 'userName', 'email', 'role');
+        expect(res.body.data).to.have.keys('id', 'firstName', 'lastName', 'userName', 'email', 'role');
         done();
       });
   });
@@ -467,8 +450,8 @@ describe('POST /api/v1/send-email', () => {
         if (err) done(err);
         expect(res).have.status(404);
         expect(res).to.be.an('object');
-        expect(res.body).to.have.keys('errors');
-        expect(res.body.errors).to.deep.equal('User with email: hareraloston1@gmail.com not found..');
+        expect(res.body).to.have.keys('error');
+        expect(res.body.error).to.deep.equal('User with email: hareraloston1@gmail.com not found..');
         done();
       });
   });
@@ -482,9 +465,8 @@ describe('POST /api/v1/send-email', () => {
         if (err) done(err);
         expect(res).have.status(400);
         expect(res).to.be.an('object');
-        expect(res.body).to.have.keys('status', 'error');
+        expect(res.body).to.have.keys('error');
         expect(res.body.error).to.deep.equal('email must be a valid email');
-        expect(res.body.status).to.deep.equal('failed');
         done();
       });
   });
@@ -507,15 +489,14 @@ describe('POST /api/v1/reset-password/:token', () => {
 describe('POST /api/v1/reset-password/:token', () => {
   it('Should not reset password of the user if token is invalid', (done) => {
     chai.request(app)
-      .post('/api/v1/reset-password/invalidtoken')
+      .post('/api/v1/reset-password/DQyMn0.spxg5wNgLosMvKOTsqNpoTnzitdxvBD7y9-fbC1elpc')
       .send(dummyUser.resetPassword)
       .end((err, res) => {
         if (err) done(err);
         expect(res).have.status(403);
         expect(res).to.be.an('object');
-        expect(res.body).to.have.keys('status', 'error');
+        expect(res.body).to.have.keys('error');
         expect(res.body.error).to.deep.equal('jwt malformed');
-        expect(res.body.status).to.deep.equal(403);
         done();
       });
   });
@@ -529,11 +510,10 @@ describe('POST /api/v1/reset-password/:token', () => {
         if (err) done(err);
         expect(res).have.status(400);
         expect(res).to.be.an('object');
-        expect(res.body).to.have.keys('status', 'error');
+        expect(res.body).to.have.keys('error');
         expect(res.body.error)
           .to.deep
           .equal('Password must be at least 8 characters with at least a number, Upper and lower cases special character');
-        expect(res.body.status).to.deep.equal('failed');
         done();
       });
   });
@@ -547,9 +527,8 @@ describe('POST /api/v1/reset-password/:token', () => {
         if (err) done(err);
         expect(res).have.status(400);
         expect(res).to.be.an('object');
-        expect(res.body).to.have.keys('status', 'error');
+        expect(res.body).to.have.keys('error');
         expect(res.body.error).to.deep.equal('password is required');
-        expect(res.body.status).to.deep.equal('failed');
         done();
       });
   });
@@ -563,9 +542,8 @@ describe('POST /api/v1/reset-password/:token', () => {
         if (err) done(err);
         expect(res).have.status(400);
         expect(res).to.be.an('object');
-        expect(res.body).to.have.keys('status', 'error');
+        expect(res.body).to.have.keys('error');
         expect(res.body.error).to.deep.equal('Passwords must much');
-        expect(res.body.status).to.deep.equal('failed');
         done();
       });
   });
@@ -579,9 +557,8 @@ describe('POST /api/v1/reset-password/:token', () => {
         if (err) done(err);
         expect(res).have.status(400);
         expect(res).to.be.an('object');
-        expect(res.body).to.have.keys('status', 'error');
+        expect(res.body).to.have.keys('error');
         expect(res.body.error).to.deep.equal('Confirm password is required');
-        expect(res.body.status).to.deep.equal('failed');
         done();
       });
   });
@@ -595,20 +572,14 @@ describe('POST /api/v1/reset-password/:token', () => {
         if (err) done(err);
         expect(res).have.status(400);
         expect(res).to.be.an('object');
-        expect(res.body).to.have.keys('status', 'error');
+        expect(res.body).to.have.keys('error');
         expect(res.body.error).to.deep.equal('Confirm password must be a string');
-        expect(res.body.status).to.deep.equal('failed');
         done();
       });
   });
 });
 // Login Tests
 describe('POST /api/v1/login', () => {
-  before(() => {
-    const { password } = dummyUser.newUser;
-    dummyUser.newUser.password = hashedPassword(password);
-    User.create(dummyUser.newUser);
-  });
   it('Should return with user information when correct credentials are supplied and account is verified', (done) => {
     chai
       .request(app)

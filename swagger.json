@@ -181,6 +181,51 @@
                 }
             }
         },
+        "/api/v1/users/signout": {
+            "post": {
+                "tags": [
+                    "Users"
+                ],
+                "description": "Logout a user in system",
+                "parameters": [{
+                    "name": "Authorization",
+                    "in": "header",
+                    "description": "Token of the user wants to logout"
+                }],
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successfully logged out",
+                        "schema": {
+                            "properties": {
+                                "message": {
+                                    "type": "string"
+                                },
+                                "data": {
+                                    "$ref": "#/definitions/Error"
+                                }
+                            }
+                        }
+                    },
+
+                    "401": {
+                        "description": "You are already logged out",
+                        "schema": {
+                            "properties": {
+                                "message": {
+                                    "type": "string"
+                                }
+                            },
+                            "data": {
+                                "$ref": "#/definitions/Error"
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/api/v1/send-email": {
             "post": {
                 "tags": [
@@ -236,6 +281,7 @@
                 }
             }
         },
+
         "/api/v1/reset-password/{token}": {
             "post": {
                 "tags": [
@@ -326,9 +372,159 @@
                     }
                   }
                 }
+            },
+      "/api/v1/profiles/{username}": {
+        "put": {
+          "tags": [
+            "Profile"
+          ],
+          "summary": "update the user profile",
+          "description": "update the user profile",
+          "parameters": [
+            {
+                "name":"Authorization",
+                "in": "header",
+                "description" :"The user token",
+                "required":true
+              
+              },
+            {
+              "name": "username",
+              "in": "path",
+              "description": "your current username",
+              "required":true,
+              "type":"string"
+            },
+            {
+                "name": "username",
+                "description": "username you want to change to",
+                "in": "forrmData",
+                "paramType": "body",
+                "type": "string"
+            },
+            {
+                "name": "bio",
+                "description": "biograpaphy",
+                "in": "forrmData",
+                "paramType": "body",
+                "type": "string"
+            },
+            {
+                "name": "image",
+                "in": "forrmData",
+                "type": "file"
             }
+          ],
+          "produces": [
+            "application/json"
+          ],
+          "responses": {
+            "200": {
+                "description": "success: when a profile is sucessfully updated"
+              },
+              "404": {
+                "description": "Error: user profile not found"
+              },
+              "403": {
+                "description": "Error: forbiden"
+              },
+              "401": {
+                "description": " Error: unauthorized"
+              },
+              "500": {
+                "description": "Error: Server Error"
+              }
+          }
         },
+        "get": {
+            "tags": [
+              "Profile"
+            ],
+            "summary": "get the user profile",
+            "description": "get the user profile",
+            "parameters": [
+              {
+                "name": "username",
+                "in": "path",
+                "description": "put your username here",
+                "required":true,
+                "type":"string"
+              }
+            ],
+            "produces": [
+              "application/json"
+            ],
+            "responses": {
+              "200": {
+                  "description": "success: when a profile is sucessfully retrieved"
+                },
+                "404": {
+                  "description": "Error: user profile not found"
+                },
+                "401": {
+                  "description": " unauthorized"
+                },
+                "500": {
+                  "description": "Server Error"
+                }
+            }
+          
+        }
+       },
+        
+       "/api/v1/profiles": {
+        "get": {
+            "tags": [
+              "Profile"
+            ],
+            "summary": "All profiles",
+            "description": "Fetch all user profiles",
+            "parameters": [
+              {
+                "name": "Authorization",
+                "in": "header",
+                "description": "User token",
+                "required":false,
+                "type":"string"
+              }
+            ],
+            "produces": [
+              "application/json"
+            ],
+            "responses": {
+                "200": {
+                    "description": "Successfully retrieved all profiles",
+                    "schema": {
+                        "properties": {
+                            "status": {
+                                "type": "integer"
+                            },
+                            "data": {
+                                "type": "array",
+                                "$ref": "#/definitions/Profile"
+                            }
+                        }
+                    }
+                },
+                "401": {
+                    "description": "User is not authenticated",
+                    "schema": {
+                        "properties": {
+                            "error": {
+                                "type": "string"
+                            },
+                            "me": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
+            }
+          }
+       }
 
+        },
+        
     "definitions": {
         "User": {
             "properties": {
@@ -356,6 +552,33 @@
                     "type": "string"
                 }
 
+            }
+        },
+
+        "Profile": {
+            "properties": {
+                "username": {
+                    "type":"string"
+                },
+                "bio": {
+                    "type":"string"
+                },
+                "image": {
+                    "type": "string"
+                }
+            }
+        },
+        "Signout": {
+            "properties": {
+                "token": {
+                    "type":"string"
+                },
+                "username": {
+                    "type":"string"
+                },
+                "email": {
+                    "type": "file"
+                }
             }
         },
         "Login": {

@@ -23,7 +23,6 @@ export default {
     const { error } = Joi.validate(req.body, userSchema, options);
     if (error) {
       return res.status(400).json({
-        status: 'failed',
         error: error.details[0].message
       });
     }
@@ -38,7 +37,6 @@ export default {
     const { error } = Joi.validate(req.body, emailSchema, options);
     if (error) {
       return res.status(400).json({
-        status: 'failed',
         error: error.details[0].message
       });
     }
@@ -54,7 +52,6 @@ export default {
     const { error } = Joi.validate(req.body, passwordSchema, options);
     if (error) {
       return res.status(400).json({
-        status: 'failed',
         error: error.details[0].message
       });
     }
@@ -72,5 +69,32 @@ export default {
       });
     }
     next();
-  }
+  },
+  profileValidation(req, res, next) {
+    const profileSchema = Joi.object().keys({
+      userName: validationRules.username,
+      bio: validationRules.bio,
+    });
+
+    const { error } = Joi.validate(req.body, profileSchema, options);
+    if (error) {
+      return res.status(400).json({
+        error: error.details[0].message.replace(/\\|(")/g, '')
+      });
+    }
+    next();
+  },
+  imageValidation(req, res, next) {
+    let filename;
+    if (req.files.image) {
+      filename = req.files.image.path;
+      const name = filename.split('/')[filename.split('/').length - 1];
+      if (!name.match(/(.jpg|.png|jpeg)$/g)) {
+        return res.status(400).json({
+          error: 'Image must be of these format .jpg .png .jpeg'
+        });
+      }
+    }
+    next();
+  },
 };
