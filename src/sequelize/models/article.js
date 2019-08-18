@@ -47,7 +47,7 @@ module.exports = (sequelize, DataTypes) => {
     }
   );
   Article.associate = (models) => {
-    Article.belongsTo(models.User, { foreignKey: 'authorId', as: 'author' });
+    Article.belongsTo(models.User, { foreignKey: 'authorId', as: 'author', onDelete: 'CASCADE' });
   };
   return Article;
 };

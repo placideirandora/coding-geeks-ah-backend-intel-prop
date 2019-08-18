@@ -20,31 +20,30 @@ class ArticleController {
           error: 'Provided token is not registered to you'
         });
       }
-      const { title } = req.body;
-      const payload = req.body;
-      if (req.body.tags) {
-        payload.tagList = req.body.tags.split(/[ ,]+/);
+      const { title, description, body } = req.body;
+      const payload = {
+        title: title.trim(),
+        description: description.trim(),
+        body: body.trim()
+      };
+      if (req.body.tags || req.body.category) {
+        payload.tagList = req.body.tags.trim().split(/[ ,]+/);
+        payload.category = req.body.category.trim();
       }
       payload.images = await uploadImage(req.files.image);
       payload.slug = slugGen(title);
       payload.authorId = id;
       const article = await Article.create(payload);
       const {
-        slug,
-        description,
-        body,
-        category,
-        images,
-        tagList,
-        authorId
+        slug, category, images, tagList, authorId
       } = article;
       if (article) {
         return res.status(201).json({
           article: {
             slug,
-            title,
-            description,
-            body,
+            title: article.title,
+            description: article.title,
+            body: article.body,
             category,
             images,
             tagList,

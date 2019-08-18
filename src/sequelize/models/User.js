@@ -65,7 +65,7 @@ export default (sequelize, DataTypes) => {
   User.associate = (models) => {
     User.hasMany(models.Follow, { foreignKey: 'following', onDelete: 'CASCADE' });
     User.hasMany(models.Follow, { foreignKey: 'follower', onDelete: 'CASCADE' });
-    User.hasMany(models.Article, { foreignKey: 'authorId', as: 'author' });
+    User.hasMany(models.Article, { foreignKey: 'authorId', as: 'author', onDelete: 'CASCADE' });
   };
   return User;
 };
