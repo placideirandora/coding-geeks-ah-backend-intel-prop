@@ -64,8 +64,8 @@ export default (sequelize, DataTypes) => {
 
   User.associate = (models) => {
     // Association definitions here
-    User.hasMany(models.Follow, { foreignKey: 'following' });
-    User.hasMany(models.Follow, { foreignKey: 'follower' });
+    User.hasMany(models.Follow, { foreignKey: 'following', onDelete: 'CASCADE' });
+    User.hasMany(models.Follow, { foreignKey: 'follower', onDelete: 'CASCADE' });
   };
   return User;
 };
