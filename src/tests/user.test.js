@@ -772,7 +772,7 @@ describe('DELETE /api/v1/profiles/:userName/unfollow', () => {
         expect(res).have.status(200);
         expect(res).to.be.an('object');
         expect(res.body).to.have.keys('message');
-        expect(res.body.message).to.deep.equal('User Kaduzichi removed in your following');
+        expect(res.body.message).to.deep.equal('You are no longer following Kaduzichi');
         done();
       });
   });

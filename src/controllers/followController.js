@@ -78,7 +78,7 @@ class Following {
 
     await Follow.destroy({ where: { follower: userId, following: id } });
     return res.status(200).json({
-      message: `User ${userName} removed in your following`
+      message: `You are no longer following ${userName}`
     });
   }
 
@@ -106,7 +106,7 @@ class Following {
 
     if (followingList.length === 0) {
       return res.status(404).json({
-        message: 'You are currently not following anyone'
+        message: `${userName} is currently not following anyone`
       });
     }
 
@@ -147,7 +147,7 @@ class Following {
 
     if (followersList.length === 0) {
       return res.status(404).json({
-        message: 'You currently have no followers.'
+        message: `${userName} currently has no followers`
       });
     }
 
