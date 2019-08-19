@@ -8,11 +8,14 @@
     "coverage": "nyc npm test && nyc report --reporter=text-lcov | coveralls",
     "build": "rm -rf build && babel -d ./build ./src -s",
     "start": "npm run build && node ./build/index.js",
-    "pretest": "cross-env NODE_ENV=test npm run down && NODE_ENV=test npm run migrate  && NODE_ENV=test npm run seed",
+    "pretest": "cross-env NODE_ENV=test npm run createdb && npm run down && NODE_ENV=test npm run migrate  && NODE_ENV=test npm run seed",
     "test": "cross-env NODE_ENV=test nyc --reporter=text mocha  --require @babel/register --require @babel/polyfill  ./src/tests/*.js --timeout 30000 --exit",
+    "posttest": "cross-env NODE_ENV=test npm run dropdb",
     "down": "cross-env NODE_ENV=test node_modules/.bin/sequelize db:migrate:undo",
     "migrate": "cross-env NODE_ENV=test node_modules/.bin/sequelize db:migrate",
-    "seed": "node_modules/.bin/sequelize db:seed:all"
+    "seed": "node_modules/.bin/sequelize db:seed:all",
+    "dropdb": "node_modules/.bin/sequelize db:drop",
+    "createdb": "node_modules/.bin/sequelize db:create"
   },
   "engines": {
     "node": "10.16.0"
@@ -45,7 +48,7 @@
     "passport-google-oauth20": "^2.0.0",
     "passport-local": "^1.0.0",
     "passport-twitter": "^1.0.4",
-    "pg": "^7.12.0",
+    "pg": "^7.12.1",
     "sequelize": "^5.12.0",
     "sequelize-cli": "^5.5.0",
     "swagger-ui-express": "^4.0.7",

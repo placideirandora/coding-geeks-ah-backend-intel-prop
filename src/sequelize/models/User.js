@@ -45,7 +45,7 @@ export default (sequelize, DataTypes) => {
       platform: {
         allowNull: true,
         type: DataTypes.STRING
-        },
+      },
       bio: {
         allowNull: true,
         type: DataTypes.STRING,

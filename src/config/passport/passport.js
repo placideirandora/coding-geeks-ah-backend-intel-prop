@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import passport from 'passport';
 import { Strategy as LocalStrategy } from 'passport-local';
 import { Strategy as FacebookStrategy } from 'passport-facebook';
@@ -173,7 +172,7 @@ const passportConfig = () => {
         const newUser = await User.create({
           firstName: fullNameArr[0],
           lastName: fullNameArr[1],
-          userName: profile.name.givenName + randomNumber(),
+          userName: fullNameArr[0] + randomNumber(),
           email: profile.emails[0].value,
           socialid: profile.id,
           platform: 'twitter'
