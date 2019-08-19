@@ -73,7 +73,8 @@ const passportConfig = () => {
           userName: Object.values(username)[0],
           email: profile.emails[0].value,
           socialid: profile.id,
-          platform: 'facebook'
+          platform: 'facebook',
+          verified: true
         });
         if (newUser) {
           return done(null, newUser);
@@ -85,7 +86,8 @@ const passportConfig = () => {
           userName: profile.name.givenName + randomNumber(),
           email: profile.emails[0].value,
           socialid: profile.id,
-          platform: 'facebook'
+          platform: 'facebook',
+          verified: true
         });
         if (newUser) {
           return done(null, newUser);
@@ -116,7 +118,8 @@ const passportConfig = () => {
           userName: Object.values(username)[0],
           email: profile.emails[0].value,
           socialid: profile.id,
-          platform: 'google'
+          platform: 'google',
+          verified: true
         });
         if (newUser) {
           return done(null, newUser);
@@ -128,7 +131,8 @@ const passportConfig = () => {
           userName: profile.name.givenName + randomNumber(),
           email: profile.emails[0].value,
           socialid: profile.id,
-          platform: 'google'
+          platform: 'google',
+          verified: true
         });
         if (newUser) {
           return done(null, newUser);
@@ -163,7 +167,8 @@ const passportConfig = () => {
           userName: Object.values(username)[0],
           email: profile.emails[0].value,
           socialid: profile.id,
-          platform: 'twitter'
+          platform: 'twitter',
+          verified: true
         });
         if (newUser) {
           return done(null, newUser);
@@ -175,7 +180,8 @@ const passportConfig = () => {
           userName: fullNameArr[0] + randomNumber(),
           email: profile.emails[0].value,
           socialid: profile.id,
-          platform: 'twitter'
+          platform: 'twitter',
+          verified: true
         });
         if (newUser) {
           return done(null, newUser);
