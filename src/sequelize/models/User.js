@@ -10,39 +10,39 @@ export default (sequelize, DataTypes) => {
       },
       firstName: {
         allowNull: false,
-        type: DataTypes.STRING,
+        type: DataTypes.STRING
       },
       lastName: {
         allowNull: false,
-        type: DataTypes.STRING,
+        type: DataTypes.STRING
       },
       userName: {
         allowNull: false,
         type: DataTypes.STRING,
-        unique: true,
+        unique: true
       },
       email: {
         allowNull: false,
         type: DataTypes.STRING,
-        unique: true,
+        unique: true
       },
       password: {
         allowNull: false,
-        type: DataTypes.STRING,
+        type: DataTypes.STRING
       },
       role: {
         allowNull: false,
         type: DataTypes.STRING,
-        defaultValue: 'user',
+        defaultValue: 'user'
       },
       verified: {
         allowNull: false,
         type: DataTypes.BOOLEAN,
-        defaultValue: false,
+        defaultValue: false
       },
       bio: {
         allowNull: true,
-        type: DataTypes.STRING,
+        type: DataTypes.STRING
       },
       image: {
         allowNull: true,
@@ -63,9 +63,9 @@ export default (sequelize, DataTypes) => {
   );
 
   User.associate = (models) => {
-    // Association definitions here
     User.hasMany(models.Follow, { foreignKey: 'following', onDelete: 'CASCADE' });
     User.hasMany(models.Follow, { foreignKey: 'follower', onDelete: 'CASCADE' });
+    User.hasMany(models.Article, { foreignKey: 'authorId', as: 'author', onDelete: 'CASCADE' });
   };
   return User;
 };
