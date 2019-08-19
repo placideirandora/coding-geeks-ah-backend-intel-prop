@@ -10,13 +10,7 @@ chai.use(chaiHttp);
 const { expect } = chai;
 const { dummyUser } = dummy;
 
-const userToken = genToken(dummyUser.validUser);
-
-before(() => {
-  const { password } = dummyUser.newUser;
-  dummyUser.newUser.password = hashedPassword(password);
-  User.create(dummyUser.newUser);
-});
+const userToken = genToken(dummyUser.newUserForFollow);
 
 describe('POST /api/v1/users', () => {
   it('Should return error if user tries to signup with an invalid firstName', (done) => {
@@ -580,6 +574,11 @@ describe('POST /api/v1/reset-password/:token', () => {
 });
 // Login Tests
 describe('POST /api/v1/login', () => {
+  before(async () => {
+    const { password } = dummyUser.newUser;
+    dummyUser.newUser.password = hashedPassword(password);
+    await User.create(dummyUser.newUser);
+  });
   it('Should return with user information when correct credentials are supplied and account is verified', (done) => {
     chai
       .request(app)
@@ -687,6 +686,135 @@ describe('POST /api/v1/login', () => {
         expect(res).have.status(401);
         expect(res.body).to.have.key('error');
         expect(res.body.error).to.deep.equal('Please verify your account first. Visit your email to verify');
+      });
+  });
+});
+// Test for folow and unfollow each other
+describe('POST /api/v1/profiles/:userName/follow', () => {
+  it('User Should follow other user', (done) => {
+    chai.request(app)
+      .post('/api/v1/profiles/Kaduzichi/follow')
+      .set('Authorization', userToken)
+      .end((err, res) => {
+        expect(res).have.status(201);
+        expect(res).to.be.an('object');
+        expect(res.body).to.have.keys('data');
+        expect(res.body.data).to.have.keys('id', 'follower', 'following', 'updatedAt', 'createdAt');
+        done();
+      });
+  });
+});
+describe('GET /api/v1/profiles/:userName/following', () => {
+  it('User Should see the list of whom he follows', (done) => {
+    chai.request(app)
+      .get('/api/v1/profiles/eubule/following')
+      .set('Authorization', userToken)
+      .end((err, res) => {
+        expect(res).have.status(200);
+        expect(res).to.be.an('object');
+        expect(res.body).to.have.keys('data');
+        expect(res.body.data).to.be.an('array');
+        expect(res.body.data[0]).to.have.keys('id', 'username');
+        done();
+      });
+  });
+});
+describe('GET /api/v1/profiles/:userName/followers', () => {
+  it('User Should see the list of whom follows him', (done) => {
+    chai.request(app)
+      .get('/api/v1/profiles/Kaduzichi/followers')
+      .set('Authorization', userToken)
+      .end((err, res) => {
+        expect(res).have.status(200);
+        expect(res).to.be.an('object');
+        expect(res.body).to.have.keys('data');
+        expect(res.body.data).to.be.an('array');
+        expect(res.body.data[0]).to.have.keys('id', 'username');
+        done();
+      });
+  });
+});
+describe('DELETE /api/v1/profiles/:userName/unfollow', () => {
+  it('User Should be able to unfollow each other', (done) => {
+    chai.request(app)
+      .delete('/api/v1/profiles/Kaduzichi/unfollow')
+      .set('Authorization', userToken)
+      .end((err, res) => {
+        expect(res).have.status(200);
+        expect(res).to.be.an('object');
+        expect(res.body).to.have.keys('message');
+        expect(res.body.message).to.deep.equal('You are no longer following Kaduzichi');
+        done();
+      });
+  });
+});
+describe('POST /api/v1/profiles/:userName/follow', () => {
+  it('User Should not be able to follow user that does not exist', (done) => {
+    chai.request(app)
+      .post('/api/v1/profiles/Kaduzichi12/follow')
+      .set('Authorization', userToken)
+      .end((err, res) => {
+        expect(res).have.status(404);
+        expect(res).to.be.an('object');
+        expect(res.body).to.have.keys('error');
+        expect(res.body.error).to.deep.equal('User name Kaduzichi12 does not exist');
+        done();
+      });
+  });
+});
+describe('POST /api/v1/profiles/:userName/follow', () => {
+  it('User Should not be able to follow himself', (done) => {
+    chai.request(app)
+      .post('/api/v1/profiles/eubule/follow')
+      .set('Authorization', userToken)
+      .end((err, res) => {
+        expect(res).have.status(403);
+        expect(res).to.be.an('object');
+        expect(res.body).to.have.keys('error');
+        expect(res.body.error).to.deep.equal('You can not follow yourself');
+        done();
+      });
+  });
+});
+describe('DELETE /api/v1/profiles/:userName/unfollow', () => {
+  it('User Should not be able to unfollow user that does not exist', (done) => {
+    chai.request(app)
+      .delete('/api/v1/profiles/Kaduzichi12/unfollow')
+      .set('Authorization', userToken)
+      .end((err, res) => {
+        expect(res).have.status(404);
+        expect(res).to.be.an('object');
+        expect(res.body).to.have.keys('error');
+        expect(res.body.error).to.deep.equal('User name Kaduzichi12 does not exist');
+        done();
+      });
+  });
+});
+describe('Get /api/v1/profiles/:userName/following', () => {
+  it('User Should not be able to see the list of who follow a user that does not exist', (done) => {
+    chai.request(app)
+      .get('/api/v1/profiles/Kaduzichi12/following')
+      .set('Authorization', userToken)
+      .end((err, res) => {
+        expect(res).have.status(404);
+        expect(res).to.be.an('object');
+        expect(res.body).to.have.keys('error');
+        expect(res.body.error).to.deep.equal('User name Kaduzichi12 does not exist');
+        done();
+      });
+  });
+});
+describe('Get /api/v1/profiles/:userName/followers', () => {
+  it('User Should not be able to see the list of who follow a user that does not exist', (done) => {
+    chai.request(app)
+      .get('/api/v1/profiles/Kaduzichi12/followers')
+      .set('Authorization', userToken)
+      .end((err, res) => {
+        expect(res).have.status(404);
+        expect(res).to.be.an('object');
+        expect(res.body).to.have.keys('error');
+        expect(res.body.error).to.deep.equal('User name Kaduzichi12 does not exist');
+        done();
       });
   });
 });
