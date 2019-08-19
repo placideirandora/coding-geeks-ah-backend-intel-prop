@@ -31,12 +31,12 @@ export default (sequelize, DataTypes) => {
       role: {
         allowNull: false,
         type: DataTypes.STRING,
-        defaultValue: 'user',
+        defaultValue: 'user'
       },
       verified: {
         allowNull: true,
         type: DataTypes.BOOLEAN,
-        defaultValue: false,
+        defaultValue: false
       },
       socialid: {
         allowNull: true,
@@ -48,7 +48,7 @@ export default (sequelize, DataTypes) => {
       },
       bio: {
         allowNull: true,
-        type: DataTypes.STRING,
+        type: DataTypes.STRING
       },
       image: {
         allowNull: true,
@@ -68,8 +68,10 @@ export default (sequelize, DataTypes) => {
     }
   );
 
-  User.associate = () => {
-    // Association definitions here
+  User.associate = (models) => {
+    User.hasMany(models.Follow, { foreignKey: 'following', onDelete: 'CASCADE' });
+    User.hasMany(models.Follow, { foreignKey: 'follower', onDelete: 'CASCADE' });
+    User.hasMany(models.Article, { foreignKey: 'authorId', as: 'author', onDelete: 'CASCADE' });
   };
   return User;
 };

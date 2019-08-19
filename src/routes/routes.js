@@ -2,13 +2,16 @@ import express from 'express';
 import passport from 'passport';
 import connectmultiparty from 'connect-multiparty';
 import Validation from '../middleware/validation';
+import ContentType from '../middleware/contentType';
 import UserAuth from '../controllers/userController';
 import verifyToken from '../middleware/verifyToken';
 import googleRequest from '../middleware/google';
 import twitterRequest from '../middleware/twitter';
 import facebookRequest from '../middleware/facebook';
+import UserFollow from '../controllers/followController';
 import Profile from '../controllers/profileController';
 import canEditProfile from '../middleware/editProfile';
+import Article from '../controllers/articleController';
 
 const router = express.Router();
 
@@ -34,5 +37,12 @@ router.get('/api/v1/auth/twitter', passport.authenticate('twitter', { session: t
 router.get('/api/v1/auth/twitter/test', twitterRequest, UserAuth.twitterLogin);
 router.get('/api/v1/auth/twitter/callback', passport.authenticate('twitter'), UserAuth.twitterLogin);
 router.post('/api/v1/users/logout', [verifyToken], UserAuth.logout);
+router.post('/api/v1/users/login', Validation.loginValidation, UserAuth.login);
+router.post('/api/v1/articles', [verifyToken, connectMulti, Validation.createArticleValidation, ContentType, Validation.imageValidation], Article.createArticle);
+router.get('/api/v1/articles', Article.getAllArticles);
+router.post('/api/v1/profiles/:userName/follow', verifyToken, UserFollow.followUser);
+router.delete('/api/v1/profiles/:userName/unfollow', verifyToken, UserFollow.unFollowUser);
+router.get('/api/v1/profiles/:userName/following', verifyToken, UserFollow.getFollowingList);
+router.get('/api/v1/profiles/:userName/followers', verifyToken, UserFollow.getFollowersList);
 
 export default router;
