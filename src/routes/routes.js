@@ -7,6 +7,7 @@ import verifyToken from '../middleware/verifyToken';
 import UserFollow from '../controllers/followController';
 import Profile from '../controllers/profileController';
 import canEditProfile from '../middleware/editProfile';
+import adminPermissions from '../middleware/adminPermissions';
 import Article from '../controllers/articleController';
 
 const router = express.Router();
@@ -14,6 +15,7 @@ const router = express.Router();
 const connectMulti = connectmultiparty();
 
 router.post('/api/v1/users', Validation.signupValidation, UserAuth.signup);
+router.post('/api/v1/users/signup', verifyToken, adminPermissions, Validation.signupValidation, UserAuth.signup);
 router.get('/api/v1/profiles/:username', Profile.user);
 router.get('/api/v1/profiles', verifyToken, Profile.fetchProfiles);
 router.put('/api/v1/profiles/:username', [verifyToken, connectMulti, canEditProfile, Validation.profileValidation, Validation.imageValidation], Profile.editProfile);
@@ -24,6 +26,9 @@ router.post('/api/v1/send-email', Validation.emailValidation, UserAuth.emailSend
 router.post('/api/v1/reset-password/:token', verifyToken, Validation.passwordValidation, UserAuth.resetPassword);
 router.post('/api/v1/users/logout', [verifyToken], UserAuth.logout);
 router.post('/api/v1/users/login', Validation.loginValidation, UserAuth.login);
+router.delete('/api/v1/users/:username', verifyToken, UserAuth.deleteUser);
+router.patch('/api/v1/users/:username', verifyToken, Validation.updateRoleValidation, UserAuth.updateRole);
+
 router.post('/api/v1/articles', [verifyToken, connectMulti, Validation.createArticleValidation, ContentType, Validation.imageValidation], Article.createArticle);
 router.get('/api/v1/articles', Article.getAllArticles);
 

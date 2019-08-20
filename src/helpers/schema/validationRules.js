@@ -125,6 +125,23 @@ export default {
       });
       return errors;
     }),
+
+  role: Joi.string()
+    .valid('user', 'admin')
+    .error((errors) => {
+      errors.forEach((err) => {
+        switch (err.type) {
+          case 'string.base':
+            err.message = 'Confirm password must be a string';
+            break;
+          case 'any.allowOnly':
+            err.message = 'role must be either user or admin';
+            break;
+        }
+      });
+      return errors;
+    }),
+
   bio: Joi.string()
     .min(20)
     .error((errors) => {
@@ -208,5 +225,24 @@ export default {
       return errors;
     }),
   category: Joi.string(),
-  tags: Joi.string()
+  tags: Joi.string(),
+  roles: Joi.string()
+    .required()
+    .valid('user', 'admin')
+    .error((errors) => {
+      errors.forEach((err) => {
+        switch (err.type) {
+          case 'string.base':
+            err.message = 'Confirm password must be a string';
+            break;
+          case 'any.required':
+            err.message = 'Role is required';
+            break;
+          case 'any.allowOnly':
+            err.message = 'Role must be either user or admin';
+            break;
+        }
+      });
+      return errors;
+    }),
 };

@@ -3,9 +3,9 @@ import bcrypt from 'bcrypt';
 export const up = queryInterface => queryInterface.bulkInsert('Users', [{
   firstName: 'Eric',
   lastName: 'Malaba',
-  userName: 'eubule',
-  email: 'eric.malaba@gmail.com',
-  password: bcrypt.hashSync('Superadmin12', 10),
+  userName: 'superadmin',
+  email: 'malabadev6@gmail.com',
+  password: bcrypt.hashSync('Super-admin12', 10),
   role: 'super-admin',
   verified: true
 }], {});
