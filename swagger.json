@@ -1121,9 +1121,162 @@
             }
           }
         }
-      }
+      },
+       "/api/v1/articles/{slug}": {
+        "put": {
+            "tags": [
+                "Articles"
+            ],
+            "description": "Authenticated user can update articles",
+            "parameters": [
+                {
+                "name":"Authorization",
+                "in": "header",
+                "description" :"The user token",
+                "required":true
+                      
+                 },
+                 {
+                "name": "slug",
+                "in": "path",
+                "description": "Articles slug",
+                "required":true,
+                "type":"string"
+                },
+                {
+                "name": "title",
+                "in": "formData",
+                "description": "",
+                "type": "string"
+                },
+                {
+                "name": "description",
+                "in": "formData",
+                "description": "",
+                "type": "string"
+                },
+                {
+                "name": "body",
+                "in": "formData",
+                "description": "",
+                "type": "string"
+               },
+                {
+                "name": "tagList",
+                "in": "formData",
+                "description": "",
+                "type": "string"
+                },
+                {
+                "name": "category",
+                "in": "formData",
+                "description": "",
+                "type": "string"
+                },
+                {
+                "name": "image",
+                "in": "formData",
+                "description": "",
+                "type": "file",
+                "required": false
+                }
+
+                        ],
+            "responses": {
+                "200": {
+                    "description": "Article updated successfully",
+                    "schema": {
+                        "properties": {
+                            "message": {
+                                "type": "string"
+                            },
+                            "data": {
+                                "$ref": "#/definitions/Articles"
+                            }
+                        }
+                    }
+                },
+                "403": {
+                    "description": "Fobidden to make changes",
+                    "schema": {
+                        "$ref": "#/definitions/Error"
+                    }
+                },
+                "404": {
+                    "description": "Article not found",
+                    "schema": {
+                        "$ref": "#/definitions/Error"
+                    }
+                }
+            }
         },
-        
+        "delete": {
+            "tags": [
+              "Articles"
+            ],
+            "description": "Delate an article",
+            "parameters": [
+                {
+                    "name":"Authorization",
+                    "in": "header",
+                    "description" :"The user token",
+                    "required":true
+                      
+                 },
+                 {
+                    "name": "slug",
+                    "in": "path",
+                    "description": "Articles slug",
+                    "required":true,
+                    "type":"string"
+                  }],
+            "produces": [
+              "application/json"
+            ],
+            "responses": {
+                "200": {
+                    "description": "Successfully deleted the article",
+                    "schema": {
+                        "properties": {
+                            "status": {
+                                "type": "integer"
+                            },
+                            "data": {
+                                "type": "string",
+                                "$ref": "#/definitions/Articles"
+                            }
+                        }
+                    }
+                },
+                "401": {
+                    "description": "User is not authenticated",
+                    "schema": {
+                        "properties": {
+                            "error": {
+                                "type": "string"
+                            },
+                            "me": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                },
+                "404": {
+                    "description": "User is fobidden to delete",
+                    "schema": {
+                        "properties": {
+                            "error": {
+                                "type": "string"
+                            },
+                            "me": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
+            }
+          }
+        },    
     "definitions": {
         "User": {
             "properties": {
@@ -1244,4 +1397,5 @@
         }
     }
     
+ }
 }

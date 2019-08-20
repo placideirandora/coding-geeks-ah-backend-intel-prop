@@ -207,6 +207,11 @@ export default {
       });
       return errors;
     }),
+  updateTitle: Joi.string().trim()
+    .min(10),
+  updateBody: Joi.string().trim(),
+  updateDescription: Joi.string().trim()
+    .min(10),
   category: Joi.string(),
-  tags: Joi.string()
+  tags: Joi.string(),
 };

@@ -12,20 +12,36 @@ const { expect } = chai;
 const { dummyArticle, dummyUser } = dummy;
 
 const invalidToken = genToken(dummyArticle.invalidUserToken);
-let userToken = '';
-let articleSlug;
-
 before(async () => {
   await Follow.create(dummyUser.validFollower);
 });
+let userToken;
+let adminToken;
+let articleSlug;
+let newArticleSlug;
 describe('POST AND GET /api/v1/articles', () => {
-  it('Should Login user and return token', (done) => {
+  // Login Users and retrieve tokens
+  it('Should Login admin and return token', (done) => {
     chai
       .request(app)
       .post('/api/v1/users/login')
       .send({
-        email: 'eric.malaba@gmail.com',
-        password: 'Superadmin12'
+        email: 'ray@gmail.com',
+        password: 'Admin1234'
+      })
+      .end((err, res) => {
+        if (err) done(err);
+        adminToken = res.body.data.token;
+        done();
+      });
+  });
+  it('Should Login normal user and return token', (done) => {
+    chai
+      .request(app)
+      .post('/api/v1/users/login')
+      .send({
+        email: 'carlos@gmail.com',
+        password: 'User1234'
       })
       .end((err, res) => {
         if (err) done(err);
@@ -33,6 +49,8 @@ describe('POST AND GET /api/v1/articles', () => {
         done();
       });
   });
+
+  // Start of Tests
   it('Should receive a message if no articles found', (done) => {
     chai
       .request(app)
@@ -40,7 +58,7 @@ describe('POST AND GET /api/v1/articles', () => {
       .set('Authorization', userToken)
       .end((err, res) => {
         if (err) done(err);
-        expect(res).have.status(200);
+        expect(res).have.status(404);
         expect(res).to.be.an('object');
         expect(res.body).to.have.keys('message');
         expect(res.body.message).to.deep.equal(
@@ -193,6 +211,7 @@ describe('POST AND GET /api/v1/articles', () => {
         expect(res.body.article)
           .to.have.property('images');
         expect(res.body).to.have.key('article');
+        articleSlug = res.body.article.slug;
         done();
       });
   });
@@ -236,6 +255,201 @@ describe('POST AND GET /api/v1/articles', () => {
         expect(res.body).to.have.keys('message', 'reaction');
         expect(res.body.message).to.deep.equal('You have disliked the article');
         expect(res.body.reaction).to.be.an('object');
+        done();
+      });
+  });
+});
+// Update Article Tests
+describe('UPDATE /api/v1/articles/:slug', () => {
+  it('Should return an error if the the user is not the author', (done) => {
+    chai
+      .request(app)
+      .put(`/api/v1/articles/${articleSlug}`)
+      .set('Authorization', invalidToken)
+      .end((err, res) => {
+        if (err) done(err);
+        expect(res).have.status(403);
+        expect(res.body).to.have.key('error');
+        expect(res.body.error).to.deep.equal('Sorry! You are not allowed to make changes to this resource');
+        done();
+      });
+  });
+  it('Should return an error if the slug provided do not correspond to any article', (done) => {
+    chai
+      .request(app)
+      .put('/api/v1/articles/kenyan-boy-making-3vmjzjpyc0a')
+      .set('Authorization', userToken)
+      .end((err, res) => {
+        if (err) done(err);
+        expect(res).have.status(404);
+        expect(res.body).to.have.key('error');
+        expect(res.body.error).to.deep.equal('Sorry! The specified article does not exist');
+        done();
+      });
+  });
+  it('Should return error if category is not a string', (done) => {
+    chai
+      .request(app)
+      .put(`/api/v1/articles/${articleSlug}`)
+      .set('Authorization', userToken)
+      .field(dummyArticle.incorrectCategory)
+      .end((err, res) => {
+        if (err) done(err);
+        expect(res).have.status(400);
+        expect(res.body).to.have.keys('error');
+        expect(res.body.error).to.deep.equal('category must be a string');
+        done();
+      });
+  });
+  it('Should return error if taglist is not a string', (done) => {
+    chai
+      .request(app)
+      .put(`/api/v1/articles/${articleSlug}`)
+      .set('Authorization', userToken)
+      .field(dummyArticle.incorrectTagList)
+      .end((err, res) => {
+        if (err) done(err);
+        expect(res).have.status(400);
+        expect(res.body).to.have.key('error');
+        expect(res.body.error).to.deep.equal('tags must be a string');
+        done();
+      });
+  });
+  it('Should return message of successfully update when title is not updated', (done) => {
+    chai
+      .request(app)
+      .put(`/api/v1/articles/${articleSlug}`)
+      .set('Authorization', userToken)
+      .field(dummyArticle.updateArticleLessTitle)
+      .end((err, res) => {
+        if (err) done(err);
+        expect(res).have.status(200);
+        expect(res.body).to.have.key('article', 'message');
+        expect(res.body.message).to.deep.equal('Profile updated successfully');
+        done();
+      });
+  });
+  it('Should take the old title and slug if title is not updated', (done) => {
+    chai
+      .request(app)
+      .put(`/api/v1/articles/${articleSlug}`)
+      .set('Authorization', userToken)
+      .field(dummyArticle.updateArticleLessTitle)
+      .end((err, res) => {
+        if (err) done(err);
+        expect(res).have.status(200);
+        expect(res.body.article.slug).to.deep.equal(articleSlug);
+        done();
+      });
+  });
+  it('Should return  the old description if it was not updated', (done) => {
+    chai
+      .request(app)
+      .put(`/api/v1/articles/${articleSlug}`)
+      .set('Authorization', userToken)
+      .field(dummyArticle.updateMissingDesc)
+      .end((err, res) => {
+        if (err) done(err);
+        expect(res).have.status(200);
+        expect(res.body.article.description).to.deep.equal('How to demonstrate growth mindset from a new perspective');
+        done();
+      });
+  });
+  it('Should return  the old body if it was not updated', (done) => {
+    chai
+      .request(app)
+      .put(`/api/v1/articles/${articleSlug}`)
+      .set('Authorization', userToken)
+      .field(dummyArticle.updateMissingBody)
+      .end((err, res) => {
+        if (err) done(err);
+        expect(res).have.status(200);
+        expect(res.body.article.body).to.deep.equal('is simply dummy text of the printing and typesetting industry Lorem Ipsum has');
+        done();
+      });
+  });
+  it('Should return the old tags if they was not updated', (done) => {
+    chai
+      .request(app)
+      .put(`/api/v1/articles/${articleSlug}`)
+      .set('Authorization', userToken)
+      .field(dummyArticle.updateMissingtags)
+      .end((err, res) => {
+        if (err) done(err);
+        expect(res).have.status(200);
+        expect(res.body.article.tagList).to.deep.equal(['Bango', 'Hip-Hop', 'R&B']);
+        done();
+      });
+  });
+  it('Should return the old category if it was not updated', (done) => {
+    chai
+      .request(app)
+      .put(`/api/v1/articles/${articleSlug}`)
+      .set('Authorization', userToken)
+      .field(dummyArticle.updateMissingCategory)
+      .end((err, res) => {
+        if (err) done(err);
+        expect(res).have.status(200);
+        expect(res.body.article.category).to.deep.equal('Music');
+        done();
+      });
+  });
+  it('Should return a new slug when title is updated', (done) => {
+    chai
+      .request(app)
+      .put(`/api/v1/articles/${articleSlug}`)
+      .set('Authorization', userToken)
+      .field(dummyArticle.updateArticleWithTitle)
+      .attach('image', fs.readFileSync('src/tests/dummyData/avatar.jpg'), 'avatar.jpg')
+      .end((err, res) => {
+        if (err) done(err);
+        expect(res).have.status(200);
+        expect(res.body).to.have.key('article', 'message');
+        expect(res.body.message).to.deep.equal('Profile updated successfully');
+        newArticleSlug = res.body.article.slug;
+        done();
+      });
+  });
+});
+
+// Deleting article Tests.
+describe('DELETE /api/v1/articles/:slug', () => {
+  it('Should return an error if the the user is not the author', (done) => {
+    chai
+      .request(app)
+      .delete(`/api/v1/articles/${newArticleSlug}`)
+      .set('Authorization', invalidToken)
+      .end((err, res) => {
+        if (err) done(err);
+        expect(res).have.status(403);
+        expect(res.body).to.have.key('error');
+        expect(res.body.error).to.deep.equal('Sorry! You are not allowed to make changes to this resource');
+        done();
+      });
+  });
+  it('Should return an error if the slug provided do not correspond to any article', (done) => {
+    chai
+      .request(app)
+      .delete('/api/v1/articles/kenyan-boy-making-3vmjzjpyc0a')
+      .set('Authorization', userToken)
+      .end((err, res) => {
+        if (err) done(err);
+        expect(res).have.status(404);
+        expect(res.body).to.have.key('error');
+        expect(res.body.error).to.deep.equal('Sorry! The specified article does not exist');
+        done();
+      });
+  });
+  it('Should delete an article and return a success message', (done) => {
+    chai
+      .request(app)
+      .delete(`/api/v1/articles/${newArticleSlug}`)
+      .set('Authorization', adminToken)
+      .end((err, res) => {
+        if (err) done(err);
+        expect(res).have.status(200);
+        expect(res.body).to.have.key('message');
+        expect(res.body.message).to.deep.equal('Article successful deleted!');
         done();
       });
   });

@@ -60,7 +60,7 @@ class ArticleController {
         });
       }
     } catch (err) {
-      throw (err);
+      throw err;
     }
   }
 
@@ -83,7 +83,7 @@ class ArticleController {
         ]
       });
       if (!articles.length) {
-        return res.status(200).json({
+        return res.status(404).json({
           message: 'No articles found at the moment! please come back later'
         });
       }
@@ -91,7 +91,67 @@ class ArticleController {
         articles
       });
     } catch (err) {
-      throw (err);
+      throw err;
+    }
+  }
+
+  /**
+   * @description update article
+   * @param {object} req
+   * @param {object} res
+   * @return {object} return object with updated article.
+   */
+  static async updateArticle(req, res) {
+    try {
+      const article = {};
+      const {
+        title, description, body, tags, category
+      } = req.body;
+      const originalArticle = await Article.findOne({ where: { slug: req.userData.slug } });
+      if (title) {
+        article.title = title.trim();
+        article.slug = slugGen(title.trim());
+      }
+      article.description = (description || originalArticle.description).trim();
+      article.body = (body || originalArticle.body).trim();
+      article.tagList = (tags || originalArticle.tagList.toString()).trim().split(/[ ,]+/);
+      article.category = (category || originalArticle.category).trim();
+      if (req.files.image) {
+        article.images = await uploadImage(req.files.image);
+      }
+      const updatedArticle = await Article.update(
+        article,
+        { where: { slug: req.userData.slug }, returning: true, plain: true }
+      );
+      if (updatedArticle) {
+        return res.status(200).json({
+          message: 'Profile updated successfully',
+          article: updatedArticle[1]
+        });
+      }
+    } catch (err) {
+      throw err;
+    }
+  }
+
+  /**
+   * @description delete article
+   * @param {object} req
+   * @param {object} res
+   * @return {object} return message of success or error.
+   */
+  static async deteleArticle(req, res) {
+    try {
+      const deleted = await Article.destroy({
+        where: { slug: req.userData.slug }
+      });
+      if (deleted) {
+        return res.status(200).json({
+          message: 'Article successful deleted!'
+        });
+      }
+    } catch (err) {
+      throw err;
     }
   }
 
