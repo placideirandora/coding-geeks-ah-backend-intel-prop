@@ -42,7 +42,7 @@ router.get('/api/v1/auth/twitter/callback', passport.authenticate('twitter'), Us
 router.post('/api/v1/users/logout', [verifyToken], UserAuth.logout);
 router.post('/api/v1/users/login', Validation.loginValidation, UserAuth.login);
 router.delete('/api/v1/users/:username', verifyToken, UserAuth.deleteUser);
-router.patch('/api/v1/users/:username', verifyToken, adminPermissions, Validation.updateRoleValidation, UserAuth.updateRole);
+router.patch('/api/v1/users/:username', verifyToken, Validation.updateRoleValidation, UserAuth.updateRole);
 
 router.post('/api/v1/articles', [verifyToken, connectMulti, Validation.createArticleValidation, ContentType, Validation.imageValidation], Article.createArticle);
 router.get('/api/v1/articles', Article.getAllArticles);

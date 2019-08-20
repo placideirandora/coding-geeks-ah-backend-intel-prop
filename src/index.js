@@ -46,6 +46,7 @@ app.use((req, res) => {
 });
 
 app.use((error, req, res, next) => {
+  console.log(error);
   res.status(500).json({
     error: error.message,
     next

@@ -229,6 +229,9 @@ export default {
     .error((errors) => {
       errors.forEach((err) => {
         switch (err.type) {
+          case 'string.base':
+            err.message = 'Confirm password must be a string';
+            break;
           case 'any.required':
             err.message = 'Role is required';
             break;
