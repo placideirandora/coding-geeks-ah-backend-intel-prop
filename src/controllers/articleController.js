@@ -40,6 +40,7 @@ class ArticleController {
       if (article) {
         return res.status(201).json({
           article: {
+            id: article.id,
             slug,
             title: article.title,
             description: article.title,
