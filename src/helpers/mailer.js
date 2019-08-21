@@ -15,6 +15,9 @@ const sendEmail = async (action, to, token) => {
   const resetSubject = 'Reset your password - Authors Haven';
   const resetContent = '<h2>Reset Password</h2><p style="font-size: 1rem;">Please Reset your password by visiting the following link:</p>';
   const resetLink = `${APP_URL}/reset-password/${token}`;
+  const notifySubject = 'Notification - New Article';
+  const notifyContent = '<h2>New published article</h2><p style="font-size: 1rem;">Please Click on a link below to read the article:</p>';
+  const notifyLink = `${token.url}`;
 
   if (action === 'verify-email') {
     const message = {
@@ -32,6 +35,16 @@ const sendEmail = async (action, to, token) => {
       subject: resetSubject,
       text: 'Authors Haven',
       html: template(resetContent, resetLink)
+    };
+    if (NODE_ENV === 'test') return true;
+    mailer.send(message);
+  } else if (action === 'notification') {
+    const message = {
+      to,
+      from: EMAIL_SENDER,
+      subject: notifySubject,
+      text: 'Authors Haven',
+      html: template(notifyContent, notifyLink)
     };
     if (NODE_ENV === 'test') return true;
     mailer.send(message);

@@ -324,5 +324,9 @@ export default {
   },
   updateProfileNotAllowed: {
     bio: 'I am the app admin'
+  },
+  validFollower: {
+    follower: 3,
+    following: 1
   }
 };

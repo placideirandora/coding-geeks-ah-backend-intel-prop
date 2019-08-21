@@ -14,8 +14,8 @@ export default(sequelize, DataTypes) => {
   );
   Follow.associate = (models) => {
     // associations can be defined here
-    Follow.belongsTo(models.User, { foreignKey: 'follower', onDelete: 'CASCADE' });
-    Follow.belongsTo(models.User, { foreignKey: 'following', onDelete: 'CASCADE' });
+    Follow.belongsTo(models.User, { foreignKey: 'follower', as: 'followerUser' });
+    Follow.belongsTo(models.User, { foreignKey: 'following', as: 'followedUser' });
   };
   return Follow;
 };
