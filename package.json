@@ -4,20 +4,18 @@
   "description": "A Social platform for the creative at heart",
   "main": "index.js",
   "scripts": {
-    "dev": "nodemon --exec babel-node ./src/index.js",
+    "dev": " nodemon --exec babel-node ./src/index.js",
     "coverage": "nyc npm test && nyc report --reporter=text-lcov | coveralls",
     "build": "rm -rf build && babel -d ./build ./src -s",
     "start": "npm run build && node ./build/index.js",
     "mocha-test": "nyc --reporter=text mocha  --require @babel/register --require @babel/polyfill  ./src/tests/*.js --timeout 30000 --exit",
     "test": "cross-env NODE_ENV=test npm-run-all db:ready mocha-test",
-    "down": "cross-env NODE_ENV=test node_modules/.bin/sequelize db:migrate:undo",
+    "down": "node_modules/.bin/sequelize db:migrate:undo",
     "db:ready": "npm-run-all down migrate seed",
     "migrate": "cross-env NODE_ENV=test node_modules/.bin/sequelize db:migrate",
     "seed": "node_modules/.bin/sequelize db:seed:all",
-    "unseed:all": "node_modules/.bin/sequelize db:seed:undo:all",
-    "undo:seed": "node_modules/.bin/sequelize db:seed:undo:all",
-    "dropdb": "node_modules/.bin/sequelize db:drop",
-    "createdb": "node_modules/.bin/sequelize db:create authors_haven_test"
+    "unseed:all": "cross-env NODE_ENV=test node_modules/.bin/sequelize db:seed:undo:all",
+    "undo:seed": "node_modules/.bin/sequelize db:seed:undo:all"
   },
   "engines": {
     "node": "10.16.0"
@@ -45,7 +43,6 @@
     "mongoose": "^5.2.2",
     "mongoose-unique-validator": "^2.0.1",
     "morgan": "^1.9.1",
-    "npm-run-all": "^4.1.5",
     "passport": "^0.4.0",
     "passport-facebook": "^3.0.0",
     "passport-google-oauth20": "^2.0.0",
@@ -69,6 +66,7 @@
     "@babel/preset-env": "^7.5.5",
     "@babel/register": "^7.5.5",
     "@babel/runtime": "^7.5.5",
+    "npm-run-all": "^4.1.5",
     "chai": "^4.2.0",
     "chai-http": "^4.3.0",
     "coveralls": "^3.0.5",

@@ -39,7 +39,7 @@ describe('POST /api/v1/profiles/notifications', () => {
   });
   it('User should be able to unsubscribe to email notification', (done) => {
     chai.request(app)
-      .patch('/api/v1/profiles/eubule/notifications/unsubscribe')
+      .patch('/api/v1/profiles/super-admin/notifications/unsubscribe')
       .set('Authorization', adminToken)
       .end((err, res) => {
         expect(res).have.status(200);
@@ -51,7 +51,7 @@ describe('POST /api/v1/profiles/notifications', () => {
   });
   it('User should be able to subscribe to email notification', (done) => {
     chai.request(app)
-      .patch('/api/v1/profiles/eubule/notifications/subscribe')
+      .patch('/api/v1/profiles/super-admin/notifications/subscribe')
       .set('Authorization', adminToken)
       .end((err, res) => {
         expect(res).have.status(200);
@@ -63,7 +63,7 @@ describe('POST /api/v1/profiles/notifications', () => {
   });
   it('User should not be able to subscribe or unsubscribe to email notification', (done) => {
     chai.request(app)
-      .patch('/api/v1/profiles/eubule/notifications/invalidsubscribe')
+      .patch('/api/v1/profiles/super-admin/notifications/invalidsubscribe')
       .set('Authorization', adminToken)
       .end((err, res) => {
         expect(res).have.status(400);

@@ -251,8 +251,8 @@ export default {
   newUserLogin: {
     firstName: 'Musinda',
     lastName: 'Kadhuwa',
-    userName: 'carlosG',
-    email: 'carlosG@gmail12.com',
+    userName: 'carlosGga',
+    email: 'carlosGga@gmail12.com',
     password: 'Jamal1230!',
     confirmPassword: 'Jamal1230!',
     verified: true

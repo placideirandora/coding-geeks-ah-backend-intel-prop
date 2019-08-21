@@ -44,8 +44,8 @@ before((done) => {
 
 before((done) => {
   const user = {
-    email: 'malabadev6@gmail.com',
-    password: 'Super-admin12',
+    email: 'eric.malaba@gmail.com',
+    password: 'Superadmin12',
   };
   chai.request(app)
     .post('/api/v1/users/login')
@@ -90,7 +90,7 @@ before((done) => {
 describe('POST /api/v1/users', () => {
   it('Should return error if user tries to signup with an invalid firstName', (done) => {
     chai.request(app)
-      .post('/api/v1/users')
+      .post('/api/v1/users/signup')
       .send(dummyUser.invalidFirstName)
       .end((err, res) => {
         if (err) done(err);
@@ -107,7 +107,7 @@ describe('POST /api/v1/users', () => {
 describe('POST /api/v1/users', () => {
   it('Should return error if user tries to signup with an invalid firstName', (done) => {
     chai.request(app)
-      .post('/api/v1/users')
+      .post('/api/v1/users/signup')
       .send(dummyUser.firstNumFirstName)
       .end((err, res) => {
         if (err) done(err);
@@ -124,7 +124,7 @@ describe('POST /api/v1/users', () => {
 describe('POST /api/v1/users', () => {
   it('Should return error if user tries to signup with missing firatName field', (done) => {
     chai.request(app)
-      .post('/api/v1/users')
+      .post('/api/v1/users/signup')
       .send(dummyUser.missingFirstName)
       .end((err, res) => {
         if (err) done(err);
@@ -140,7 +140,7 @@ describe('POST /api/v1/users', () => {
 describe('POST /api/v1/users', () => {
   it('Should return error if user tries to signup  with a few characters for name', (done) => {
     chai.request(app)
-      .post('/api/v1/users')
+      .post('/api/v1/users/signup')
       .send(dummyUser.lessFirstName)
       .end((err, res) => {
         if (err) done(err);
@@ -156,7 +156,7 @@ describe('POST /api/v1/users', () => {
 describe('POST /api/v1/users', () => {
   it('Should return error if user tries to signup  with a few numbers for name', (done) => {
     chai.request(app)
-      .post('/api/v1/users')
+      .post('/api/v1/users/signup')
       .send(dummyUser.numFirstName)
       .end((err, res) => {
         if (err) done(err);
@@ -172,7 +172,7 @@ describe('POST /api/v1/users', () => {
 describe('POST /api/v1/users', () => {
   it('Should return error if user tries to signup with an invalid lasttName', (done) => {
     chai.request(app)
-      .post('/api/v1/users')
+      .post('/api/v1/users/signup')
       .send(dummyUser.invalidLastName)
       .end((err, res) => {
         if (err) done(err);
@@ -190,7 +190,7 @@ describe('POST /api/v1/users', () => {
 describe('POST /api/v1/users', () => {
   it('Should return error if user tries to signup with an invalid Last name', (done) => {
     chai.request(app)
-      .post('/api/v1/users')
+      .post('/api/v1/users/signup')
       .send(dummyUser.firstNumLastName)
       .end((err, res) => {
         if (err) done(err);
@@ -207,7 +207,7 @@ describe('POST /api/v1/users', () => {
 describe('POST /api/v1/users', () => {
   it('Should return error if user tries to signup with missing lasttName field', (done) => {
     chai.request(app)
-      .post('/api/v1/users')
+      .post('/api/v1/users/signup')
       .send(dummyUser.missingLastName)
       .end((err, res) => {
         if (err) done(err);
@@ -223,7 +223,7 @@ describe('POST /api/v1/users', () => {
 describe('POST /api/v1/users', () => {
   it('Should return error if user tries to signup  with a few characters for name', (done) => {
     chai.request(app)
-      .post('/api/v1/users')
+      .post('/api/v1/users/signup')
       .send(dummyUser.lessLastName)
       .end((err, res) => {
         if (err) done(err);
@@ -240,7 +240,7 @@ describe('POST /api/v1/users', () => {
 describe('POST /api/v1/users', () => {
   it('Should return error if user tries to signup  with a few numbers for name', (done) => {
     chai.request(app)
-      .post('/api/v1/users')
+      .post('/api/v1/users/signup')
       .send(dummyUser.numLastName)
       .end((err, res) => {
         if (err) done(err);
@@ -256,7 +256,7 @@ describe('POST /api/v1/users', () => {
 describe('POST /api/v1/users', () => {
   it('Should return error if user tries to signup with an invalid UserName', (done) => {
     chai.request(app)
-      .post('/api/v1/users')
+      .post('/api/v1/users/signup')
       .send(dummyUser.invalidUserName)
       .end((err, res) => {
         if (err) done(err);
@@ -272,7 +272,7 @@ describe('POST /api/v1/users', () => {
 describe('POST /api/v1/users', () => {
   it('Should return error if user tries to signup with an invalid User name', (done) => {
     chai.request(app)
-      .post('/api/v1/users')
+      .post('/api/v1/users/signup')
       .send(dummyUser.firstNumUserName)
       .end((err, res) => {
         if (err) done(err);
@@ -288,7 +288,7 @@ describe('POST /api/v1/users', () => {
 describe('POST /api/v1/users', () => {
   it('Should return error if user tries to signup with missing userName field', (done) => {
     chai.request(app)
-      .post('/api/v1/users')
+      .post('/api/v1/users/signup')
       .send(dummyUser.missingUserName)
       .end((err, res) => {
         if (err) done(err);
@@ -304,7 +304,7 @@ describe('POST /api/v1/users', () => {
 describe('POST /api/v1/users', () => {
   it('Should return error if user tries to signup  with a few characters for name', (done) => {
     chai.request(app)
-      .post('/api/v1/users')
+      .post('/api/v1/users/signup')
       .send(dummyUser.lessUserName)
       .end((err, res) => {
         if (err) done(err);
@@ -320,7 +320,7 @@ describe('POST /api/v1/users', () => {
 describe('POST /api/v1/users', () => {
   it('Should return error if user tries to signup  with a few numbers for name', (done) => {
     chai.request(app)
-      .post('/api/v1/users')
+      .post('/api/v1/users/signup')
       .send(dummyUser.numUserName)
       .end((err, res) => {
         if (err) done(err);
@@ -336,7 +336,7 @@ describe('POST /api/v1/users', () => {
 describe('POST /api/v1/users', () => {
   it('Should return error if user tries to signup  with invalid email', (done) => {
     chai.request(app)
-      .post('/api/v1/users')
+      .post('/api/v1/users/signup')
       .send(dummyUser.invalidEmail)
       .end((err, res) => {
         if (err) done(err);
@@ -352,7 +352,7 @@ describe('POST /api/v1/users', () => {
 describe('POST /api/v1/users', () => {
   it('Should return error if user tries to signup with missing email field', (done) => {
     chai.request(app)
-      .post('/api/v1/users')
+      .post('/api/v1/users/signup')
       .send(dummyUser.missingEmail)
       .end((err, res) => {
         if (err) done(err);
@@ -368,7 +368,7 @@ describe('POST /api/v1/users', () => {
 describe('POST /api/v1/users', () => {
   it('Should return error if user tries to signup  with invalid password', (done) => {
     chai.request(app)
-      .post('/api/v1/users')
+      .post('/api/v1/users/signup')
       .send(dummyUser.invalidPassword)
       .end((err, res) => {
         if (err) done(err);
@@ -386,7 +386,7 @@ describe('POST /api/v1/users', () => {
 describe('POST /api/v1/users', () => {
   it('Should return error if user tries to signup with missing password field', (done) => {
     chai.request(app)
-      .post('/api/v1/users')
+      .post('/api/v1/users/signup')
       .send(dummyUser.missingPassword)
       .end((err, res) => {
         if (err) done(err);
@@ -402,7 +402,7 @@ describe('POST /api/v1/users', () => {
 describe('POST /api/v1/users', () => {
   it('Should return error if user tries to signup with invalid confirm password type', (done) => {
     chai.request(app)
-      .post('/api/v1/users')
+      .post('/api/v1/users/signup')
       .send(dummyUser.numConfirmPassword)
       .end((err, res) => {
         if (err) done(err);
@@ -418,7 +418,7 @@ describe('POST /api/v1/users', () => {
 describe('POST /api/v1/users', () => {
   it('Should return error if user tries to signup with missing confirm', (done) => {
     chai.request(app)
-      .post('/api/v1/users')
+      .post('/api/v1/users/signup')
       .send(dummyUser.missingConfirm)
       .end((err, res) => {
         if (err) done(err);
@@ -434,7 +434,7 @@ describe('POST /api/v1/users', () => {
 describe('POST /api/v1/users', () => {
   it('Should return error if user tries to signup with when passwords do not match', (done) => {
     chai.request(app)
-      .post('/api/v1/users')
+      .post('/api/v1/users/signup')
       .send(dummyUser.unmatchedPassword)
       .end((err, res) => {
         if (err) done(err);
@@ -450,14 +450,14 @@ describe('POST /api/v1/users', () => {
 describe('POST /api/v1/users', () => {
   it('Should successfully register user upon correct validation', (done) => {
     chai.request(app)
-      .post('/api/v1/users')
+      .post('/api/v1/users/signup')
       .send(dummyUser.validUser)
       .end((err, res) => {
         if (err) done(err);
         expect(res).have.status(201);
         expect(res).to.be.an('object');
         expect(res.body).to.have.keys('message', 'data');
-        expect(res.body.message).to.deep.equal('User created. Please, Check your email for a verification link.');
+        expect(res.body.message).to.deep.equal('User created. Please, Check your email for a verification link');
         expect(res.body.data).to.have.keys('id', 'firstName', 'lastName', 'userName', 'email', 'role');
         done();
       });
@@ -466,7 +466,7 @@ describe('POST /api/v1/users', () => {
 describe('POST /api/v1/users', () => {
   it('Sould return error if user tries to signup with an existing email', (done) => {
     chai.request(app)
-      .post('/api/v1/users')
+      .post('/api/v1/users/signup')
       .send(dummyUser.existingEmail)
       .end((err, res) => {
         if (err) done(err);
@@ -482,7 +482,7 @@ describe('POST /api/v1/users', () => {
 describe('POST /api/v1/users', () => {
   it('Sould return error if user tries to signup with an existing userName', (done) => {
     chai.request(app)
-      .post('/api/v1/users')
+      .post('/api/v1/users/signup')
       .send(dummyUser.existingUserName)
       .end((err, res) => {
         if (err) done(err);
@@ -659,7 +659,7 @@ describe('POST /api/v1/users/login', () => {
       .request(app)
       .post('/api/v1/users/login')
       .send({
-        email: 'carlosG@gmail12.com',
+        email: 'carlosGga@gmail12.com',
         password: 'Jamal1230!',
       })
       .end((err, res) => {
@@ -769,7 +769,7 @@ describe('POST /api/v1/users/login', () => {
 describe('POST /api/v1/profiles/:userName/follow', () => {
   it('User Should follow other user', (done) => {
     chai.request(app)
-      .post('/api/v1/profiles/carlosG/follow')
+      .post('/api/v1/profiles/carlosGga/follow')
       .set('Authorization', userToken)
       .end((err, res) => {
         expect(res).have.status(201);
@@ -827,13 +827,13 @@ describe('GET /api/v1/profiles/:userName/followers', () => {
 describe('DELETE /api/v1/profiles/:userName/unfollow', () => {
   it('User Should be able to unfollow each other', (done) => {
     chai.request(app)
-      .delete('/api/v1/profiles/carlosG/unfollow')
+      .delete('/api/v1/profiles/carlosGga/unfollow')
       .set('Authorization', userToken)
       .end((err, res) => {
         expect(res).have.status(200);
         expect(res).to.be.an('object');
         expect(res.body).to.have.keys('message');
-        expect(res.body.message).to.deep.equal('You are no longer following carlosG');
+        expect(res.body.message).to.deep.equal('You are no longer following carlosGga');
         done();
       });
   });
@@ -912,7 +912,7 @@ describe('Get /api/v1/profiles/:userName/followers', () => {
 describe('POST /api/v1/users/signup', () => {
   it('Should successfuly create a user through the admin', (done) => {
     chai.request(app)
-      .post('/api/v1/users/signup')
+      .post('/api/v1/users')
       .set('Authorization', superAdminToken)
       .send(dummyUser.superCreateAdmin)
       .end((err, res) => {
@@ -928,7 +928,7 @@ describe('POST /api/v1/users/signup', () => {
 describe('POST /api/v1/users/signup', () => {
   it('Should return error if super-admin provides wrong user role', (done) => {
     chai.request(app)
-      .post('/api/v1/users/signup')
+      .post('/api/v1/users')
       .set('Authorization', superAdminToken)
       .send(dummyUser.superCreateWrongRole)
       .end((err, res) => {

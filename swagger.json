@@ -40,7 +40,7 @@
                 }
             }
         },
-        "/api/v1/users": {
+        "/api/v1/users/signup": {
             "post": {
                 "tags": [
                     "Users"
@@ -117,7 +117,7 @@
                 }
             }
         },
-        "/api/v1/users/signup": {
+        "/api/v1/users": {
             "post": {
                 "tags": [
                     "Users"

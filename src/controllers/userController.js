@@ -19,6 +19,14 @@ class Authentication {
    */
   static async signup(req, res) {
     try {
+      let message;
+      if (req.userData) {
+        if (req.userData.role === 'super-admin') {
+          message = 'User created. User should check their email for a verification link';
+        }
+      } else {
+        message = 'User created. Please, Check your email for a verification link';
+      }
       const { email, userName, password } = req.body;
       const user = await User.findOne({ where: { email } });
       const name = await User.findOne({ where: { userName } });
@@ -59,7 +67,7 @@ class Authentication {
       await sendEmail(action, createdUser.email, userToken);
 
       return res.status(201).json({
-        message: 'User created. Please, Check your email for a verification link.',
+        message,
         data: {
           id: createdUser.id,
           firstName: createdUser.firstName,
@@ -170,9 +178,8 @@ class Authentication {
           error: `User with username ${name} not found`
         });
       }
-      if (userRole === 'user' || ((userRole !== 'admin' || userRole !== 'super-admin')
-      && (user.role === 'super-admin'
-      || (userRole === 'admin' && user.role === 'admin')))) {
+      if (userRole === 'user' || (user.role === 'super-admin'
+      || (userRole === 'admin' && user.role === 'admin'))) {
         return res.status(403).json({
           error: 'You do not have permission to perform this action'
         });
