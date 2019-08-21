@@ -1275,8 +1275,86 @@
                 }
             }
           }
-       }
-
+       },
+       "/api/v1/articles/{articleSlug}/like": {
+        "put": {
+          "tags": [
+            "Articles"
+          ],
+          "summary": "Like an article",
+          "produces": [
+            "application/json"
+          ],
+          "parameters": [
+              {
+                "name": "Authorization",
+                "in": "header",
+                "description": "Token",
+                "required": true
+              },
+            {
+              "name": "articleSlug",
+              "in": "path",
+              "description": "A slug of an article",
+              "required": true,
+              "type": "string"
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Article Liked"
+            },
+            "400": {
+              "description": "Bad Request"
+            },
+            "404": {
+              "description": "Article Not Found"
+            },
+            "401": {
+              "description": "Unauthorized Access"
+            }
+          }
+        }
+      }, "/api/v1/articles/{articleSlug}/dislike": {
+        "put": {
+          "tags": [
+            "Articles"
+          ],
+          "summary": "Dislike an article",
+          "produces": [
+            "application/json"
+          ],
+          "parameters": [
+              {
+                "name": "Authorization",
+                "in": "header",
+                "description": "Token",
+                "required": true
+              },
+            {
+              "name": "articleSlug",
+              "in": "path",
+              "description": "A slug of an article",
+              "required": true,
+              "type": "string"
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Article Disliked"
+            },
+            "400": {
+              "description": "Bad Request"
+            },
+            "404": {
+              "description": "Article Not Found"
+            },
+            "401": {
+              "description": "Unauthorized Access"
+            }
+          }
+        }
+      }
         },
         
     "definitions": {

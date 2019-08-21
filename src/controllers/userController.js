@@ -278,9 +278,10 @@ class Authentication {
         username: req.user.userName,
         email: req.user.email
       }
-       });
+    });
   }
-    /**
+
+  /**
    * @description user logout
    * @param {object} req
    * @param {object} res

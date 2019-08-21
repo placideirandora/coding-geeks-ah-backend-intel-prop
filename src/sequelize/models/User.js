@@ -77,7 +77,11 @@ export default (sequelize, DataTypes) => {
     User.hasMany(models.Follow, { foreignKey: 'following', onDelete: 'CASCADE' });
     User.hasMany(models.Follow, { foreignKey: 'follower', onDelete: 'CASCADE' });
     User.hasMany(models.Article, { foreignKey: 'authorId', as: 'author', onDelete: 'CASCADE' });
+<<<<<<< HEAD
     User.hasMany(models.Notification, { foreignKey: 'userId', onDelete: 'CASCADE' });
+=======
+    User.hasMany(models.Reaction, { foreignKey: 'userId', as: 'LikerOrDisliker', onDelete: 'CASCADE' });
+>>>>>>> feat(like-dislike): implement the like or dislike an article
   };
   return User;
 };
