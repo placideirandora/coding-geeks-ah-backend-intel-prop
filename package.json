@@ -11,7 +11,7 @@
     "mocha-test": "nyc --reporter=text mocha  --require @babel/register --require @babel/polyfill  ./src/tests/*.js --timeout 30000 --exit",
     "test": "cross-env NODE_ENV=test npm-run-all db:ready mocha-test",
     "down": "cross-env NODE_ENV=test node_modules/.bin/sequelize db:migrate:undo",
-    "db:ready": "npm-run-all down undo:seed migrate seed",
+    "db:ready": "npm-run-all down migrate seed",
     "migrate": "cross-env NODE_ENV=test node_modules/.bin/sequelize db:migrate",
     "seed": "node_modules/.bin/sequelize db:seed:all",
     "unseed:all": "node_modules/.bin/sequelize db:seed:undo:all",
