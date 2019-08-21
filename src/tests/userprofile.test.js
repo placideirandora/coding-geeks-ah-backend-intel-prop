@@ -67,8 +67,8 @@ describe('GET /api/v1/profiles', () => {
         expect(res).to.have.status(200);
         expect(res.body).to.be.an('object');
         expect(res.body).to.have.keys('message', 'data');
-        expect(res.body.message).to.deep.equal('2 Users found');
-        expect(res.body.data[0]).to.have.keys('userName', 'bio', 'image');
+        expect(res.body.message).to.deep.equal('6 Users found');
+        expect(res.body.data[0]).to.have.keys('userName', 'role', 'bio', 'image');
         done();
       });
   });
@@ -90,10 +90,25 @@ describe('GET /api/v1/profiles', () => {
 });
 
 describe('PUT /api/v1/profiles', () => {
-  it('should get an error when there is a wrong input profile name', (done) => {
+  it('should get an error when user does not exist', (done) => {
     chai
       .request(app)
       .put('/api/v1/profiles/Kadhutii')
+      .set('Authorization', userToken)
+      .end((err, res) => {
+        if (err) done(err);
+        expect(res).have.status(404);
+        expect(res).to.be.an('object');
+        expect(res.body).to.have.keys('error');
+        expect(res.body.error).to.deep.equal('User Kadhutii not found');
+        done();
+      });
+  });
+
+  it('should get an error when user tries to edit a profile they do not own', (done) => {
+    chai
+      .request(app)
+      .put('/api/v1/profiles/ricky')
       .set('Authorization', userToken)
       .end((err, res) => {
         if (err) done(err);

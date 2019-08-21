@@ -170,9 +170,9 @@ class Authentication {
           error: `User with username ${name} not found`
         });
       }
-      if ((userRole !== 'admin' || userRole !== 'super-admin')
+      if (userRole === 'user' || ((userRole !== 'admin' || userRole !== 'super-admin')
       && (user.role === 'super-admin'
-      || (userRole === 'admin' && user.role === 'admin'))) {
+      || (userRole === 'admin' && user.role === 'admin')))) {
         return res.status(403).json({
           error: 'You do not have permission to perform this action'
         });
@@ -200,14 +200,13 @@ class Authentication {
   static async updateRole(req, res) {
     try {
       const name = req.params.username;
-      const userRole = req.userData.role;
       const user = await User.findOne({ where: { userName: name } });
       if (!user) {
         return res.status(404).json({
           error: `User with username ${name} not found`
         });
       }
-      if (userRole !== 'super-admin' || user.role === 'super-admin') {
+      if (user.role === 'super-admin') {
         return res.status(403).json({
           error: 'You do not have permission to perform this action'
         });
@@ -226,7 +225,7 @@ class Authentication {
         role: update[1].role
       };
       return res.status(200).json({
-        message: 'Role successfully updated',
+        message: 'User role successfully updated',
         data: updatedUser
       });
     } catch (err) {

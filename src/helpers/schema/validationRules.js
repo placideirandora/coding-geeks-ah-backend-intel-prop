@@ -131,9 +131,6 @@ export default {
     .error((errors) => {
       errors.forEach((err) => {
         switch (err.type) {
-          case 'string.base':
-            err.message = 'Confirm password must be a string';
-            break;
           case 'any.allowOnly':
             err.message = 'role must be either user or admin';
             break;
@@ -232,9 +229,6 @@ export default {
     .error((errors) => {
       errors.forEach((err) => {
         switch (err.type) {
-          case 'string.base':
-            err.message = 'Confirm password must be a string';
-            break;
           case 'any.required':
             err.message = 'Role is required';
             break;

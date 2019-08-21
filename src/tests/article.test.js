@@ -19,8 +19,8 @@ describe('POST AND GET /api/v1/articles', () => {
       .request(app)
       .post('/api/v1/users/login')
       .send({
-        email: 'eric.malaba@gmail.com',
-        password: 'Superadmin12'
+        email: 'malabadev6@gmail.com',
+        password: 'Super-admin12'
       })
       .end((err, res) => {
         if (err) done(err);
