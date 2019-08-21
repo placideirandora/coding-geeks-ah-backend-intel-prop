@@ -30,7 +30,6 @@ class ArticleRate {
         { rate }, { where: { id: ratings.id }, returning: true }
       );
       return res.status(200).send({
-        status: res.statusCode,
         data: { rating: updatedRating, Author: userInfo }
       });
     }

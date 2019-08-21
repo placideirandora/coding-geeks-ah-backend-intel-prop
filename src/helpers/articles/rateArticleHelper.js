@@ -16,8 +16,8 @@ class ArticleRatelehelper {
        * @return {string} Validate the rate
        */
   static async validateArticleRated(id, user) {
-    const findarticle = await Article.findOne({ where: { id } });
-    if (findarticle) {
+    const findArticle = await Article.findOne({ where: { id } });
+    if (findArticle) {
       const articleOwner = await Article.findAll({
         where: { id, authorId: user }
       });
@@ -25,7 +25,7 @@ class ArticleRatelehelper {
         return 'Sorry! You cannot rate your article';
       }
     }
-    if (findarticle == null) {
+    if (findArticle == null) {
       return 'This Article does not exist';
     }
     return true;

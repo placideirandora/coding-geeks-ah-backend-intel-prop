@@ -22,7 +22,7 @@ class ArticleMiddleware {
     if (validateArticle !== true) {
       errorMessage.push(validateArticle);
     }
-    if (req.body.rate === undefined) {
+    if (!req.body.rate) {
       errorMessage.push('Rate is required');
     }
     const validateRate = await ArticleRateHelper.validateRating(req.body.rate);
