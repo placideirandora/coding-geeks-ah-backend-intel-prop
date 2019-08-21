@@ -10,10 +10,14 @@ import SwaggerDocument from '../swagger.json';
 import db from './sequelize/models';
 import router from './routes/routes';
 import passConfig from './config/passport/passport';
+import './helpers/notification/eventEmitter';
+import './helpers/notification/eventListener';
+import SocketIO from './helpers/socketIo';
 
 config();
 
 const app = express();
+SocketIO(app);
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -50,7 +54,7 @@ app.use((error, req, res, next) => {
 
 const PORT = process.env.PORT || 3000;
 
-db.sequelize.sync({ alter: true }).then(() => {
+db.sequelize.sync({ alter: false }).then(() => {
   console.log('Database Connected!');
   app.listen(PORT, () => {
     console.log(`Server listening on port: ${PORT}`);

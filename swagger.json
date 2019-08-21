@@ -669,7 +669,204 @@
           
         }
        },
-        
+       "/api/v1/profiles/{username}/notification/{subscribe}": {
+            "patch": {
+                "tags": [
+                    "Profile"
+                ],
+                "description": "User can subscribe or unsubscribe to email notification",
+                "parameters": [
+                    {
+                        "name": "username",
+                        "in": "path",
+                        "description": "username",
+                        "required":true,
+                        "type":"string"
+                    },
+                    {
+                        "name": "subscribe",
+                        "in": "path",
+                        "description": "subscription",
+                        "required":true,
+                        "type":"string"
+                    },
+                    {
+                        "name": "Authorization",
+                        "in": "header",
+                        "description": "The user token",
+                        "required":true,
+                        "type":"string"
+                    }],
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successfully subscribe or unsubscribe to email notification",
+                        "schema": {
+                            "properties": {
+                                "message": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Missing fields or invalid value",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+
+                    "404": {
+                        "description": "User not found",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/profiles/notification/{id}/read": {
+            "patch": {
+                "tags": [
+                    "Profile"
+                ],
+                "description": "User can mark notification as read",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Notification Id",
+                        "required":true,
+                        "type":"string"
+                    },
+                    {
+                        "name": "Authorization",
+                        "in": "header",
+                        "description": "The user token",
+                        "required":true,
+                        "type":"string"
+                    }],
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successfully notification marked as read",
+                        "schema": {
+                            "properties": {
+                                "message": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Missing fields or invalid value",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+
+                    "404": {
+                        "description": "User not found",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                }
+            }
+        }, 
+        "/api/v1/profiles/notification/read/all": {
+            "patch": {
+                "tags": [
+                    "Profile"
+                ],
+                "description": "User can mark all notification as read",
+                "parameters": [
+                    {
+                        "name": "Authorization",
+                        "in": "header",
+                        "description": "The user token",
+                        "required":true,
+                        "type":"string"
+                    }],
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successfully notification marked as read",
+                        "schema": {
+                            "properties": {
+                                "message": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Missing fields or invalid value",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+
+                    "404": {
+                        "description": "User not found",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/profiles/notification/all": {
+            "get": {
+                "tags": [
+                    "Profile"
+                ],
+                "description": "User can get all notification as read",
+                "parameters": [
+                    {
+                        "name": "Authorization",
+                        "in": "header",
+                        "description": "The user token",
+                        "required":true,
+                        "type":"string"
+                    }],
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successfully notifications retrieved",
+                        "schema": {
+                            "properties": {
+                                "message": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Missing fields or invalid value",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+
+                    "404": {
+                        "description": "User not found",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                }
+            }
+        },
+
        "/api/v1/profiles": {
         "get": {
             "tags": [
