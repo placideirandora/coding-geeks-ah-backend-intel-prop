@@ -8,6 +8,10 @@ export default (sequelize, DataTypes) => {
         primaryKey: true,
         type: DataTypes.INTEGER
       },
+      articleId: {
+        allowNull: false,
+        type: DataTypes.INTEGER
+      },
       articleSlug: {
         allowNull: false,
         type: DataTypes.STRING,
@@ -32,7 +36,7 @@ export default (sequelize, DataTypes) => {
   );
   Reaction.associate = (models) => {
     Reaction.belongsTo(models.User, { foreignKey: 'userId', as: 'LikerOrDislker', onDelete: 'CASCADE' });
-    Reaction.belongsTo(models.Article, { foreignKey: 'articleSlug', as: 'Article', onDelete: 'CASCADE' });
+    Reaction.belongsTo(models.Article, { foreignKey: 'articleId', as: 'Article', onDelete: 'CASCADE' });
   };
   return Reaction;
 };
