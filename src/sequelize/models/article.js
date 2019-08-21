@@ -40,6 +40,14 @@ module.exports = (sequelize, DataTypes) => {
       authorId: {
         type: DataTypes.INTEGER,
         allowNull: false
+      },
+      likes: {
+        type: DataTypes.INTEGER,
+        defaultValue: 0
+      },
+      dislikes: {
+        type: DataTypes.INTEGER,
+        defaultValue: 0
       }
     },
     {
@@ -48,6 +56,7 @@ module.exports = (sequelize, DataTypes) => {
   );
   Article.associate = (models) => {
     Article.belongsTo(models.User, { foreignKey: 'authorId', as: 'author', onDelete: 'CASCADE' });
+    Article.hasMany(models.Reaction, { foreignKey: 'articleSlug', as: 'Article', onDelete: 'CASCADE' });
   };
   return Article;
 };

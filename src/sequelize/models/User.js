@@ -66,6 +66,7 @@ export default (sequelize, DataTypes) => {
     User.hasMany(models.Follow, { foreignKey: 'following', onDelete: 'CASCADE' });
     User.hasMany(models.Follow, { foreignKey: 'follower', onDelete: 'CASCADE' });
     User.hasMany(models.Article, { foreignKey: 'authorId', as: 'author', onDelete: 'CASCADE' });
+    User.hasMany(models.Reaction, { foreignKey: 'userId', as: 'LikerOrDisliker', onDelete: 'CASCADE' });
   };
   return User;
 };

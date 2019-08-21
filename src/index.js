@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import swaggerUi from 'swagger-ui-express';
 import express from 'express';
 import morgan from 'morgan';
@@ -40,7 +41,7 @@ app.use((error, req, res, next) => {
 
 const PORT = process.env.PORT || 3000;
 
-db.sequelize.sync({ alter: true }).then(() => {
+db.sequelize.sync({ alter: false }).then(() => {
   console.log('Database Connected!');
   app.listen(PORT, () => {
     console.log(`Server listening on port: ${PORT}`);
