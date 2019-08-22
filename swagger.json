@@ -669,7 +669,7 @@
           
         }
        },
-       "/api/v1/profiles/{username}/notification/{subscribe}": {
+       "/api/v1/profiles/{username}/notifications/{subscribe}": {
             "patch": {
                 "tags": [
                     "Profile"
@@ -727,7 +727,7 @@
                 }
             }
         },
-        "/api/v1/profiles/notification/{id}/read": {
+        "/api/v1/profiles/notifications/{id}/read": {
             "patch": {
                 "tags": [
                     "Profile"
@@ -778,7 +778,7 @@
                 }
             }
         }, 
-        "/api/v1/profiles/notification/read/all": {
+        "/api/v1/profiles/notifications/read/all": {
             "patch": {
                 "tags": [
                     "Profile"
@@ -822,7 +822,7 @@
                 }
             }
         },
-        "/api/v1/profiles/notification/all": {
+        "/api/v1/profiles/notifications/all": {
             "get": {
                 "tags": [
                     "Profile"
