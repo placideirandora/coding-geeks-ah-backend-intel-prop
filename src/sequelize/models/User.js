@@ -54,6 +54,11 @@ export default (sequelize, DataTypes) => {
         allowNull: true,
         type: DataTypes.STRING,
       },
+      notify: {
+        allownull: false,
+        type: DataTypes.BOOLEAN,
+        defaultValue: true
+      },
       createdAt: {
         allowNull: true,
         type: DataTypes.DATE,
@@ -61,7 +66,7 @@ export default (sequelize, DataTypes) => {
       updatedAt: {
         allowNull: true,
         type: DataTypes.DATE,
-      },
+      }
     },
     {
       timestamps: true,
@@ -72,6 +77,7 @@ export default (sequelize, DataTypes) => {
     User.hasMany(models.Follow, { foreignKey: 'following', onDelete: 'CASCADE' });
     User.hasMany(models.Follow, { foreignKey: 'follower', onDelete: 'CASCADE' });
     User.hasMany(models.Article, { foreignKey: 'authorId', as: 'author', onDelete: 'CASCADE' });
+    User.hasMany(models.Notification, { foreignKey: 'userId', onDelete: 'CASCADE' });
   };
   return User;
 };

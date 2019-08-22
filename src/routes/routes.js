@@ -12,6 +12,7 @@ import UserFollow from '../controllers/followController';
 import Profile from '../controllers/profileController';
 import canEditProfile from '../middleware/editProfile';
 import Article from '../controllers/articleController';
+import Notification from '../controllers/notificationController';
 
 const router = express.Router();
 
@@ -44,5 +45,10 @@ router.post('/api/v1/profiles/:userName/follow', verifyToken, UserFollow.followU
 router.delete('/api/v1/profiles/:userName/unfollow', verifyToken, UserFollow.unFollowUser);
 router.get('/api/v1/profiles/:userName/following', verifyToken, UserFollow.getFollowingList);
 router.get('/api/v1/profiles/:userName/followers', verifyToken, UserFollow.getFollowersList);
+
+router.patch('/api/v1/profiles/:username/notifications/:subscribe', [verifyToken, canEditProfile], Notification.optInOutNotificatation);
+router.get('/api/v1/profiles/notifications/all', verifyToken, Notification.getNotification);
+router.patch('/api/v1/profiles/notifications/:id/read', verifyToken, Notification.readOneNotification);
+router.patch('/api/v1/profiles/notifications/read/all', verifyToken, Notification.readAllNotification);
 
 export default router;

@@ -3,16 +3,19 @@ import chai from 'chai';
 import fs from 'fs';
 import app from '../index';
 import dummy from './dummyData';
+import { Follow } from '../sequelize/models';
 import { genToken } from '../helpers/auth';
 
 
 chai.use(chaiHttp);
 const { expect } = chai;
-const { dummyArticle } = dummy;
+const { dummyArticle, dummyUser } = dummy;
 
 const invalidToken = genToken(dummyArticle.invalidUserToken);
 let userToken = '';
-
+before(async () => {
+  await Follow.create(dummyUser.validFollower);
+});
 describe('POST AND GET /api/v1/articles', () => {
   it('Should Login user and return token', (done) => {
     chai
