@@ -15,12 +15,6 @@ class ArticleRate {
   static async rateArticle(req, res) {
     const { rate } = req.body;
     const rateAuthor = await User.findOne({ where: { id: req.userData.id } });
-    const userInfo = {
-      username: rateAuthor.username,
-      email: rateAuthor.email,
-      bio: rateAuthor.bio,
-      image: rateAuthor.image
-    };
     const ratings = await Rating.findOne(
       { where: { reviewerId: rateAuthor.id, articleId: req.params.id } }
     );
@@ -30,7 +24,8 @@ class ArticleRate {
         { rate }, { where: { id: ratings.id }, returning: true }
       );
       return res.status(200).send({
-        data: { rating: updatedRating, Author: userInfo }
+        message: 'Successfully updated the rate of this article',
+        data: { rating: updatedRating }
       });
     }
     const rating = await Rating.create({
@@ -40,7 +35,8 @@ class ArticleRate {
     });
 
     return res.status(201).send({
-      data: { rating, Author: userInfo }
+      message: 'Successfully rated this article',
+      data: { rating }
     });
   }
 }

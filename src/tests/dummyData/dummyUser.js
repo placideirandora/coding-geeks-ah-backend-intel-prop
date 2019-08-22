@@ -273,5 +273,9 @@ export default {
   },
   invalidProfile6: {
     bio: 'fdavfdyd',
+  },
+  validFollower: {
+    follower: 3,
+    following: 1
   }
 };

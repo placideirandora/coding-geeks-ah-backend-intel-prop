@@ -8,15 +8,6 @@ export const up = queryInterface => queryInterface.bulkInsert('Users', [{
   password: bcrypt.hashSync('Superadmin12', 10),
   role: 'super-admin',
   verified: true
-},
-{
-  firstName: 'Raymond',
-  lastName: 'Gakwaya',
-  userName: 'raymond21!',
-  email: 'raymond11@gmail.com',
-  password: bcrypt.hashSync('Superadmin12', 10),
-  role: 'user',
-  verified: true
 }
 ], {});
 

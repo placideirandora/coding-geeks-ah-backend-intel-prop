@@ -3,16 +3,21 @@ import chai from 'chai';
 import fs from 'fs';
 import app from '../index';
 import dummy from './dummyData';
+import { Follow } from '../sequelize/models';
 import { genToken } from '../helpers/auth';
 
 
 chai.use(chaiHttp);
 const { expect } = chai;
-const { dummyArticle } = dummy;
+const { dummyArticle, dummyUser } = dummy;
 let articleId;
 const invalidToken = genToken(dummyArticle.invalidUserToken);
 let userToken1 = '';
 let userToken2 = '';
+
+before(async () => {
+  await Follow.create(dummyUser.validFollower);
+});
 
 before((done) => {
   chai
@@ -33,8 +38,8 @@ before((done) => {
     .request(app)
     .post('/api/v1/users/login')
     .send({
-      email: 'raymond11@gmail.com',
-      password: 'Superadmin12'
+      email: 'carlos@gmail.com',
+      password: 'User1234'
     })
     .end((err, res) => {
       if (err) done(err);
