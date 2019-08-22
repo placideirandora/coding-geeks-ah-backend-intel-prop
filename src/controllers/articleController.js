@@ -118,8 +118,11 @@ class ArticleController {
 
       const reactedAlready = await Reaction.findOne({ where: { articleSlug: slugId, userId: liker } });
 
+      const { id } = findArticle;
+
       if (!reactedAlready) {
         const likedArticle = await Reaction.create({
+          articleId: id,
           articleSlug: slugId,
           userId: liker,
           likes: likeVote,
@@ -245,8 +248,11 @@ class ArticleController {
 
       const reactedAlready = await Reaction.findOne({ where: { articleSlug: slugId, userId: disliker } });
 
+      const { id } = findArticle;
+
       if (!reactedAlready) {
         const dislikedArticle = await Reaction.create({
+          articleId: id,
           articleSlug: slugId,
           userId: disliker,
           dislikes: likeVote,

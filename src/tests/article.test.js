@@ -18,6 +18,9 @@ before(async () => {
 });
 let articleSlug;
 
+before(async () => {
+  await Follow.create(dummyUser.validFollower);
+});
 describe('POST AND GET /api/v1/articles', () => {
   it('Should Login user and return token', (done) => {
     chai

@@ -61,7 +61,7 @@ module.exports = (sequelize, DataTypes) => {
   );
   Article.associate = (models) => {
     Article.belongsTo(models.User, { foreignKey: 'authorId', as: 'author', onDelete: 'CASCADE' });
-    Article.hasMany(models.Reaction, { foreignKey: 'articleSlug', as: 'Article', onDelete: 'CASCADE' });
+    Article.hasMany(models.Reaction, { foreignKey: 'articleId', as: 'Article', onDelete: 'CASCADE' });
   };
   return Article;
 };
