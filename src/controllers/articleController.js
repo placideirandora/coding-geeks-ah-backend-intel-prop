@@ -37,7 +37,7 @@ class ArticleController {
       payload.authorId = id;
       const article = await Article.create(payload);
       const {
-        slug, category, images, tagList, authorId, likes, dislikes
+        slug, category, images, tagList, authorId,
       } = article;
       if (article) {
         return res.status(201).json({
@@ -55,9 +55,7 @@ class ArticleController {
               bio: author.bio,
               image: author.image,
               following: author.following
-            },
-            likes,
-            dislikes,
+            }
           }
         });
       }
@@ -113,7 +111,7 @@ class ArticleController {
       const findArticle = await Article.findOne({ where: { slug: slugId } });
 
       if (!findArticle) {
-        return res.status(200).json({
+        return res.status(404).json({
           message: 'Article not found'
         });
       }
@@ -137,9 +135,9 @@ class ArticleController {
           return res.status(200).json({
             message: 'You have liked the article',
             reaction: {
-              ArticleSLUG: articleSlug,
-              UserID: userId,
-              Likes: likes
+              articleSlug,
+              userId,
+              likes
             }
           });
         }
@@ -162,9 +160,9 @@ class ArticleController {
             return res.status(200).json({
               message: 'You have removed your like',
               reaction: {
-                ArticleSLUG: articleSlug,
-                UserID: userId,
-                Likes: likes,
+                articleSlug,
+                userId,
+                likes,
               }
             });
           }
@@ -190,9 +188,9 @@ class ArticleController {
               return res.status(200).json({
                 message: 'You have liked the article',
                 reaction: {
-                  ArticleSLUG: articleSlug,
-                  UserID: userId,
-                  Likes: likes,
+                  articleSlug,
+                  userId,
+                  likes,
                 }
               });
             }
@@ -211,9 +209,9 @@ class ArticleController {
             return res.status(200).json({
               message: 'You have liked the article',
               reaction: {
-                ArticleSLUG: articleSlug,
-                UserID: userId,
-                Likes: likes,
+                articleSlug,
+                userId,
+                likes,
               }
             });
           }
@@ -240,7 +238,7 @@ class ArticleController {
       const findArticle = await Article.findOne({ where: { slug: slugId } });
 
       if (!findArticle) {
-        return res.status(200).json({
+        return res.status(404).json({
           message: 'Article not found'
         });
       }
@@ -263,9 +261,9 @@ class ArticleController {
           return res.status(200).json({
             message: 'You have disliked the article',
             reaction: {
-              ArticleSLUG: articleSlug,
-              UserID: userId,
-              Dislikes: dislikes
+              articleSlug,
+              userId,
+              dislikes
             }
           });
         }
@@ -288,9 +286,9 @@ class ArticleController {
             return res.status(200).json({
               message: 'You have removed your dislike',
               reaction: {
-                ArticleSLUG: articleSlug,
-                UserID: userId,
-                Dislikes: dislikes,
+                articleSlug,
+                userId,
+                dislikes,
               }
             });
           }
@@ -316,9 +314,9 @@ class ArticleController {
               return res.status(200).json({
                 message: 'You have disliked the article',
                 reaction: {
-                  ArticleSLUG: articleSlug,
-                  UserID: userId,
-                  Dislikes: dislikes,
+                  articleSlug,
+                  userId,
+                  dislikes,
                 }
               });
             }
@@ -337,9 +335,9 @@ class ArticleController {
             return res.status(200).json({
               message: 'You have disliked the article',
               reaction: {
-                ArticleSLUG: articleSlug,
-                UserID: userId,
-                Dislikes: dislikes,
+                articleSlug,
+                userId,
+                dislikes,
               }
             });
           }
