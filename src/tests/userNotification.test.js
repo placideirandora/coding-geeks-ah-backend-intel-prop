@@ -8,7 +8,7 @@ const { expect } = chai;
 let adminToken = '';
 let userToken = '';
 
-describe('POST /api/v1/profiles/notification', () => {
+describe('POST /api/v1/profiles/notifications', () => {
   it('Should Login user and return token', (done) => {
     chai
       .request(app)
@@ -39,7 +39,7 @@ describe('POST /api/v1/profiles/notification', () => {
   });
   it('User should be able to unsubscribe to email notification', (done) => {
     chai.request(app)
-      .patch('/api/v1/profiles/eubule/notification/unsubscribe')
+      .patch('/api/v1/profiles/eubule/notifications/unsubscribe')
       .set('Authorization', adminToken)
       .end((err, res) => {
         expect(res).have.status(200);
@@ -51,7 +51,7 @@ describe('POST /api/v1/profiles/notification', () => {
   });
   it('User should be able to subscribe to email notification', (done) => {
     chai.request(app)
-      .patch('/api/v1/profiles/eubule/notification/subscribe')
+      .patch('/api/v1/profiles/eubule/notifications/subscribe')
       .set('Authorization', adminToken)
       .end((err, res) => {
         expect(res).have.status(200);
@@ -63,7 +63,7 @@ describe('POST /api/v1/profiles/notification', () => {
   });
   it('User should not be able to subscribe or unsubscribe to email notification', (done) => {
     chai.request(app)
-      .patch('/api/v1/profiles/eubule/notification/invalidsubscribe')
+      .patch('/api/v1/profiles/eubule/notifications/invalidsubscribe')
       .set('Authorization', adminToken)
       .end((err, res) => {
         expect(res).have.status(400);
@@ -75,7 +75,7 @@ describe('POST /api/v1/profiles/notification', () => {
   });
   it('User should not be able to get notification if not exist', (done) => {
     chai.request(app)
-      .get('/api/v1/profiles/notification/all')
+      .get('/api/v1/profiles/notifications/all')
       .set('Authorization', adminToken)
       .end((err, res) => {
         expect(res).have.status(404);
@@ -87,7 +87,7 @@ describe('POST /api/v1/profiles/notification', () => {
   });
   it('User should not be able to read notification if not exist', (done) => {
     chai.request(app)
-      .patch('/api/v1/profiles/notification/30/read')
+      .patch('/api/v1/profiles/notifications/30/read')
       .set('Authorization', adminToken)
       .end((err, res) => {
         expect(res).have.status(404);
@@ -99,7 +99,7 @@ describe('POST /api/v1/profiles/notification', () => {
   });
   it('User should not be able to read all notification if not exist', (done) => {
     chai.request(app)
-      .patch('/api/v1/profiles/notification/read/all')
+      .patch('/api/v1/profiles/notifications/read/all')
       .set('Authorization', adminToken)
       .end((err, res) => {
         expect(res).have.status(404);
@@ -111,7 +111,7 @@ describe('POST /api/v1/profiles/notification', () => {
   });
   it('User should be able to get all notifications', (done) => {
     chai.request(app)
-      .get('/api/v1/profiles/notification/all')
+      .get('/api/v1/profiles/notifications/all')
       .set('Authorization', userToken)
       .end((err, res) => {
         expect(res).have.status(200);
@@ -124,7 +124,7 @@ describe('POST /api/v1/profiles/notification', () => {
   });
   it('User should mark notification as read', (done) => {
     chai.request(app)
-      .patch('/api/v1/profiles/notification/1/read')
+      .patch('/api/v1/profiles/notifications/1/read')
       .set('Authorization', userToken)
       .end((err, res) => {
         expect(res).have.status(200);
@@ -136,7 +136,7 @@ describe('POST /api/v1/profiles/notification', () => {
   });
   it('User should mark notification as read', (done) => {
     chai.request(app)
-      .patch('/api/v1/profiles/notification/read/all')
+      .patch('/api/v1/profiles/notifications/read/all')
       .set('Authorization', userToken)
       .end((err, res) => {
         expect(res).have.status(200);

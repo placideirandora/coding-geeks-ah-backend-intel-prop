@@ -53,9 +53,9 @@ router.delete('/api/v1/profiles/:userName/unfollow', verifyToken, UserFollow.unF
 router.get('/api/v1/profiles/:userName/following', verifyToken, UserFollow.getFollowingList);
 router.get('/api/v1/profiles/:userName/followers', verifyToken, UserFollow.getFollowersList);
 
-router.patch('/api/v1/profiles/:username/notification/:subscribe', [verifyToken, canEditProfile], Notification.optInOutNotificatation);
-router.get('/api/v1/profiles/notification/all', verifyToken, Notification.getNotification);
-router.patch('/api/v1/profiles/notification/:id/read', verifyToken, Notification.readOneNotification);
-router.patch('/api/v1/profiles/notification/read/all', verifyToken, Notification.readAllNotification);
+router.patch('/api/v1/profiles/:username/notifications/:subscribe', [verifyToken, canEditProfile], Notification.optInOutNotificatation);
+router.get('/api/v1/profiles/notifications/all', verifyToken, Notification.getNotification);
+router.patch('/api/v1/profiles/notifications/:id/read', verifyToken, Notification.readOneNotification);
+router.patch('/api/v1/profiles/notifications/read/all', verifyToken, Notification.readAllNotification);
 
 export default router;
