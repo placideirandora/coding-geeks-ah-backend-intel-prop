@@ -12,8 +12,10 @@ const { expect } = chai;
 const { dummyArticle, dummyUser } = dummy;
 let articleId;
 const invalidToken = genToken(dummyArticle.invalidUserToken);
+
 let userToken1 = '';
 let userToken2 = '';
+let articleSlug;
 
 before(async () => {
   await Follow.create(dummyUser.validFollower);
@@ -202,6 +204,7 @@ describe('POST AND GET /api/v1/articles', () => {
       .field(dummyArticle.validArticle)
       .attach('image', fs.readFileSync('src/tests/dummyData/avatar.jpg'), 'avatar.jpg')
       .end((err, res) => {
+        articleSlug = res.body.article.slug;
         if (err) done(err);
         expect(res).have.status(201);
         expect(res.body.article)
@@ -224,64 +227,94 @@ describe('POST AND GET /api/v1/articles', () => {
         done();
       });
   });
+  it('Should like the article', (done) => {
+    chai
+      .request(app)
+      .put(`/api/v1/articles/${articleSlug}/like`)
+      .set('Authorization', userToken1)
+      .end((err, res) => {
+        if (err) done(err);
+        expect(res).have.status(200);
+        expect(res).to.be.an('object');
+        expect(res.body).to.have.keys('message', 'reaction');
+        expect(res.body.message).to.deep.equal('You have liked the article');
+        expect(res.body.reaction).to.be.an('object');
+        done();
+      });
+  });
+  it('Should dislike the article', (done) => {
+    chai
+      .request(app)
+      .put(`/api/v1/articles/${articleSlug}/dislike`)
+      .set('Authorization', userToken1)
+      .end((err, res) => {
+        if (err) done(err);
+        expect(res).have.status(200);
+        expect(res).to.be.an('object');
+        expect(res.body).to.have.keys('message', 'reaction');
+        expect(res.body.message).to.deep.equal('You have disliked the article');
+        expect(res.body.reaction).to.be.an('object');
+        done();
+      });
+  });
+});
 
-  // Rating Tests
+// Rating Tests
 
-  describe('POST /api/v1/articles/{id}/rate', () => {
-    it('Should not be able to rate your own article', (done) => {
-      chai
-        .request(app)
-        .post(`/api/v1/articles/${articleId}/rate`)
-        .set('Authorization', userToken1)
-        .send({ rate: 1 })
-        .end((err, res) => {
-          if (err) done(err);
-          expect(res).have.status(400);
-          expect(res).to.be.an('object');
-          expect(res.body.error).to.deep.equal('Sorry! You cannot rate your article');
-          done();
-        });
-    });
-    it('Should not be able to rate the article when there is no rate provided', (done) => {
-      chai
-        .request(app)
-        .post(`/api/v1/articles/${articleId}/rate`)
-        .set('Authorization', userToken2)
-        .end((err, res) => {
-          if (err) done(err);
-          expect(res).have.status(400);
-          expect(res).to.be.an('object');
-          expect(res.body.error).to.deep.equal('Rate is required');
-          done();
-        });
-    });
-    it('Should not be able to rate the article which does not exist', (done) => {
-      chai
-        .request(app)
-        .post('/api/v1/articles/5/rate')
-        .set('Authorization', userToken2)
-        .send({ rate: 3 })
-        .end((err, res) => {
-          if (err) done(err);
-          expect(res).have.status(400);
-          expect(res).to.be.an('object');
-          expect(res.body.error).to.deep.equal('This Article does not exist');
-          done();
-        });
-    });
-    it('Should not be able to rate the article if the id is invalid', (done) => {
-      chai
-        .request(app)
-        .post('/api/v1/articles/m/rate')
-        .set('Authorization', userToken2)
-        .send({ rate: 3 })
-        .end((err, res) => {
-          if (err) done(err);
-          expect(res).have.status(400);
-          expect(res).to.be.an('object');
-          expect(res.body.error).to.deep.equal('id must be a number');
-          done();
-        });
-    });
+describe('POST /api/v1/articles/{id}/rate', () => {
+  it('Should not be able to rate your own article', (done) => {
+    chai
+      .request(app)
+      .post(`/api/v1/articles/${articleId}/rate`)
+      .set('Authorization', userToken1)
+      .send({ rate: 1 })
+      .end((err, res) => {
+        if (err) done(err);
+        expect(res).have.status(400);
+        expect(res).to.be.an('object');
+        expect(res.body.error).to.deep.equal('Sorry! You cannot rate your article');
+        done();
+      });
+  });
+  it('Should not be able to rate the article when there is no rate provided', (done) => {
+    chai
+      .request(app)
+      .post(`/api/v1/articles/${articleId}/rate`)
+      .set('Authorization', userToken2)
+      .end((err, res) => {
+        if (err) done(err);
+        expect(res).have.status(400);
+        expect(res).to.be.an('object');
+        expect(res.body.error).to.deep.equal('Rate is required');
+        done();
+      });
+  });
+  it('Should not be able to rate the article which does not exist', (done) => {
+    chai
+      .request(app)
+      .post('/api/v1/articles/5/rate')
+      .set('Authorization', userToken2)
+      .send({ rate: 3 })
+      .end((err, res) => {
+        if (err) done(err);
+        expect(res).have.status(400);
+        expect(res).to.be.an('object');
+        expect(res.body.error).to.deep.equal('This Article does not exist');
+        done();
+      });
+  });
+  it('Should not be able to rate the article if the id is invalid', (done) => {
+    chai
+      .request(app)
+      .post('/api/v1/articles/m/rate')
+      .set('Authorization', userToken2)
+      .send({ rate: 3 })
+      .end((err, res) => {
+        if (err) done(err);
+        expect(res).have.status(400);
+        expect(res).to.be.an('object');
+        expect(res.body.error).to.deep.equal('id must be a number');
+        done();
+      });
   });
 });

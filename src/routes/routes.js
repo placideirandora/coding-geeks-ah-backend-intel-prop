@@ -44,6 +44,8 @@ router.post('/api/v1/users/login', Validation.loginValidation, UserAuth.login);
 router.post('/api/v1/articles', [verifyToken, connectMulti, Validation.createArticleValidation, ContentType, Validation.imageValidation], Article.createArticle);
 router.get('/api/v1/articles', Article.getAllArticles);
 router.post('/api/v1/articles/:id/rate', [verifyToken, Validation.idInParamsValidation, ArticleMiddleware.checkRatedArticle], articleRate.rateArticle);
+router.put('/api/v1/articles/:articleSlug/like', verifyToken, Article.likeArticle);
+router.put('/api/v1/articles/:articleSlug/dislike', verifyToken, Article.dislikeArticle);
 router.post('/api/v1/profiles/:userName/follow', verifyToken, UserFollow.followUser);
 router.delete('/api/v1/profiles/:userName/unfollow', verifyToken, UserFollow.unFollowUser);
 router.get('/api/v1/profiles/:userName/following', verifyToken, UserFollow.getFollowingList);
