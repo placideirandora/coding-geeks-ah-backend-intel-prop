@@ -1,4 +1,6 @@
-import { User, Article } from '../sequelize/models';
+/* eslint-disable no-shadow */
+/* eslint-disable max-len */
+import { User, Article, Reaction } from '../sequelize/models';
 import { slugGen, uploadImage } from '../helpers/articles/articleHelper';
 
 /**
@@ -35,7 +37,7 @@ class ArticleController {
       payload.authorId = id;
       const article = await Article.create(payload);
       const {
-        slug, category, images, tagList, authorId
+        slug, category, images, tagList, authorId,
       } = article;
       if (article) {
         return res.status(201).json({
@@ -92,6 +94,266 @@ class ArticleController {
       throw (err);
     }
   }
+
+  /**
+   * @description like an article
+   * @param {object} req
+   * @param {object} res
+   * @return {object} return object with a liked article
+   */
+  static async likeArticle(req, res) {
+    try {
+      const liker = req.userData.id;
+      const slugId = req.params.articleSlug;
+      const likeVote = 1;
+      const dislikeVote = 0;
+
+      const findArticle = await Article.findOne({ where: { slug: slugId } });
+
+      if (!findArticle) {
+        return res.status(404).json({
+          message: 'Article not found'
+        });
+      }
+
+      const reactedAlready = await Reaction.findOne({ where: { articleSlug: slugId, userId: liker } });
+
+      const { id } = findArticle;
+
+      if (!reactedAlready) {
+        const likedArticle = await Reaction.create({
+          articleId: id,
+          articleSlug: slugId,
+          userId: liker,
+          likes: likeVote,
+        });
+
+        const {
+          articleSlug, userId, likes
+        } = likedArticle;
+
+        if (likedArticle) {
+          await Article.increment({ likes: 1 }, { where: { slug: slugId } });
+
+          return res.status(200).json({
+            message: 'You have liked the article',
+            reaction: {
+              articleSlug,
+              userId,
+              likes
+            }
+          });
+        }
+      }
+
+      const { likes } = reactedAlready;
+
+      if (likes > 0) {
+        if (reactedAlready) {
+          const removeLike = await Reaction.update({ likes: dislikeVote }, { where: { articleSlug: slugId, userId: liker } });
+
+          if (removeLike) {
+            await Article.decrement({ likes: 1 }, { where: { slug: slugId } });
+            const updatedArticle = await Reaction.findOne({ where: { articleSlug: slugId, userId: liker } });
+
+            const {
+              articleSlug, userId, likes,
+            } = updatedArticle;
+
+            return res.status(200).json({
+              message: 'You have removed your like',
+              reaction: {
+                articleSlug,
+                userId,
+                likes,
+              }
+            });
+          }
+        }
+      } else {
+        const { dislikes } = reactedAlready;
+
+        if (dislikes > 0) {
+          const removeDislike = await Reaction.update({ dislikes: dislikeVote }, { where: { articleSlug: slugId, userId: liker } });
+
+          if (removeDislike) {
+            await Article.decrement({ dislikes: 1 }, { where: { slug: slugId } });
+            const likeArticleAgain = await Reaction.update({ likes: likeVote }, { where: { articleSlug: slugId, userId: liker } });
+
+            if (likeArticleAgain) {
+              await Article.increment({ likes: 1 }, { where: { slug: slugId } });
+              const updatedArticle = await Reaction.findOne({ where: { articleSlug: slugId, userId: liker } });
+
+              const {
+                articleSlug, userId, likes,
+              } = updatedArticle;
+
+              return res.status(200).json({
+                message: 'You have liked the article',
+                reaction: {
+                  articleSlug,
+                  userId,
+                  likes,
+                }
+              });
+            }
+          }
+        } else {
+          const likeArticleAgain = await Reaction.update({ likes: likeVote }, { where: { articleSlug: slugId, userId: liker } });
+          await Article.increment({ likes: 1 }, { where: { slug: slugId } });
+
+          if (likeArticleAgain) {
+            const updatedArticle = await Reaction.findOne({ where: { articleSlug: slugId, userId: liker } });
+
+            const {
+              articleSlug, userId, likes,
+            } = updatedArticle;
+
+            return res.status(200).json({
+              message: 'You have liked the article',
+              reaction: {
+                articleSlug,
+                userId,
+                likes,
+              }
+            });
+          }
+        }
+      }
+    } catch (err) {
+      throw (err);
+    }
+  }
+
+  /**
+   * @description dislike an article
+   * @param {object} req
+   * @param {object} res
+   * @return {object} return object with a disliked article
+   */
+  static async dislikeArticle(req, res) {
+    try {
+      const disliker = req.userData.id;
+      const slugId = req.params.articleSlug;
+      const likeVote = 1;
+      const dislikeVote = 0;
+
+      const findArticle = await Article.findOne({ where: { slug: slugId } });
+
+      if (!findArticle) {
+        return res.status(404).json({
+          message: 'Article not found'
+        });
+      }
+
+      const reactedAlready = await Reaction.findOne({ where: { articleSlug: slugId, userId: disliker } });
+
+      const { id } = findArticle;
+
+      if (!reactedAlready) {
+        const dislikedArticle = await Reaction.create({
+          articleId: id,
+          articleSlug: slugId,
+          userId: disliker,
+          dislikes: likeVote,
+        });
+        const {
+          articleSlug, userId, dislikes
+        } = dislikedArticle;
+
+        if (dislikedArticle) {
+          await Article.increment({ dislikes: 1 }, { where: { slug: slugId } });
+
+          return res.status(200).json({
+            message: 'You have disliked the article',
+            reaction: {
+              articleSlug,
+              userId,
+              dislikes
+            }
+          });
+        }
+      }
+
+      const { dislikes } = reactedAlready;
+
+      if (dislikes > 0) {
+        if (reactedAlready) {
+          const removeDislike = await Reaction.update({ dislikes: dislikeVote }, { where: { articleSlug: slugId, userId: disliker } });
+
+          if (removeDislike) {
+            const updatedArticle = await Reaction.findOne({ where: { articleSlug: slugId, userId: disliker } });
+            await Article.decrement({ dislikes: 1 }, { where: { slug: slugId } });
+
+            const {
+              articleSlug, userId, dislikes,
+            } = updatedArticle;
+
+            return res.status(200).json({
+              message: 'You have removed your dislike',
+              reaction: {
+                articleSlug,
+                userId,
+                dislikes,
+              }
+            });
+          }
+        }
+      } else {
+        const { likes } = reactedAlready;
+
+        if (likes > 0) {
+          const removeLike = await Reaction.update({ likes: dislikeVote }, { where: { articleSlug: slugId, userId: disliker } });
+
+          if (removeLike) {
+            await Article.decrement({ likes: 1 }, { where: { slug: slugId } });
+            const dislikeArticleAgain = await Reaction.update({ dislikes: likeVote }, { where: { articleSlug: slugId, userId: disliker } });
+
+            if (dislikeArticleAgain) {
+              await Article.increment({ dislikes: 1 }, { where: { slug: slugId } });
+              const updatedArticle = await Reaction.findOne({ where: { articleSlug: slugId, userId: disliker } });
+
+              const {
+                articleSlug, userId, dislikes,
+              } = updatedArticle;
+
+              return res.status(200).json({
+                message: 'You have disliked the article',
+                reaction: {
+                  articleSlug,
+                  userId,
+                  dislikes,
+                }
+              });
+            }
+          }
+        } else {
+          const dislikeArticleAgain = await Reaction.update({ dislikes: likeVote }, { where: { articleSlug: slugId, userId: disliker } });
+
+          if (dislikeArticleAgain) {
+            await Article.increment({ dislikes: 1 }, { where: { slug: slugId } });
+            const updatedArticle = await Reaction.findOne({ where: { articleSlug: slugId, userId: disliker } });
+
+            const {
+              articleSlug, userId, dislikes,
+            } = updatedArticle;
+
+            return res.status(200).json({
+              message: 'You have disliked the article',
+              reaction: {
+                articleSlug,
+                userId,
+                dislikes,
+              }
+            });
+          }
+        }
+      }
+    } catch (err) {
+      throw (err);
+    }
+  }
 }
+
 
 export default ArticleController;

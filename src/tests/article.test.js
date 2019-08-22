@@ -13,6 +13,8 @@ const { dummyArticle, dummyUser } = dummy;
 
 const invalidToken = genToken(dummyArticle.invalidUserToken);
 let userToken = '';
+let articleSlug;
+
 before(async () => {
   await Follow.create(dummyUser.validFollower);
 });
@@ -185,6 +187,7 @@ describe('POST AND GET /api/v1/articles', () => {
       .field(dummyArticle.validArticle)
       .attach('image', fs.readFileSync('src/tests/dummyData/avatar.jpg'), 'avatar.jpg')
       .end((err, res) => {
+        articleSlug = res.body.article.slug;
         if (err) done(err);
         expect(res).have.status(201);
         expect(res.body.article)
@@ -203,6 +206,36 @@ describe('POST AND GET /api/v1/articles', () => {
         expect(res).have.status(200);
         expect(res).to.be.an('object');
         expect(res.body).to.have.keys('articles');
+        done();
+      });
+  });
+  it('Should like the article', (done) => {
+    chai
+      .request(app)
+      .put(`/api/v1/articles/${articleSlug}/like`)
+      .set('Authorization', userToken)
+      .end((err, res) => {
+        if (err) done(err);
+        expect(res).have.status(200);
+        expect(res).to.be.an('object');
+        expect(res.body).to.have.keys('message', 'reaction');
+        expect(res.body.message).to.deep.equal('You have liked the article');
+        expect(res.body.reaction).to.be.an('object');
+        done();
+      });
+  });
+  it('Should dislike the article', (done) => {
+    chai
+      .request(app)
+      .put(`/api/v1/articles/${articleSlug}/dislike`)
+      .set('Authorization', userToken)
+      .end((err, res) => {
+        if (err) done(err);
+        expect(res).have.status(200);
+        expect(res).to.be.an('object');
+        expect(res.body).to.have.keys('message', 'reaction');
+        expect(res.body.message).to.deep.equal('You have disliked the article');
+        expect(res.body.reaction).to.be.an('object');
         done();
       });
   });
