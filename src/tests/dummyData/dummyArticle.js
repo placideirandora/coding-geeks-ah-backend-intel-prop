@@ -2,7 +2,20 @@ export default {
   validArticle: {
     title: 'Growth mindset',
     description: 'How to demonstrate growth mindsewt',
+    category: 'Eductaion',
+    body:
+      'is simply dummy text of the printing and typesetting industry Lorem Ipsum has'
+  },
+  lessCategory: {
+    title: 'Growth mindset',
+    description: 'How to demonstrate growth mindsewt',
     tags: 'Fixed mind, Confidence, low self-esteem',
+    body:
+      'is simply dummy text of the printing and typesetting industry Lorem Ipsum has'
+  },
+  lessTags: {
+    title: 'Growth mindset',
+    description: 'How to demonstrate growth mindsewt',
     category: 'Eductaion',
     body:
       'is simply dummy text of the printing and typesetting industry Lorem Ipsum has'
@@ -44,13 +57,12 @@ export default {
       'is simply dummy text of the printing and typesetting industry Lorem Ipsum has'
   },
   updateMissingBody: {
+    description: 'How to demonstrate growth mindsewt',
     tags: 'Bango, Hip-Hop, R&B',
-    category: 'Music',
   },
   updateMissingtags: {
-    tags: 'Bango, Hip-Hop, R&B',
-    body:
-      'Music is the best medicine. It can get you out of bed and wiggle your body'
+    description: 'How to demonstrate growth mindsewt',
+    category: 'Music',
   },
   updateMissingCategory: {
     tags: 'Bango, Hip-Hop, R&B',
@@ -76,14 +88,16 @@ export default {
     description: 'How to demonstrate growth mindsewt',
     tags: [12, 356, 78, 90],
     category: 'Fixed mind Confidence',
-    body: 'is simply dummy text of the printing and typesetting industry Lorem Ipsum has'
+    body:
+      'is simply dummy text of the printing and typesetting industry Lorem Ipsum has'
   },
   incorrectCategory: {
     title: 'Growth mindset',
     description: 'How to demonstrate growth mindsewt',
     tags: 'Fixed mind-Confidence, Fixed-mind-Confidence',
     category: [12, 356, 78, 90],
-    body: 'is simply dummy text of the printing and typesetting industry Lorem Ipsum has'
+    body:
+      'is simply dummy text of the printing and typesetting industry Lorem Ipsum has'
   },
   invalidUserToken: {
     id: 1000,
@@ -95,5 +109,5 @@ export default {
     confirmPassword: 'Jamal1230!',
     role: 'user',
     verified: true
-  },
+  }
 };

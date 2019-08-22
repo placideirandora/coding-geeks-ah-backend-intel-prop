@@ -18,6 +18,7 @@ const isOwner = async (req, res, next) => {
     });
   }
   req.userData.slug = slug;
+  req.userData.articleId = foundArticle.id;
   next();
 };
 

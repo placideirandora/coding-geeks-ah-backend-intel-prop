@@ -28,8 +28,10 @@ class ArticleController {
         description: description.trim(),
         body: body.trim()
       };
-      if (req.body.tags || req.body.category) {
+      if (req.body.tags) {
         payload.tagList = req.body.tags.trim().split(/[ ,]+/);
+      }
+      if (req.body.category) {
         payload.category = req.body.category.trim();
       }
       payload.images = await uploadImage(req.files.image);
@@ -112,10 +114,10 @@ class ArticleController {
         article.title = title.trim();
         article.slug = slugGen(title.trim());
       }
-      article.description = (description || originalArticle.description).trim();
-      article.body = (body || originalArticle.body).trim();
-      article.tagList = (tags || originalArticle.tagList.toString()).trim().split(/[ ,]+/);
-      article.category = (category || originalArticle.category).trim();
+      article.description = description ? description.trim() : originalArticle.description;
+      article.body = body ? body.trim() : originalArticle.body;
+      article.tagList = tags ? tags.trim().split(/[ ,]+/) : originalArticle.tags;
+      article.category = category ? category.trim() : originalArticle.category;
       if (req.files.image) {
         article.images = await uploadImage(req.files.image);
       }
@@ -125,7 +127,7 @@ class ArticleController {
       );
       if (updatedArticle) {
         return res.status(200).json({
-          message: 'Profile updated successfully',
+          message: 'Article updated successfully',
           article: updatedArticle[1]
         });
       }
@@ -143,7 +145,7 @@ class ArticleController {
   static async deteleArticle(req, res) {
     try {
       const deleted = await Article.destroy({
-        where: { slug: req.userData.slug }
+        where: { id: req.userData.articleId }
       });
       if (deleted) {
         return res.status(200).json({

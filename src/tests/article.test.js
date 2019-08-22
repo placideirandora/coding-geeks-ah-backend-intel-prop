@@ -40,8 +40,8 @@ describe('POST AND GET /api/v1/articles', () => {
       .request(app)
       .post('/api/v1/users/login')
       .send({
-        email: 'carlos@gmail.com',
-        password: 'User1234'
+        email: 'eric.malaba@gmail.com',
+        password: 'Superadmin12'
       })
       .end((err, res) => {
         if (err) done(err);
@@ -169,6 +169,19 @@ describe('POST AND GET /api/v1/articles', () => {
         done();
       });
   });
+  it('Should return error if category is empty', (done) => {
+    chai
+      .request(app)
+      .post('/api/v1/articles')
+      .set('Authorization', userToken)
+      .field(dummyArticle.lessCategory)
+      .end((err, res) => {
+        if (err) done(err);
+        expect(res).have.status(201);
+        expect(res.body).to.have.keys('article');
+        done();
+      });
+  });
   it('Should return error if category is not a string', (done) => {
     chai
       .request(app)
@@ -194,6 +207,19 @@ describe('POST AND GET /api/v1/articles', () => {
         expect(res).have.status(400);
         expect(res.body).to.have.key('error');
         expect(res.body.error).to.deep.equal('tags must be a string');
+        done();
+      });
+  });
+  it('Should return error if taglist is not set', (done) => {
+    chai
+      .request(app)
+      .post('/api/v1/articles')
+      .set('Authorization', userToken)
+      .field(dummyArticle.lessTags)
+      .end((err, res) => {
+        if (err) done(err);
+        expect(res).have.status(201);
+        expect(res.body).to.have.key('article');
         done();
       });
   });
@@ -325,7 +351,7 @@ describe('UPDATE /api/v1/articles/:slug', () => {
         if (err) done(err);
         expect(res).have.status(200);
         expect(res.body).to.have.key('article', 'message');
-        expect(res.body.message).to.deep.equal('Profile updated successfully');
+        expect(res.body.message).to.deep.equal('Article updated successfully');
         done();
       });
   });
@@ -352,6 +378,19 @@ describe('UPDATE /api/v1/articles/:slug', () => {
         if (err) done(err);
         expect(res).have.status(200);
         expect(res.body.article.description).to.deep.equal('How to demonstrate growth mindset from a new perspective');
+        done();
+      });
+  });
+  it('Should return error if taglist is not set', (done) => {
+    chai
+      .request(app)
+      .put(`/api/v1/articles/${articleSlug}`)
+      .set('Authorization', userToken)
+      .field(dummyArticle.updateMissingtags)
+      .end((err, res) => {
+        if (err) done(err);
+        expect(res).have.status(200);
+        expect(res.body).to.have.key('article', 'message');
         done();
       });
   });
@@ -405,7 +444,7 @@ describe('UPDATE /api/v1/articles/:slug', () => {
         if (err) done(err);
         expect(res).have.status(200);
         expect(res.body).to.have.key('article', 'message');
-        expect(res.body.message).to.deep.equal('Profile updated successfully');
+        expect(res.body.message).to.deep.equal('Article updated successfully');
         newArticleSlug = res.body.article.slug;
         done();
       });

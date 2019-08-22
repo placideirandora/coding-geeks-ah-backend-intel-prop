@@ -1039,6 +1039,19 @@
                             }
                         }
                     }
+                },
+                "404": {
+                    "description": "Article not found",
+                    "schema": {
+                        "properties": {
+                            "error": {
+                                "type": "string"
+                            },
+                            "me": {
+                                "type": "string"
+                            }
+                        }
+                    }
                 }
             }
           }
@@ -1196,6 +1209,19 @@
                         }
                     }
                 },
+                "401": {
+                    "description": "User is not authenticated",
+                    "schema": {
+                        "properties": {
+                            "error": {
+                                "type": "string"
+                            },
+                            "me": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                },
                 "403": {
                     "description": "Fobidden to make changes",
                     "schema": {
@@ -1261,7 +1287,7 @@
                         }
                     }
                 },
-                "404": {
+                "403": {
                     "description": "User is fobidden to delete",
                     "schema": {
                         "properties": {
