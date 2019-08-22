@@ -10,10 +10,14 @@ import SwaggerDocument from '../swagger.json';
 import db from './sequelize/models';
 import router from './routes/routes';
 import passConfig from './config/passport/passport';
+import './helpers/notification/eventEmitter';
+import './helpers/notification/eventListener';
+import SocketIO from './helpers/socketIo';
 
 config();
 
 const app = express();
+SocketIO(app);
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));

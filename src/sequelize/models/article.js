@@ -1,3 +1,5 @@
+import eventEmitter from '../../helpers/notification/eventEmitter';
+
 module.exports = (sequelize, DataTypes) => {
   const Article = sequelize.define(
     'Article',
@@ -51,7 +53,10 @@ module.exports = (sequelize, DataTypes) => {
       }
     },
     {
-      timeStamps: true
+      timeStamps: true,
+      hooks: {
+        afterCreate: article => eventEmitter.emit('newArticle', article)
+      }
     }
   );
   Article.associate = (models) => {
