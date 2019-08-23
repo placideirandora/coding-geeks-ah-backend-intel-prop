@@ -12,6 +12,10 @@ const { expect } = chai;
 const { dummyArticle, dummyUser } = dummy;
 let articleId;
 const invalidToken = genToken(dummyArticle.invalidUserToken);
+let userToken = '';
+before(async () => {
+  await Follow.create(dummyUser.validFollower);
+});
 
 let userToken1 = '';
 let userToken2 = '';

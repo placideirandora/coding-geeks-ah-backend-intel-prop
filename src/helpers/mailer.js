@@ -26,9 +26,8 @@ const sendEmail = async (action, to, token) => {
       subject: verifySubject,
       html: template(verifyContent, verifyLink)
     };
-    if (NODE_ENV === 'test') return true;
-    mailer.send(message);
-  } else if (action === 'reset-password') {
+    return NODE_ENV === 'test' ? true : mailer.send(message);
+  } if (action === 'reset-password') {
     const message = {
       to,
       from: EMAIL_SENDER,
@@ -36,9 +35,8 @@ const sendEmail = async (action, to, token) => {
       text: 'Authors Haven',
       html: template(resetContent, resetLink)
     };
-    if (NODE_ENV === 'test') return true;
-    mailer.send(message);
-  } else if (action === 'notification') {
+    return NODE_ENV === 'test' ? true : mailer.send(message);
+  } if (action === 'notification') {
     const message = {
       to,
       from: EMAIL_SENDER,
@@ -46,8 +44,7 @@ const sendEmail = async (action, to, token) => {
       text: 'Authors Haven',
       html: template(notifyContent, notifyLink)
     };
-    if (NODE_ENV === 'test') return true;
-    mailer.send(message);
+    return NODE_ENV === 'test' ? true : mailer.send(message);
   }
 };
 
