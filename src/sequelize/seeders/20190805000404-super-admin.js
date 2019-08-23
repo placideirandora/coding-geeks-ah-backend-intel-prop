@@ -8,6 +8,7 @@ export const up = queryInterface => queryInterface.bulkInsert('Users', [{
   password: bcrypt.hashSync('Superadmin12', 10),
   role: 'super-admin',
   verified: true
-}], {});
+}
+], {});
 
 export const down = queryInterface => queryInterface.bulkDelete('Users', null, {});

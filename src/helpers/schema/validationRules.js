@@ -239,4 +239,5 @@ export default {
       });
       return errors;
     }),
+  id: Joi.number()
 };

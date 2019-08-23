@@ -1276,6 +1276,83 @@
             }
           }
        },
+       "/api/v1/articles/{id}/rate": {
+        "post": {
+            "tags": [
+                "Articles"
+            ],
+            "description": "User should be able to rate an article",
+            "parameters": [
+                {
+                "name":"Authorization",
+                "in": "header",
+                "description" :"The user token"
+                      
+                },
+                {
+                "name": "id",
+                "in": "path",
+                "description": "id of the article you want to rate",
+                "type": "integer"
+                },
+                {
+                "name": "Rate",
+                "in": "body",
+                "description": "Your rating to this article betwee 1 and 5",
+                "schema": {
+                    "required": [
+                        "rate"
+                    ],
+                    "properties": {
+                        "rate": {
+                            "type": "integer"
+                        }
+                    }
+                }
+                }
+
+                ],
+                "produces": [
+                    "application/json"
+                  ],
+            "responses": {
+                "201": {
+                    "description": "Article successfully rate",
+                    "schema": {
+                        "properties": {
+                            "message": {
+                                "type": "string"
+                            },
+                            "data": {
+                                "schema": {
+                                    "$ref": "#/definitions/RateArticle"
+                                }
+                            }
+                        }
+                    }
+                },
+                "200": {
+                    "description": "Successfully updated the rate",
+                    "schema": {
+                        "$ref": "#/definitions/RateArticle"
+                    }
+                },
+                "400": {
+                    "description": "Missing fields or invalid value",
+                    "schema": {
+                        "$ref": "#/definitions/Error"
+                    }
+                },
+
+                "403": {
+                    "description": "Wrong token",
+                    "schema": {
+                        "$ref": "#/definitions/Error"
+                    }
+                }
+            }
+        }
+       },
        "/api/v1/articles/{articleSlug}/like": {
         "put": {
           "tags": [
@@ -1464,11 +1541,19 @@
             }
     }
 },
+"RateArticle": {
+    "properties": {
+        "rating": {
+            "type":"integer"
+        },
+        "Author": {
+            "type":"string"
+        }
+
+    }
+},
         "Error": {
             "properties": {
-                "status": {
-                    "type": "integer"
-                },
                 "error": {
                     "type": "string"
                 }
