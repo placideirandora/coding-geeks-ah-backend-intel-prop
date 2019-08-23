@@ -12,6 +12,8 @@ import UserFollow from '../controllers/followController';
 import Profile from '../controllers/profileController';
 import canEditProfile from '../middleware/editProfile';
 import Article from '../controllers/articleController';
+import articleRate from '../controllers/ratingController';
+import ArticleMiddleware from '../middleware/articleMiddleware';
 import Notification from '../controllers/notificationController';
 
 const router = express.Router();
@@ -41,6 +43,7 @@ router.post('/api/v1/users/logout', [verifyToken], UserAuth.logout);
 router.post('/api/v1/users/login', Validation.loginValidation, UserAuth.login);
 router.post('/api/v1/articles', [verifyToken, connectMulti, Validation.createArticleValidation, ContentType, Validation.imageValidation], Article.createArticle);
 router.get('/api/v1/articles', Article.getAllArticles);
+router.post('/api/v1/articles/:id/rate', [verifyToken, Validation.idInParamsValidation, ArticleMiddleware.checkRatedArticle], articleRate.rateArticle);
 router.put('/api/v1/articles/:articleSlug/like', verifyToken, Article.likeArticle);
 router.put('/api/v1/articles/:articleSlug/dislike', verifyToken, Article.dislikeArticle);
 router.post('/api/v1/profiles/:userName/follow', verifyToken, UserFollow.followUser);

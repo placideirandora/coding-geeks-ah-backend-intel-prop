@@ -113,4 +113,17 @@ export default {
     }
     next();
   },
+  idInParamsValidation(req, res, next) {
+    const idSchema = Joi.object().keys({
+      id: validationRules.id,
+    });
+
+    const { error } = Joi.validate(req.params, idSchema, options);
+    if (error) {
+      return res.status(400).json({
+        error: error.details[0].message
+      });
+    }
+    next();
+  },
 };

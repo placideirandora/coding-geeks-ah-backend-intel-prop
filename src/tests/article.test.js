@@ -10,34 +10,51 @@ import { genToken } from '../helpers/auth';
 chai.use(chaiHttp);
 const { expect } = chai;
 const { dummyArticle, dummyUser } = dummy;
-
+let articleId;
 const invalidToken = genToken(dummyArticle.invalidUserToken);
-let userToken = '';
+
+let userToken1 = '';
+let userToken2 = '';
 let articleSlug;
 
 before(async () => {
   await Follow.create(dummyUser.validFollower);
 });
+
+before((done) => {
+  chai
+    .request(app)
+    .post('/api/v1/users/login')
+    .send({
+      email: 'eric.malaba@gmail.com',
+      password: 'Superadmin12'
+    })
+    .end((err, res) => {
+      if (err) done(err);
+      userToken1 = res.body.data.token;
+      done();
+    });
+});
+before((done) => {
+  chai
+    .request(app)
+    .post('/api/v1/users/login')
+    .send({
+      email: 'carlos@gmail.com',
+      password: 'User1234'
+    })
+    .end((err, res) => {
+      if (err) done(err);
+      userToken2 = res.body.data.token;
+      done();
+    });
+});
 describe('POST AND GET /api/v1/articles', () => {
-  it('Should Login user and return token', (done) => {
-    chai
-      .request(app)
-      .post('/api/v1/users/login')
-      .send({
-        email: 'eric.malaba@gmail.com',
-        password: 'Superadmin12'
-      })
-      .end((err, res) => {
-        if (err) done(err);
-        userToken = res.body.data.token;
-        done();
-      });
-  });
   it('Should receive a message if no articles found', (done) => {
     chai
       .request(app)
       .get('/api/v1/articles')
-      .set('Authorization', userToken)
+      .set('Authorization', userToken1)
       .end((err, res) => {
         if (err) done(err);
         expect(res).have.status(200);
@@ -54,7 +71,7 @@ describe('POST AND GET /api/v1/articles', () => {
       .request(app)
       .post('/api/v1/articles')
       .set('content-type', 'application/json')
-      .set('Authorization', userToken)
+      .set('Authorization', userToken1)
       .send(dummyArticle.validArticle)
       .end((err, res) => {
         if (err) done(err);
@@ -85,7 +102,7 @@ describe('POST AND GET /api/v1/articles', () => {
     chai
       .request(app)
       .post('/api/v1/articles')
-      .set('Authorization', userToken)
+      .set('Authorization', userToken1)
       .field('title', '')
       .end((err, res) => {
         if (err) done(err);
@@ -99,7 +116,7 @@ describe('POST AND GET /api/v1/articles', () => {
     chai
       .request(app)
       .post('/api/v1/articles')
-      .set('Authorization', userToken)
+      .set('Authorization', userToken1)
       .field(dummyArticle.incompleteTitle)
       .end((err, res) => {
         if (err) done(err);
@@ -113,7 +130,7 @@ describe('POST AND GET /api/v1/articles', () => {
     chai
       .request(app)
       .post('/api/v1/articles')
-      .set('Authorization', userToken)
+      .set('Authorization', userToken1)
       .field(dummyArticle.missingDescription)
       .end((err, res) => {
         if (err) done(err);
@@ -127,7 +144,7 @@ describe('POST AND GET /api/v1/articles', () => {
     chai
       .request(app)
       .post('/api/v1/articles')
-      .set('Authorization', userToken)
+      .set('Authorization', userToken1)
       .field(dummyArticle.incompleteDescription)
       .end((err, res) => {
         if (err) done(err);
@@ -141,7 +158,7 @@ describe('POST AND GET /api/v1/articles', () => {
     chai
       .request(app)
       .post('/api/v1/articles')
-      .set('Authorization', userToken)
+      .set('Authorization', userToken1)
       .field(dummyArticle.missingBody)
       .end((err, res) => {
         if (err) done(err);
@@ -155,7 +172,7 @@ describe('POST AND GET /api/v1/articles', () => {
     chai
       .request(app)
       .post('/api/v1/articles')
-      .set('Authorization', userToken)
+      .set('Authorization', userToken1)
       .field(dummyArticle.incorrectCategory)
       .end((err, res) => {
         if (err) done(err);
@@ -169,7 +186,7 @@ describe('POST AND GET /api/v1/articles', () => {
     chai
       .request(app)
       .post('/api/v1/articles')
-      .set('Authorization', userToken)
+      .set('Authorization', userToken1)
       .field(dummyArticle.incorrectTagList)
       .end((err, res) => {
         if (err) done(err);
@@ -183,7 +200,7 @@ describe('POST AND GET /api/v1/articles', () => {
     chai
       .request(app)
       .post('/api/v1/articles')
-      .set('Authorization', userToken)
+      .set('Authorization', userToken1)
       .field(dummyArticle.validArticle)
       .attach('image', fs.readFileSync('src/tests/dummyData/avatar.jpg'), 'avatar.jpg')
       .end((err, res) => {
@@ -193,6 +210,7 @@ describe('POST AND GET /api/v1/articles', () => {
         expect(res.body.article)
           .to.have.property('images');
         expect(res.body).to.have.key('article');
+        articleId = res.body.article.id;
         done();
       });
   });
@@ -200,7 +218,7 @@ describe('POST AND GET /api/v1/articles', () => {
     chai
       .request(app)
       .get('/api/v1/articles')
-      .set('Authorization', userToken)
+      .set('Authorization', userToken1)
       .end((err, res) => {
         if (err) done(err);
         expect(res).have.status(200);
@@ -213,7 +231,7 @@ describe('POST AND GET /api/v1/articles', () => {
     chai
       .request(app)
       .put(`/api/v1/articles/${articleSlug}/like`)
-      .set('Authorization', userToken)
+      .set('Authorization', userToken1)
       .end((err, res) => {
         if (err) done(err);
         expect(res).have.status(200);
@@ -228,7 +246,7 @@ describe('POST AND GET /api/v1/articles', () => {
     chai
       .request(app)
       .put(`/api/v1/articles/${articleSlug}/dislike`)
-      .set('Authorization', userToken)
+      .set('Authorization', userToken1)
       .end((err, res) => {
         if (err) done(err);
         expect(res).have.status(200);
@@ -236,6 +254,66 @@ describe('POST AND GET /api/v1/articles', () => {
         expect(res.body).to.have.keys('message', 'reaction');
         expect(res.body.message).to.deep.equal('You have disliked the article');
         expect(res.body.reaction).to.be.an('object');
+        done();
+      });
+  });
+});
+
+// Rating Tests
+
+describe('POST /api/v1/articles/{id}/rate', () => {
+  it('Should not be able to rate your own article', (done) => {
+    chai
+      .request(app)
+      .post(`/api/v1/articles/${articleId}/rate`)
+      .set('Authorization', userToken1)
+      .send({ rate: 1 })
+      .end((err, res) => {
+        if (err) done(err);
+        expect(res).have.status(400);
+        expect(res).to.be.an('object');
+        expect(res.body.error).to.deep.equal('Sorry! You cannot rate your article');
+        done();
+      });
+  });
+  it('Should not be able to rate the article when there is no rate provided', (done) => {
+    chai
+      .request(app)
+      .post(`/api/v1/articles/${articleId}/rate`)
+      .set('Authorization', userToken2)
+      .end((err, res) => {
+        if (err) done(err);
+        expect(res).have.status(400);
+        expect(res).to.be.an('object');
+        expect(res.body.error).to.deep.equal('Rate is required');
+        done();
+      });
+  });
+  it('Should not be able to rate the article which does not exist', (done) => {
+    chai
+      .request(app)
+      .post('/api/v1/articles/5/rate')
+      .set('Authorization', userToken2)
+      .send({ rate: 3 })
+      .end((err, res) => {
+        if (err) done(err);
+        expect(res).have.status(400);
+        expect(res).to.be.an('object');
+        expect(res.body.error).to.deep.equal('This Article does not exist');
+        done();
+      });
+  });
+  it('Should not be able to rate the article if the id is invalid', (done) => {
+    chai
+      .request(app)
+      .post('/api/v1/articles/m/rate')
+      .set('Authorization', userToken2)
+      .send({ rate: 3 })
+      .end((err, res) => {
+        if (err) done(err);
+        expect(res).have.status(400);
+        expect(res).to.be.an('object');
+        expect(res.body.error).to.deep.equal('id must be a number');
         done();
       });
   });

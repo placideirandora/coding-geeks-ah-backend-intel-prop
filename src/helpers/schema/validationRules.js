@@ -208,5 +208,6 @@ export default {
       return errors;
     }),
   category: Joi.string(),
-  tags: Joi.string()
+  tags: Joi.string(),
+  id: Joi.number()
 };
