@@ -16,7 +16,7 @@ const sendEmail = async (action, to, token) => {
   const resetContent = '<h2>Reset Password</h2><p style="font-size: 1rem;">Please Reset your password by visiting the following link:</p>';
   const resetLink = `${APP_URL}/reset-password/${token}`;
   const notifySubject = 'Notification - New Article';
-  const notifyContent = '<h2>New published article</h2><p style="font-size: 1rem;">Please Click on a link below to read the article:</p>';
+  const notifyContent = `<h2>${token.ownerId} published new article</h2><p style="font-size: 1rem;">Please Click on a link below to read the article:</p>`;
   const notifyLink = `${token.url}`;
 
   if (action === 'verify-email') {
@@ -26,9 +26,8 @@ const sendEmail = async (action, to, token) => {
       subject: verifySubject,
       html: template(verifyContent, verifyLink)
     };
-    if (NODE_ENV === 'test') return true;
-    mailer.send(message);
-  } else if (action === 'reset-password') {
+    return NODE_ENV === 'test' ? true : mailer.send(message);
+  } if (action === 'reset-password') {
     const message = {
       to,
       from: EMAIL_SENDER,
@@ -36,9 +35,8 @@ const sendEmail = async (action, to, token) => {
       text: 'Authors Haven',
       html: template(resetContent, resetLink)
     };
-    if (NODE_ENV === 'test') return true;
-    mailer.send(message);
-  } else if (action === 'notification') {
+    return NODE_ENV === 'test' ? true : mailer.send(message);
+  } if (action === 'notification') {
     const message = {
       to,
       from: EMAIL_SENDER,
@@ -46,8 +44,7 @@ const sendEmail = async (action, to, token) => {
       text: 'Authors Haven',
       html: template(notifyContent, notifyLink)
     };
-    if (NODE_ENV === 'test') return true;
-    mailer.send(message);
+    return NODE_ENV === 'test' ? true : mailer.send(message);
   }
 };
 

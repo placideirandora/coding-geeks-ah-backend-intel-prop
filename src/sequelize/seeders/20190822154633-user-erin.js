@@ -1,14 +1,13 @@
 import bcrypt from 'bcrypt';
 
 export const up = queryInterface => queryInterface.bulkInsert('Users', [{
-  firstName: 'Eric',
-  lastName: 'Malaba',
-  userName: 'super-admin',
-  email: 'eric.malaba@gmail.com',
-  password: bcrypt.hashSync('Superadmin12', 10),
-  role: 'super-admin',
+  firstName: 'Erin',
+  lastName: 'Mugisho',
+  userName: 'admin',
+  email: 'admin@gmail.com',
+  password: bcrypt.hashSync('Admin-user12', 10),
+  role: 'admin',
   verified: true
-}
-], {});
+}], {});
 
 export const down = queryInterface => queryInterface.bulkDelete('Users', null, {});

@@ -17,13 +17,14 @@ export default {
       userName: validationRules.userName,
       email: validationRules.email,
       password: validationRules.password,
-      confirmPassword: validationRules.confirmPassword
+      confirmPassword: validationRules.confirmPassword,
+      role: validationRules.role
     });
 
     const { error } = Joi.validate(req.body, userSchema, options);
     if (error) {
       return res.status(400).json({
-        error: error.details[0].message
+        error: error.details[0].message.replace(/\\|(")/g, '')
       });
     }
     next();
@@ -128,6 +129,30 @@ export default {
       });
     }
     next();
-  }
+  },
+  updateRoleValidation(req, res, next) {
+    const updateRoleSchema = Joi.object().keys({
+      role: validationRules.roles
+    });
+    const { error } = Joi.validate(req.body, updateRoleSchema, options);
+    if (error) {
+      return res.status(400).json({
+        error: error.details[0].message.replace(/\\|(")/g, '')
+      });
+    }
+    next();
+  },
+  idInParamsValidation(req, res, next) {
+    const idSchema = Joi.object().keys({
+      id: validationRules.id,
+    });
 
+    const { error } = Joi.validate(req.params, idSchema, options);
+    if (error) {
+      return res.status(400).json({
+        error: error.details[0].message
+      });
+    }
+    next();
+  },
 };

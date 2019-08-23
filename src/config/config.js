@@ -9,7 +9,8 @@ module.exports = {
     database: process.env.DB_NAME,
     host: process.env.DB_HOST,
     dialect: 'postgres',
-    logging: false
+    logging: false,
+    seederStorage: 'sequelize'
   },
   test: {
     username: process.env.DB_USER,
@@ -17,7 +18,8 @@ module.exports = {
     database: process.env.DB_NAME_TEST,
     host: process.env.DB_HOST,
     dialect: 'postgres',
-    logging: false
+    logging: false,
+    seederStorage: 'sequelize'
   },
   production: {
     username: process.env.DB_USER,
@@ -25,6 +27,7 @@ module.exports = {
     use_env_variable: 'DATABASE_URL',
     url: process.env.DATABASE_URL,
     dialect: 'postgres',
-    logging: false
+    logging: false,
+    seederStorage: 'sequelize'
   }
 };

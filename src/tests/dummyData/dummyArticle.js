@@ -35,6 +35,24 @@ export default {
     body:
       'Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical'
   },
+  validArticle1: {
+    id: 1,
+    title: 'Growth mindset',
+    description: 'How to demonstrate growth mindsewt',
+    tags: 'Fixed mind, Confidence, low self-esteem',
+    category: 'Eductaion',
+    body:
+      'is simply dummy text of the printing and typesetting industry Lorem Ipsum has'
+  },
+  validArticle2: {
+    id: 2,
+    title: 'Growth mindset',
+    description: 'How to demonstrate growth mindsewt',
+    tags: 'Fixed mind, Confidence, low self-esteem',
+    category: 'Eductaion',
+    body:
+      'is simply dummy text of the printing and typesetting industry Lorem Ipsum has'
+  },
   incompleteTitle: {
     title: 'Growth',
     description: 'How to demonstrate growth mindsewt',

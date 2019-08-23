@@ -11,7 +11,10 @@ import facebookRequest from '../middleware/facebook';
 import UserFollow from '../controllers/followController';
 import Profile from '../controllers/profileController';
 import canEditProfile from '../middleware/editProfile';
+import adminPermissions from '../middleware/adminPermissions';
 import Article from '../controllers/articleController';
+import articleRate from '../controllers/ratingController';
+import ArticleMiddleware from '../middleware/articleMiddleware';
 import Notification from '../controllers/notificationController';
 import findOwner from '../middleware/findOwner';
 
@@ -19,7 +22,8 @@ const router = express.Router();
 
 const connectMulti = connectmultiparty();
 
-router.post('/api/v1/users', Validation.signupValidation, UserAuth.signup);
+router.post('/api/v1/users/signup', Validation.signupValidation, UserAuth.signup);
+router.post('/api/v1/users', verifyToken, adminPermissions, Validation.signupValidation, UserAuth.signup);
 router.get('/api/v1/profiles/:username', Profile.user);
 router.get('/api/v1/profiles', verifyToken, Profile.fetchProfiles);
 router.put('/api/v1/profiles/:username', [verifyToken, connectMulti, canEditProfile, Validation.profileValidation, Validation.imageValidation], Profile.editProfile);
@@ -40,8 +44,12 @@ router.get('/api/v1/auth/twitter/test', twitterRequest, UserAuth.twitterLogin);
 router.get('/api/v1/auth/twitter/callback', passport.authenticate('twitter'), UserAuth.twitterLogin);
 router.post('/api/v1/users/logout', [verifyToken], UserAuth.logout);
 router.post('/api/v1/users/login', Validation.loginValidation, UserAuth.login);
+router.delete('/api/v1/users/:username', verifyToken, UserAuth.deleteUser);
+router.patch('/api/v1/users/:username', verifyToken, adminPermissions, Validation.updateRoleValidation, UserAuth.updateRole);
+router.get('/api/v1/articles/:slug', Article.getSingleArticle);
 router.post('/api/v1/articles', [verifyToken, connectMulti, Validation.createArticleValidation, ContentType, Validation.imageValidation], Article.createArticle);
 router.get('/api/v1/articles', Article.getAllArticles);
+router.post('/api/v1/articles/:id/rate', [verifyToken, Validation.idInParamsValidation, ArticleMiddleware.checkRatedArticle], articleRate.rateArticle);
 router.put('/api/v1/articles/:articleSlug/like', verifyToken, Article.likeArticle);
 router.put('/api/v1/articles/:articleSlug/dislike', verifyToken, Article.dislikeArticle);
 router.post('/api/v1/profiles/:userName/follow', verifyToken, UserFollow.followUser);

@@ -44,6 +44,7 @@ class ArticleController {
       if (article) {
         return res.status(201).json({
           article: {
+            id: article.id,
             slug,
             title: article.title,
             description: article.title,
@@ -411,6 +412,37 @@ class ArticleController {
           }
         }
       }
+    } catch (err) {
+      throw (err);
+    }
+  }
+
+  /**
+  * @description get an article
+  * @param {object} req
+  * @param {object} res
+  * @return {object} return object with a disliked article
+  */
+  static async getSingleArticle(req, res) {
+    try {
+      const article = await Article.findOne({
+        where: { slug: req.params.slug },
+        include: [
+          {
+            model: User,
+            as: 'author',
+            attributes: ['userName', 'bio', 'image']
+          }
+        ]
+      });
+      if (!article) {
+        return res.status(404).json({
+          message: 'Sorry! The requested article was not found.'
+        });
+      }
+      return res.status(200).json({
+        article
+      });
     } catch (err) {
       throw (err);
     }

@@ -40,7 +40,7 @@
                 }
             }
         },
-        "/api/v1/users": {
+        "/api/v1/users/signup": {
             "post": {
                 "tags": [
                     "Users"
@@ -110,6 +110,239 @@
 
                     "409": {
                         "description": "User already exist",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/users": {
+            "post": {
+                "tags": [
+                    "Users"
+                ],
+                "description": "Super admin can create a new user or admin in system",
+                "parameters": [
+                    {
+                        "name": "Authorization",
+                        "in": "header",
+                        "description": "User token",
+                        "required":false,
+                        "type":"string"
+                      },
+                    {
+                    "name": "user",
+                    "in": "body",
+                    "description": "The User we want to create",
+                    "schema": {
+                        "required": [
+                            "firstName",
+                            "lastName",
+                            "userName",
+                            "email",
+                            "password",
+                            "confirmPassword",
+                            "role"
+                        ],
+                        "properties": {
+                            "firstName": {
+                                "type": "string",
+                                "required": true
+                            },
+                            "lastName": {
+                                "type": "string",
+                                "required": true
+                            },
+                            "userName": {
+                                "type": "string",
+                                "required": true
+                            },
+                            "email": {
+                                "type": "string",
+                                "required": true
+                            },
+                            "password": {
+                                "type": "string",
+                                "required": true
+                            },
+                            "confirmPassword": {
+                                "type": "string",
+                                "required": true
+                            },
+                            "role": {
+                                "type": "string",
+                                "required": false
+                            }
+                        }
+                    }
+                }],
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Successfully created new User",
+                        "schema": {
+                            "properties": {
+                                "status": {
+                                    "type": "string"
+                                },
+                                "message": {
+                                    "type": "string"
+                                },
+                                "data": {
+                                    "$ref": "#/definitions/User"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Missing fields or invalid value",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+
+                    "409": {
+                        "description": "User already exist",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "401": {
+                        "description": "User is not logged in",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "403": {
+                        "description": "You are not authorized to access this resource",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/users/{username}": {
+            "patch": {
+                "tags": [
+                    "Users"
+                ],
+                "description": "Super admin can update user profile role",
+                "parameters": [
+                    {
+                        "name": "username",
+                        "in": "path",
+                        "description": "Username of the user to be updated",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "Authorization",
+                        "in": "header",
+                        "description": "User token",
+                        "required":false,
+                        "type":"string"
+                      },
+                    {
+                    "name": "user",
+                    "in": "body",
+                    "description": "The User we want to create",
+                    "schema": {
+                        "required": [
+                            "role"
+                        ],
+                        "properties": {
+                            "role": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                }],
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successfully updated a user role",
+                        "schema": {
+                            "properties": {
+                                "message": {
+                                    "type": "string"
+                                },
+                                "data": {
+                                    "$ref": "#/definitions/User"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid role value",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "401": {
+                        "description": "User is not logged in",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "403": {
+                        "description": "When non-super admins tries to update a user role",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Users"
+                ],
+                "description": "Admins can delete user profiles",
+                "parameters": [
+                    {
+                        "name": "username",
+                        "in": "path",
+                        "description": "Username of the user to be updated",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "Authorization",
+                        "in": "header",
+                        "description": "User token",
+                        "required":false,
+                        "type":"string"
+                      }],
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successfully deleted a user",
+                        "schema": {
+                            "properties": {
+                                "message": {
+                                    "type": "string"
+                                },
+                                "data": {
+                                    "$ref": "#/definitions/User"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "User is not logged in",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "403": {
+                        "description": "When the user has no permission to delete a resource",
                         "schema": {
                             "$ref": "#/definitions/Error"
                         }
@@ -1056,6 +1289,83 @@
             }
           }
        },
+       "/api/v1/articles/{id}/rate": {
+        "post": {
+            "tags": [
+                "Articles"
+            ],
+            "description": "User should be able to rate an article",
+            "parameters": [
+                {
+                "name":"Authorization",
+                "in": "header",
+                "description" :"The user token"
+                      
+                },
+                {
+                "name": "id",
+                "in": "path",
+                "description": "id of the article you want to rate",
+                "type": "integer"
+                },
+                {
+                "name": "Rate",
+                "in": "body",
+                "description": "Your rating to this article betwee 1 and 5",
+                "schema": {
+                    "required": [
+                        "rate"
+                    ],
+                    "properties": {
+                        "rate": {
+                            "type": "integer"
+                        }
+                    }
+                }
+                }
+
+                ],
+                "produces": [
+                    "application/json"
+                  ],
+            "responses": {
+                "201": {
+                    "description": "Article successfully rate",
+                    "schema": {
+                        "properties": {
+                            "message": {
+                                "type": "string"
+                            },
+                            "data": {
+                                "schema": {
+                                    "$ref": "#/definitions/RateArticle"
+                                }
+                            }
+                        }
+                    }
+                },
+                "200": {
+                    "description": "Successfully updated the rate",
+                    "schema": {
+                        "$ref": "#/definitions/RateArticle"
+                    }
+                },
+                "400": {
+                    "description": "Missing fields or invalid value",
+                    "schema": {
+                        "$ref": "#/definitions/Error"
+                    }
+                },
+
+                "403": {
+                    "description": "Wrong token",
+                    "schema": {
+                        "$ref": "#/definitions/Error"
+                    }
+                }
+            }
+        }
+       },
        "/api/v1/articles/{articleSlug}/like": {
         "put": {
           "tags": [
@@ -1236,6 +1546,52 @@
                 }
             }
         },
+        "get": {
+            "tags": [
+              "Articles"
+            ],
+            "description": "Delate an article",
+            "parameters": [
+                 {
+                    "name": "slug",
+                    "in": "path",
+                    "description": "Articles slug",
+                    "required":true,
+                    "type":"string"
+                  }],
+            "produces": [
+              "application/json"
+            ],
+            "responses": {
+                "200": {
+                    "description": "",
+                    "schema": {
+                        "properties": {
+                            "status": {
+                                "type": "integer"
+                            },
+                            "data": {
+                                "type": "string",
+                                "$ref": "#/definitions/Articles"
+                            }
+                        }
+                    }
+                },
+                "404": {
+                    "description": "Article not found",
+                    "schema": {
+                        "properties": {
+                            "error": {
+                                "type": "string"
+                            },
+                            "me": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
+            }
+          },
         "delete": {
             "tags": [
               "Articles"
@@ -1410,11 +1766,19 @@
             }
     }
 },
+"RateArticle": {
+    "properties": {
+        "rating": {
+            "type":"integer"
+        },
+        "Author": {
+            "type":"string"
+        }
+
+    }
+},
         "Error": {
             "properties": {
-                "status": {
-                    "type": "integer"
-                },
                 "error": {
                     "type": "string"
                 }

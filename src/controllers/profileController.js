@@ -48,11 +48,24 @@ class Profile {
    * @returns {object} all available profiles
    */
   static async fetchProfiles(req, res) {
+    const currentUser = req.userData.role;
+    let users;
     try {
-      const users = await User.findAll({
-        where: { role: 'user' },
-        attributes: ['userName', 'bio', 'image']
-      });
+      if (currentUser === 'user') {
+        users = await User.findAll({
+          where: { role: 'user' },
+          attributes: ['userName', 'bio', 'image']
+        });
+      } else if (currentUser === 'admin') {
+        users = await User.findAll({
+          where: { role: ['user', 'admin'] },
+          attributes: ['userName', 'bio', 'image', 'role']
+        });
+      } else {
+        users = await User.findAll({
+          attributes: ['userName', 'bio', 'image', 'role']
+        });
+      }
       res.status(200).json({
         message: `${users.length} Users found`,
         data: users

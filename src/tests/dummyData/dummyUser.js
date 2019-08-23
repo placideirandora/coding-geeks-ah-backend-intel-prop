@@ -221,6 +221,24 @@ export default {
     password: 'Jamal.123',
     confirmPassword: 1
   },
+  superCreateWrongRole: {
+    firstName: 'sudi',
+    lastName: 'simba',
+    userName: 'sudi',
+    email: 'sudi@gmail.com',
+    password: 'Sudi123!',
+    confirmPassword: 'Sudi123!',
+    role: 'admins'
+  },
+  superCreateAdmin: {
+    firstName: 'sudi',
+    lastName: 'simba',
+    userName: 'sudi',
+    email: 'sudi@gmail.com',
+    password: 'Sudi123!',
+    confirmPassword: 'Sudi123!',
+    role: 'admin'
+  },
   newUser: {
     firstName: 'Musinda',
     lastName: 'Kadhuwa',
@@ -230,12 +248,29 @@ export default {
     confirmPassword: 'Jamal1230!',
     verified: true
   },
+  newUserLogin: {
+    firstName: 'Musinda',
+    lastName: 'Kadhuwa',
+    userName: 'carlosGga',
+    email: 'carlosGga@gmail12.com',
+    password: 'Jamal1230!',
+    confirmPassword: 'Jamal1230!',
+    verified: true
+  },
   newUserForFollow: {
-    id: 1,
     firstName: 'Musinda',
     lastName: 'Kadhuwa',
     userName: 'Kaduzichi',
     email: 'jamal@gmail12.com',
+    password: 'Jamal1230!',
+    confirmPassword: 'Jamal1230!',
+    verified: true
+  },
+  newUserFollow: {
+    firstName: 'Rick',
+    lastName: 'Oburu',
+    userName: 'ricky',
+    email: 'rick@gmail.com',
     password: 'Jamal1230!',
     confirmPassword: 'Jamal1230!',
     verified: true
@@ -273,6 +308,22 @@ export default {
   },
   invalidProfile6: {
     bio: 'fdavfdyd',
+  },
+  updateUserRole: {
+    role: 'admin'
+  },
+  updateRoleMissing: {
+    roles: 'user'
+  },
+  updateInvalidRole: {
+    role: 'users'
+  },
+  updateManyFields: {
+    role: 'user',
+    verified: true
+  },
+  updateProfileNotAllowed: {
+    bio: 'I am the app admin'
   },
   validFollower: {
     follower: 3,

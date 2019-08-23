@@ -19,6 +19,14 @@ class Authentication {
    */
   static async signup(req, res) {
     try {
+      let message;
+      if (req.userData) {
+        if (req.userData.role === 'super-admin') {
+          message = 'User created. User should check their email for a verification link';
+        }
+      } else {
+        message = 'User created. Please, Check your email for a verification link';
+      }
       const { email, userName, password } = req.body;
       const user = await User.findOne({ where: { email } });
       const name = await User.findOne({ where: { userName } });
@@ -37,14 +45,29 @@ class Authentication {
 
       req.body.password = hashedPassword(password);
 
+      if (req.userData) {
+        req.body.role = (req.userData.role === 'super-admin') ? req.body.role : 'user';
+      }
+
       const createdUser = await User.create(req.body);
       const userToken = genToken(createdUser);
       const action = 'verify-email';
 
+      await User.update(
+        {
+          role: req.body.role,
+        },
+        {
+          where: { userName: req.body.userName },
+          returning: true,
+          plain: true
+        }
+      );
+
       await sendEmail(action, createdUser.email, userToken);
 
       return res.status(201).json({
-        message: 'User created. Please, Check your email for a verification link.',
+        message,
         data: {
           id: createdUser.id,
           firstName: createdUser.firstName,
@@ -137,6 +160,84 @@ class Authentication {
         }
       });
     })(req, res);
+  }
+
+  /**
+   * @description admins delete a user
+   * @param {object} req
+   * @param {object} res
+   * @returns {obkject} success message
+   */
+  static async deleteUser(req, res) {
+    try {
+      const name = req.params.username;
+      const userRole = req.userData.role;
+      const user = await User.findOne({ where: { userName: name } });
+      if (!user) {
+        return res.status(404).json({
+          error: `User with username ${name} not found`
+        });
+      }
+      if (userRole === 'user' || (user.role === 'super-admin'
+      || (userRole === 'admin' && user.role === 'admin'))) {
+        return res.status(403).json({
+          error: 'You do not have permission to perform this action'
+        });
+      }
+
+      await User.destroy({
+        where: {
+          userName: name
+        }
+      });
+      return res.status(200).json({
+        message: `User ${name} successfully deleted`
+      });
+    } catch (err) {
+      throw (err);
+    }
+  }
+
+  /**
+   * @description admin change user role
+   * @param {object} req
+   * @param {object} res
+   *@returns {object} message
+   */
+  static async updateRole(req, res) {
+    try {
+      const name = req.params.username;
+      const user = await User.findOne({ where: { userName: name } });
+      if (!user) {
+        return res.status(404).json({
+          error: `User with username ${name} not found`
+        });
+      }
+      if (user.role === 'super-admin') {
+        return res.status(403).json({
+          error: 'You do not have permission to perform this action'
+        });
+      }
+      const update = await User.update(
+        {
+          role: req.body.role
+        },
+        { where: { userName: name }, returning: true, plain: true }
+      );
+      const updatedUser = {
+        id: update[1].id,
+        Username: update[1].userName,
+        email: update[1].email,
+        bio: update[1].bio,
+        role: update[1].role
+      };
+      return res.status(200).json({
+        message: 'User role successfully updated',
+        data: updatedUser
+      });
+    } catch (err) {
+      throw (err);
+    }
   }
 
   /**

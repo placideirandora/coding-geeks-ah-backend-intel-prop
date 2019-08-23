@@ -31,6 +31,7 @@ export default async (article) => {
     eventEmitter.emit('new_inapp', payload.message, followerUser.userName);
 
     if (followerUser.notify === true) {
+      payload.ownerId = owner.userName;
       await sendEmail('notification', followerUser.email, payload);
     }
   });
