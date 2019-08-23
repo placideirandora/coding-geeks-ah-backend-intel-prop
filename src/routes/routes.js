@@ -16,6 +16,7 @@ import Article from '../controllers/articleController';
 import articleRate from '../controllers/ratingController';
 import ArticleMiddleware from '../middleware/articleMiddleware';
 import Notification from '../controllers/notificationController';
+import findOwner from '../middleware/findOwner';
 
 const router = express.Router();
 
@@ -45,7 +46,7 @@ router.post('/api/v1/users/logout', [verifyToken], UserAuth.logout);
 router.post('/api/v1/users/login', Validation.loginValidation, UserAuth.login);
 router.delete('/api/v1/users/:username', verifyToken, UserAuth.deleteUser);
 router.patch('/api/v1/users/:username', verifyToken, adminPermissions, Validation.updateRoleValidation, UserAuth.updateRole);
-
+router.get('/api/v1/articles/:slug', Article.getSingleArticle);
 router.post('/api/v1/articles', [verifyToken, connectMulti, Validation.createArticleValidation, ContentType, Validation.imageValidation], Article.createArticle);
 router.get('/api/v1/articles', Article.getAllArticles);
 router.post('/api/v1/articles/:id/rate', [verifyToken, Validation.idInParamsValidation, ArticleMiddleware.checkRatedArticle], articleRate.rateArticle);
@@ -55,6 +56,8 @@ router.post('/api/v1/profiles/:userName/follow', verifyToken, UserFollow.followU
 router.delete('/api/v1/profiles/:userName/unfollow', verifyToken, UserFollow.unFollowUser);
 router.get('/api/v1/profiles/:userName/following', verifyToken, UserFollow.getFollowingList);
 router.get('/api/v1/profiles/:userName/followers', verifyToken, UserFollow.getFollowersList);
+router.delete('/api/v1/articles/:slug', [verifyToken, findOwner], Article.deteleArticle);
+router.put('/api/v1/articles/:slug', [verifyToken, findOwner, connectMulti, Validation.updateArticleValidation, ContentType, Validation.imageValidation], Article.updateArticle);
 
 router.patch('/api/v1/profiles/:username/notifications/:subscribe', [verifyToken, canEditProfile], Notification.optInOutNotificatation);
 router.get('/api/v1/profiles/notifications/all', verifyToken, Notification.getNotification);

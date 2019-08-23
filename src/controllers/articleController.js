@@ -28,8 +28,10 @@ class ArticleController {
         description: description.trim(),
         body: body.trim()
       };
-      if (req.body.tags || req.body.category) {
+      if (req.body.tags) {
         payload.tagList = req.body.tags.trim().split(/[ ,]+/);
+      }
+      if (req.body.category) {
         payload.category = req.body.category.trim();
       }
       payload.images = await uploadImage(req.files.image);
@@ -61,7 +63,7 @@ class ArticleController {
         });
       }
     } catch (err) {
-      throw (err);
+      throw err;
     }
   }
 
@@ -84,7 +86,7 @@ class ArticleController {
         ]
       });
       if (!articles.length) {
-        return res.status(200).json({
+        return res.status(404).json({
           message: 'No articles found at the moment! please come back later'
         });
       }
@@ -92,7 +94,67 @@ class ArticleController {
         articles
       });
     } catch (err) {
-      throw (err);
+      throw err;
+    }
+  }
+
+  /**
+   * @description update article
+   * @param {object} req
+   * @param {object} res
+   * @return {object} return object with updated article.
+   */
+  static async updateArticle(req, res) {
+    try {
+      const article = {};
+      const {
+        title, description, body, tags, category
+      } = req.body;
+      const originalArticle = await Article.findOne({ where: { slug: req.userData.slug } });
+      if (title) {
+        article.title = title.trim();
+        article.slug = slugGen(title.trim());
+      }
+      article.description = description ? description.trim() : originalArticle.description;
+      article.body = body ? body.trim() : originalArticle.body;
+      article.tagList = tags ? tags.trim().split(/[ ,]+/) : originalArticle.tags;
+      article.category = category ? category.trim() : originalArticle.category;
+      if (req.files.image) {
+        article.images = await uploadImage(req.files.image);
+      }
+      const updatedArticle = await Article.update(
+        article,
+        { where: { slug: req.userData.slug }, returning: true, plain: true }
+      );
+      if (updatedArticle) {
+        return res.status(200).json({
+          message: 'Article updated successfully',
+          article: updatedArticle[1]
+        });
+      }
+    } catch (err) {
+      throw err;
+    }
+  }
+
+  /**
+   * @description delete article
+   * @param {object} req
+   * @param {object} res
+   * @return {object} return message of success or error.
+   */
+  static async deteleArticle(req, res) {
+    try {
+      const deleted = await Article.destroy({
+        where: { id: req.userData.articleId }
+      });
+      if (deleted) {
+        return res.status(200).json({
+          message: 'Article successful deleted!'
+        });
+      }
+    } catch (err) {
+      throw err;
     }
   }
 
@@ -350,6 +412,37 @@ class ArticleController {
           }
         }
       }
+    } catch (err) {
+      throw (err);
+    }
+  }
+
+  /**
+  * @description get an article
+  * @param {object} req
+  * @param {object} res
+  * @return {object} return object with a disliked article
+  */
+  static async getSingleArticle(req, res) {
+    try {
+      const article = await Article.findOne({
+        where: { slug: req.params.slug },
+        include: [
+          {
+            model: User,
+            as: 'author',
+            attributes: ['userName', 'bio', 'image']
+          }
+        ]
+      });
+      if (!article) {
+        return res.status(404).json({
+          message: 'Sorry! The requested article was not found.'
+        });
+      }
+      return res.status(200).json({
+        article
+      });
     } catch (err) {
       throw (err);
     }

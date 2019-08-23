@@ -74,7 +74,7 @@ export default {
   profileValidation(req, res, next) {
     const profileSchema = Joi.object().keys({
       userName: validationRules.username,
-      bio: validationRules.bio,
+      bio: validationRules.bio
     });
 
     const { error } = Joi.validate(req.body, profileSchema, options);
@@ -104,9 +104,25 @@ export default {
       description: validationRules.description,
       body: validationRules.body,
       category: validationRules.category,
-      tags: validationRules.tags,
+      tags: validationRules.tags
     });
     const { error } = Joi.validate(req.body, createArticleSchema, options);
+    if (error) {
+      return res.status(400).json({
+        error: error.details[0].message.replace(/\\|(")/g, '')
+      });
+    }
+    next();
+  },
+  updateArticleValidation(req, res, next) {
+    const updateArticleSchema = Joi.object().keys({
+      title: validationRules.updateTitle,
+      description: validationRules.updateDescription,
+      body: validationRules.updateBody,
+      category: validationRules.category,
+      tags: validationRules.tags
+    });
+    const { error } = Joi.validate(req.body, updateArticleSchema, options);
     if (error) {
       return res.status(400).json({
         error: error.details[0].message.replace(/\\|(")/g, '')
