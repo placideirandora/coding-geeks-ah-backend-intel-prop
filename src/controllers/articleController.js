@@ -75,7 +75,36 @@ class ArticleController {
    */
   static async getAllArticles(req, res) {
     try {
+      let page = parseInt(req.query.page, 10);
+      let limit = parseInt(req.query.limit, 10);
+      if (!page) {
+        page = 1;
+      }
+      if (!limit) {
+        limit = 10;
+      }
+      if (page < 1) {
+        page = 1;
+      }
+      if (limit < 1 || limit > 10) {
+        limit = 10;
+      }
+
+      const { count } = await Article.findAndCountAll();
+      if (!count) {
+        return res.status(404).json({
+          message: 'No articles found at the moment! please come back later'
+        });
+      }
+      const pages = Math.ceil(count / limit);
+      if (page > pages) {
+        page = pages;
+      }
+
+      const offset = (page - 1) * limit;
       const articles = await Article.findAll({
+        offset,
+        limit,
         order: [['createdAt', 'DESC']],
         include: [
           {
@@ -85,11 +114,6 @@ class ArticleController {
           }
         ]
       });
-      if (!articles.length) {
-        return res.status(404).json({
-          message: 'No articles found at the moment! please come back later'
-        });
-      }
       res.status(200).json({
         articles
       });
