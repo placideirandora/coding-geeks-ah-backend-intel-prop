@@ -20,6 +20,7 @@ before(async () => {
 let userToken1 = '';
 let userToken2 = '';
 let articleSlug;
+let articleSlug2;
 let newArticleSlug;
 
 before(async () => {
@@ -243,6 +244,70 @@ describe('POST AND GET /api/v1/articles', () => {
         expect(res.body).to.have.key('article');
         articleSlug = res.body.article.slug;
         articleId = res.body.article.id;
+        done();
+      });
+  });
+  it('Should create and return a second article', (done) => {
+    chai
+      .request(app)
+      .post('/api/v1/articles')
+      .set('Authorization', userToken1)
+      .field(dummyArticle.validArticle)
+      .attach('image', fs.readFileSync('src/tests/dummyData/avatar.jpg'), 'avatar.jpg')
+      .end((err, res) => {
+        articleSlug = res.body.article.slug;
+        if (err) done(err);
+        expect(res).have.status(201);
+        expect(res.body.article)
+          .to.have.property('images');
+        expect(res.body).to.have.key('article');
+        articleSlug2 = res.body.article.slug;
+        articleId = res.body.article.id;
+        done();
+      });
+  });
+  it('Should comment on the article', (done) => {
+    chai
+      .request(app)
+      .post(`/api/v1/articles/${articleSlug2}/comment`)
+      .set('Authorization', userToken1)
+      .send({ comment: 'This story is cool!' })
+      .end((err, res) => {
+        if (err) done(err);
+        expect(res).have.status(201);
+        expect(res).to.be.an('object');
+        expect(res.body).to.have.keys('message', 'articleComment');
+        expect(res.body.message).to.deep.equal('You have commented on the article');
+        expect(res.body.articleComment).to.be.an('object');
+        done();
+      });
+  });
+  it('Should not comment on the article if it does not exist', (done) => {
+    chai
+      .request(app)
+      .post('/api/v1/articles/1/comment')
+      .set('Authorization', userToken1)
+      .send({ comment: 'This story is cool!' })
+      .end((err, res) => {
+        if (err) done(err);
+        expect(res).have.status(404);
+        expect(res).to.be.an('object');
+        expect(res.body).to.have.keys('message');
+        expect(res.body.message).to.deep.equal('Article not found');
+        done();
+      });
+  });
+  it('Should not comment on the article if comment is not provided', (done) => {
+    chai
+      .request(app)
+      .post(`/api/v1/articles/${articleSlug}/comment`)
+      .set('Authorization', userToken1)
+      .end((err, res) => {
+        if (err) done(err);
+        expect(res).have.status(400);
+        expect(res).to.be.an('object');
+        expect(res.body).to.have.keys('error');
+        expect(res.body.error).to.deep.equal('Comment is required');
         done();
       });
   });

@@ -1,6 +1,8 @@
 /* eslint-disable no-shadow */
 /* eslint-disable max-len */
-import { User, Article, Reaction } from '../sequelize/models';
+import {
+  User, Article, Reaction, Comment
+} from '../sequelize/models';
 import { slugGen, uploadImage } from '../helpers/articles/articleHelper';
 
 /**
@@ -446,6 +448,53 @@ class ArticleController {
     } catch (err) {
       throw (err);
     }
+  }
+
+  /**
+   * @param {object} req
+   * @param {object} res
+   * @returns {object} returns an object containing a commented article response
+   */
+  static async commentArticle(req, res) {
+    const commenter = req.userData.id;
+    const slugId = req.params.articleSlug;
+    const { comment } = req.body;
+
+    const authorProfile = await User.findOne({ where: { id: commenter } });
+
+    const findArticle = await Article.findOne({ where: { slug: slugId } });
+
+    if (!findArticle) {
+      return res.status(404).json({
+        message: 'Article not found'
+      });
+    }
+
+    const { id } = findArticle;
+    const { userName, bio, image } = authorProfile;
+
+    const articleComment = await Comment.create({
+      articleId: id,
+      articleSlug: slugId,
+      userId: commenter,
+      comment: comment.trim(),
+    });
+
+    return res.status(201).json({
+      message: 'You have commented on the article',
+      articleComment: {
+        id: articleComment.id,
+        articleSlug: articleComment.articleSlug,
+        comment: articleComment.comment,
+        updatedAt: articleComment.updatedAt,
+        createdAt: articleComment.createdAt,
+        commenter: {
+          username: userName,
+          bio,
+          image
+        }
+      }
+    });
   }
 }
 

@@ -155,4 +155,16 @@ export default {
     }
     next();
   },
+  commentValidation(req, res, next) {
+    const commentArticleSchema = Joi.object().keys({
+      comment: validationRules.comment,
+    });
+    const { error } = Joi.validate(req.body, commentArticleSchema, options);
+    if (error) {
+      return res.status(400).json({
+        error: error.details[0].message.replace(/\\|(")/g, '')
+      });
+    }
+    next();
+  },
 };

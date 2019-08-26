@@ -52,13 +52,13 @@ router.get('/api/v1/articles', Article.getAllArticles);
 router.post('/api/v1/articles/:id/rate', [verifyToken, Validation.idInParamsValidation, ArticleMiddleware.checkRatedArticle], articleRate.rateArticle);
 router.put('/api/v1/articles/:articleSlug/like', verifyToken, Article.likeArticle);
 router.put('/api/v1/articles/:articleSlug/dislike', verifyToken, Article.dislikeArticle);
+router.post('/api/v1/articles/:articleSlug/comment', verifyToken, Validation.commentValidation, Article.commentArticle);
 router.post('/api/v1/profiles/:userName/follow', verifyToken, UserFollow.followUser);
 router.delete('/api/v1/profiles/:userName/unfollow', verifyToken, UserFollow.unFollowUser);
 router.get('/api/v1/profiles/:userName/following', verifyToken, UserFollow.getFollowingList);
 router.get('/api/v1/profiles/:userName/followers', verifyToken, UserFollow.getFollowersList);
 router.delete('/api/v1/articles/:slug', [verifyToken, findOwner], Article.deteleArticle);
 router.put('/api/v1/articles/:slug', [verifyToken, findOwner, connectMulti, Validation.updateArticleValidation, ContentType, Validation.imageValidation], Article.updateArticle);
-
 router.patch('/api/v1/profiles/:username/notifications/:subscribe', [verifyToken, canEditProfile], Notification.optInOutNotificatation);
 router.get('/api/v1/profiles/notifications/all', verifyToken, Notification.getNotification);
 router.patch('/api/v1/profiles/notifications/:id/read', verifyToken, Notification.readOneNotification);
