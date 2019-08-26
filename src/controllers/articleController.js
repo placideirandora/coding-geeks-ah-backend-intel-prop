@@ -1,8 +1,10 @@
 /* eslint-disable no-shadow */
 /* eslint-disable max-len */
+import { config } from 'dotenv';
 import { User, Article, Reaction } from '../sequelize/models';
 import { slugGen, uploadImage } from '../helpers/articles/articleHelper';
 
+config();
 /**
  * @description holds article logic
  */
@@ -100,6 +102,8 @@ class ArticleController {
       if (page > pages) {
         page = pages;
       }
+      const previous = page === 1 ? 1 : page - 1;
+      const next = page === pages ? page : page + 1;
 
       const offset = (page - 1) * limit;
       const articles = await Article.findAll({
@@ -114,7 +118,16 @@ class ArticleController {
           }
         ]
       });
+      const previousURL = new URL(`?page=${previous}&limit=${limit}`, process.env.ARTICLE_URL);
+      const nextURL = new URL(`?page=${next}&limit=${limit}`, process.env.ARTICLE_URL);
+      const firstPage = new URL(`?page=1&limit=${limit}`, process.env.ARTICLE_URL);
+      const lastPage = new URL(`?page=${pages}&limit=${limit}`, process.env.ARTICLE_URL);
       res.status(200).json({
+        firstPage,
+        previousPage: previousURL,
+        currentPage: page,
+        nextPage: nextURL,
+        lastPage,
         articles
       });
     } catch (err) {
