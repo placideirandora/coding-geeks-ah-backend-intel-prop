@@ -94,7 +94,7 @@ class ArticleController {
         });
       }
       articles.map((article) => {
-        const readTimeOfArticle = readTime(article.body, article.title, article.description);
+        const readTimeOfArticle = readTime(article.body);
         article.get().readTime = readTimeOfArticle;
         article.readTime = readTime;
         return true;
@@ -136,11 +136,7 @@ class ArticleController {
         returning: true,
         plain: true
       });
-      const readTimeOfArticle = readTime(
-        updatedArticle[1].body,
-        updatedArticle[1].title,
-        updatedArticle[1].description
-      );
+      const readTimeOfArticle = readTime(updatedArticle[1].body);
       updatedArticle[1].get().readTime = readTimeOfArticle;
       if (updatedArticle) {
         return res.status(200).json({
@@ -480,7 +476,7 @@ class ArticleController {
           message: 'Sorry! The requested article was not found.'
         });
       }
-      const readTimeOfArticle = readTime(article.body, article.title, article.description);
+      const readTimeOfArticle = readTime(article.body);
       article.get().readTime = readTimeOfArticle;
       return res.status(200).json({
         article
