@@ -1,6 +1,5 @@
 /* eslint-disable no-shadow */
 /* eslint-disable max-len */
-import { log } from 'util';
 import { User, Article, Reaction } from '../sequelize/models';
 import { slugGen, uploadImage } from '../helpers/articles/articleHelper';
 import readTime from '../helpers/articles/readTimeForArticle';
