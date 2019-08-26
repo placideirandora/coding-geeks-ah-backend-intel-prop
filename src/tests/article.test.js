@@ -259,6 +259,71 @@ describe('POST AND GET /api/v1/articles', () => {
         done();
       });
   });
+  it('Should return articles if paginary page query is not specified', (done) => {
+    chai
+      .request(app)
+      .get('/api/v1/articles?limit=2')
+      .set('Authorization', userToken1)
+      .end((err, res) => {
+        if (err) done(err);
+        expect(res).have.status(200);
+        expect(res).to.be.an('object');
+        expect(res.body).to.have.keys('articles');
+        done();
+      });
+  });
+  it('Should return articles if pagination limit query is not specified', (done) => {
+    chai
+      .request(app)
+      .get('/api/v1/articles?page=2')
+      .set('Authorization', userToken1)
+      .end((err, res) => {
+        if (err) done(err);
+        expect(res).have.status(200);
+        expect(res).to.be.an('object');
+        expect(res.body).to.have.keys('articles');
+        done();
+      });
+  });
+  it('Should return articles if pagination page is negative', (done) => {
+    chai
+      .request(app)
+      .get('/api/v1/articles?page=-2')
+      .set('Authorization', userToken1)
+      .end((err, res) => {
+        if (err) done(err);
+        expect(res).have.status(200);
+        expect(res).to.be.an('object');
+        expect(res.body).to.have.keys('articles');
+        done();
+      });
+  });
+  it('Should return articles if pagination limit is negative', (done) => {
+    chai
+      .request(app)
+      .get('/api/v1/articles?limit=-2')
+      .set('Authorization', userToken1)
+      .end((err, res) => {
+        if (err) done(err);
+        expect(res).have.status(200);
+        expect(res).to.be.an('object');
+        expect(res.body).to.have.keys('articles');
+        done();
+      });
+  });
+  it('Should return articles if wrong values are provided for pagination', (done) => {
+    chai
+      .request(app)
+      .get('/api/v1/articles?page=one&limit=ten')
+      .set('Authorization', userToken1)
+      .end((err, res) => {
+        if (err) done(err);
+        expect(res).have.status(200);
+        expect(res).to.be.an('object');
+        expect(res.body).to.have.keys('articles');
+        done();
+      });
+  });
   it('Should return a particluar article', (done) => {
     chai
       .request(app)
