@@ -155,4 +155,29 @@ export default {
     }
     next();
   },
+  commentValidation(req, res, next) {
+    const commentArticleSchema = Joi.object().keys({
+      comment: validationRules.comment
+    });
+    const { error } = Joi.validate(req.body, commentArticleSchema, options);
+    if (error) {
+      return res.status(400).json({
+        error: error.details[0].message.replace(/\\|(")/g, '')
+      });
+    }
+    next();
+  },
+  commentParamsValidation(req, res, next) {
+    const commentParamsSchema = Joi.object().keys({
+      commentId: validationRules.commentId,
+      articleSlug: validationRules.articleSlug,
+    });
+    const { error } = Joi.validate(req.params, commentParamsSchema, options);
+    if (error) {
+      return res.status(400).json({
+        error: error.details[0].message.replace(/\\|(")/g, '')
+      });
+    }
+    next();
+  },
 };

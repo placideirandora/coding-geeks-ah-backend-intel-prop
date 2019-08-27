@@ -221,6 +221,18 @@ export default {
       });
       return errors;
     }),
+  comment: Joi.string().trim()
+    .required()
+    .error((errors) => {
+      errors.forEach((err) => {
+        switch (err.type) {
+          case 'any.required':
+            err.message = 'Comment is required';
+            break;
+        }
+      });
+      return errors;
+    }),
   updateTitle: Joi.string().trim()
     .min(10),
   updateBody: Joi.string().trim(),
@@ -244,5 +256,9 @@ export default {
       });
       return errors;
     }),
-  id: Joi.number()
+  id: Joi.number(),
+  commentId: Joi.number().integer()
+    .required(),
+  articleSlug: Joi.string()
+    .required(),
 };
