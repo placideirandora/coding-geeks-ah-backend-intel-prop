@@ -256,5 +256,9 @@ export default {
       });
       return errors;
     }),
-  id: Joi.number()
+  id: Joi.number(),
+  commentId: Joi.number().integer()
+    .required(),
+  articleSlug: Joi.string()
+    .required(),
 };

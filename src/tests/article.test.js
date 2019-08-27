@@ -269,7 +269,7 @@ describe('POST AND GET /api/v1/articles', () => {
   it('Should comment on the article', (done) => {
     chai
       .request(app)
-      .post(`/api/v1/articles/${articleSlug2}/comment`)
+      .post(`/api/v1/articles/${articleSlug2}/comments`)
       .set('Authorization', userToken1)
       .send({ comment: 'This story is cool!' })
       .end((err, res) => {
@@ -282,10 +282,56 @@ describe('POST AND GET /api/v1/articles', () => {
         done();
       });
   });
+  it('Should retrieve comments of the article', (done) => {
+    chai
+      .request(app)
+      .get(`/api/v1/articles/${articleSlug2}/comments`)
+      .set('Authorization', userToken1)
+      .end((err, res) => {
+        if (err) done(err);
+        expect(res).have.status(200);
+        expect(res).to.be.an('object');
+        expect(res.body).to.have.keys('message', 'comments');
+        expect(res.body.message).to.deep.equal('Comments retrieved');
+        expect(res.body.comments).to.be.an('array');
+        done();
+      });
+  });
+  it('Should update the comment of the article', (done) => {
+    chai
+      .request(app)
+      .patch(`/api/v1/articles/${articleSlug2}/comments/1`)
+      .set('Authorization', userToken1)
+      .send({ comment: 'I have changed my comment!' })
+      .end((err, res) => {
+        if (err) done(err);
+        expect(res).have.status(200);
+        expect(res).to.be.an('object');
+        expect(res.body).to.have.keys('message', 'updatedComment');
+        expect(res.body.message).to.deep.equal('Comment updated');
+        expect(res.body.updatedComment).to.be.an('object');
+        done();
+      });
+  });
+  it('Should not update the comment if it cannot be found', (done) => {
+    chai
+      .request(app)
+      .patch(`/api/v1/articles/${articleSlug2}/comments/10000`)
+      .set('Authorization', userToken1)
+      .send({ comment: 'I have changed my comment!' })
+      .end((err, res) => {
+        if (err) done(err);
+        expect(res).have.status(404);
+        expect(res).to.be.an('object');
+        expect(res.body).to.have.keys('message');
+        expect(res.body.message).to.deep.equal('Comment cannot be found');
+        done();
+      });
+  });
   it('Should not comment on the article if it does not exist', (done) => {
     chai
       .request(app)
-      .post('/api/v1/articles/1/comment')
+      .post('/api/v1/articles/1/comments')
       .set('Authorization', userToken1)
       .send({ comment: 'This story is cool!' })
       .end((err, res) => {
@@ -300,7 +346,7 @@ describe('POST AND GET /api/v1/articles', () => {
   it('Should not comment on the article if comment is not provided', (done) => {
     chai
       .request(app)
-      .post(`/api/v1/articles/${articleSlug}/comment`)
+      .post(`/api/v1/articles/${articleSlug}/comments`)
       .set('Authorization', userToken1)
       .end((err, res) => {
         if (err) done(err);
@@ -308,6 +354,48 @@ describe('POST AND GET /api/v1/articles', () => {
         expect(res).to.be.an('object');
         expect(res.body).to.have.keys('error');
         expect(res.body.error).to.deep.equal('Comment is required');
+        done();
+      });
+  });
+  it('Should delete the comment of the article', (done) => {
+    chai
+      .request(app)
+      .delete(`/api/v1/articles/${articleSlug2}/comments/1`)
+      .set('Authorization', userToken1)
+      .end((err, res) => {
+        if (err) done(err);
+        expect(res).have.status(200);
+        expect(res).to.be.an('object');
+        expect(res.body).to.have.keys('message');
+        expect(res.body.message).to.deep.equal('Comment deleted');
+        done();
+      });
+  });
+  it('Should not delete the comment if it cannot be found', (done) => {
+    chai
+      .request(app)
+      .delete(`/api/v1/articles/${articleSlug2}/comments/1`)
+      .set('Authorization', userToken1)
+      .end((err, res) => {
+        if (err) done(err);
+        expect(res).have.status(404);
+        expect(res).to.be.an('object');
+        expect(res.body).to.have.keys('message');
+        expect(res.body.message).to.deep.equal('Comment cannot be found');
+        done();
+      });
+  });
+  it('Should not retrieve comments because the article has none', (done) => {
+    chai
+      .request(app)
+      .get(`/api/v1/articles/${articleSlug2}/comments`)
+      .set('Authorization', userToken1)
+      .end((err, res) => {
+        if (err) done(err);
+        expect(res).have.status(404);
+        expect(res).to.be.an('object');
+        expect(res.body).to.have.keys('message');
+        expect(res.body.message).to.deep.equal('The article has no comments at the moment');
         done();
       });
   });
