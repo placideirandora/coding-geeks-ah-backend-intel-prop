@@ -1,8 +1,11 @@
 /* eslint-disable no-shadow */
 /* eslint-disable max-len */
 import { config } from 'dotenv';
-import { User, Article, Reaction } from '../sequelize/models';
+import {
+  User, Article, Reaction, Comment
+} from '../sequelize/models';
 import { slugGen, uploadImage } from '../helpers/articles/articleHelper';
+import readTime from '../helpers/articles/readTimeForArticle';
 
 config();
 /**
@@ -25,6 +28,7 @@ class ArticleController {
         });
       }
       const { title, description, body } = req.body;
+      const readTimeOfArticle = readTime(body, title, description);
       const payload = {
         title: title.trim(),
         description: description.trim(),
@@ -41,7 +45,7 @@ class ArticleController {
       payload.authorId = id;
       const article = await Article.create(payload);
       const {
-        slug, category, images, tagList, authorId,
+        slug, category, images, tagList, authorId
       } = article;
       if (article) {
         return res.status(201).json({
@@ -54,6 +58,7 @@ class ArticleController {
             category,
             images,
             tagList,
+            readTime: readTimeOfArticle,
             author: {
               authorId,
               username: author.userName,
@@ -122,6 +127,13 @@ class ArticleController {
       const nextURL = new URL(`?page=${next}&limit=${limit}`, `${process.env.APP_URL}/articles`);
       const firstPage = new URL(`?page=1&limit=${limit}`, `${process.env.APP_URL}/articles`);
       const lastPage = new URL(`?page=${pages}&limit=${limit}`, `${process.env.APP_URL}/articles`);
+
+      articles.map((article) => {
+        const readTimeOfArticle = readTime(article.body);
+        article.get().readTime = readTimeOfArticle;
+        article.readTime = readTime;
+        return true;
+      });
       res.status(200).json({
         firstPage,
         previousPage: previousURL,
@@ -159,10 +171,13 @@ class ArticleController {
       if (req.files.image) {
         article.images = await uploadImage(req.files.image);
       }
-      const updatedArticle = await Article.update(
-        article,
-        { where: { slug: req.userData.slug }, returning: true, plain: true }
-      );
+      const updatedArticle = await Article.update(article, {
+        where: { slug: req.userData.slug },
+        returning: true,
+        plain: true
+      });
+      const readTimeOfArticle = readTime(updatedArticle[1].body);
+      updatedArticle[1].get().readTime = readTimeOfArticle;
       if (updatedArticle) {
         return res.status(200).json({
           message: 'Article updated successfully',
@@ -216,7 +231,9 @@ class ArticleController {
         });
       }
 
-      const reactedAlready = await Reaction.findOne({ where: { articleSlug: slugId, userId: liker } });
+      const reactedAlready = await Reaction.findOne({
+        where: { articleSlug: slugId, userId: liker }
+      });
 
       const { id } = findArticle;
 
@@ -225,12 +242,10 @@ class ArticleController {
           articleId: id,
           articleSlug: slugId,
           userId: liker,
-          likes: likeVote,
+          likes: likeVote
         });
 
-        const {
-          articleSlug, userId, likes
-        } = likedArticle;
+        const { articleSlug, userId, likes } = likedArticle;
 
         if (likedArticle) {
           await Article.increment({ likes: 1 }, { where: { slug: slugId } });
@@ -250,22 +265,25 @@ class ArticleController {
 
       if (likes > 0) {
         if (reactedAlready) {
-          const removeLike = await Reaction.update({ likes: dislikeVote }, { where: { articleSlug: slugId, userId: liker } });
+          const removeLike = await Reaction.update(
+            { likes: dislikeVote },
+            { where: { articleSlug: slugId, userId: liker } }
+          );
 
           if (removeLike) {
             await Article.decrement({ likes: 1 }, { where: { slug: slugId } });
-            const updatedArticle = await Reaction.findOne({ where: { articleSlug: slugId, userId: liker } });
+            const updatedArticle = await Reaction.findOne({
+              where: { articleSlug: slugId, userId: liker }
+            });
 
-            const {
-              articleSlug, userId, likes,
-            } = updatedArticle;
+            const { articleSlug, userId, likes } = updatedArticle;
 
             return res.status(200).json({
               message: 'You have removed your like',
               reaction: {
                 articleSlug,
                 userId,
-                likes,
+                likes
               }
             });
           }
@@ -274,54 +292,63 @@ class ArticleController {
         const { dislikes } = reactedAlready;
 
         if (dislikes > 0) {
-          const removeDislike = await Reaction.update({ dislikes: dislikeVote }, { where: { articleSlug: slugId, userId: liker } });
+          const removeDislike = await Reaction.update(
+            { dislikes: dislikeVote },
+            { where: { articleSlug: slugId, userId: liker } }
+          );
 
           if (removeDislike) {
             await Article.decrement({ dislikes: 1 }, { where: { slug: slugId } });
-            const likeArticleAgain = await Reaction.update({ likes: likeVote }, { where: { articleSlug: slugId, userId: liker } });
+            const likeArticleAgain = await Reaction.update(
+              { likes: likeVote },
+              { where: { articleSlug: slugId, userId: liker } }
+            );
 
             if (likeArticleAgain) {
               await Article.increment({ likes: 1 }, { where: { slug: slugId } });
-              const updatedArticle = await Reaction.findOne({ where: { articleSlug: slugId, userId: liker } });
+              const updatedArticle = await Reaction.findOne({
+                where: { articleSlug: slugId, userId: liker }
+              });
 
-              const {
-                articleSlug, userId, likes,
-              } = updatedArticle;
+              const { articleSlug, userId, likes } = updatedArticle;
 
               return res.status(200).json({
                 message: 'You have liked the article',
                 reaction: {
                   articleSlug,
                   userId,
-                  likes,
+                  likes
                 }
               });
             }
           }
         } else {
-          const likeArticleAgain = await Reaction.update({ likes: likeVote }, { where: { articleSlug: slugId, userId: liker } });
+          const likeArticleAgain = await Reaction.update(
+            { likes: likeVote },
+            { where: { articleSlug: slugId, userId: liker } }
+          );
           await Article.increment({ likes: 1 }, { where: { slug: slugId } });
 
           if (likeArticleAgain) {
-            const updatedArticle = await Reaction.findOne({ where: { articleSlug: slugId, userId: liker } });
+            const updatedArticle = await Reaction.findOne({
+              where: { articleSlug: slugId, userId: liker }
+            });
 
-            const {
-              articleSlug, userId, likes,
-            } = updatedArticle;
+            const { articleSlug, userId, likes } = updatedArticle;
 
             return res.status(200).json({
               message: 'You have liked the article',
               reaction: {
                 articleSlug,
                 userId,
-                likes,
+                likes
               }
             });
           }
         }
       }
     } catch (err) {
-      throw (err);
+      throw err;
     }
   }
 
@@ -346,7 +373,9 @@ class ArticleController {
         });
       }
 
-      const reactedAlready = await Reaction.findOne({ where: { articleSlug: slugId, userId: disliker } });
+      const reactedAlready = await Reaction.findOne({
+        where: { articleSlug: slugId, userId: disliker }
+      });
 
       const { id } = findArticle;
 
@@ -355,11 +384,9 @@ class ArticleController {
           articleId: id,
           articleSlug: slugId,
           userId: disliker,
-          dislikes: likeVote,
+          dislikes: likeVote
         });
-        const {
-          articleSlug, userId, dislikes
-        } = dislikedArticle;
+        const { articleSlug, userId, dislikes } = dislikedArticle;
 
         if (dislikedArticle) {
           await Article.increment({ dislikes: 1 }, { where: { slug: slugId } });
@@ -379,22 +406,25 @@ class ArticleController {
 
       if (dislikes > 0) {
         if (reactedAlready) {
-          const removeDislike = await Reaction.update({ dislikes: dislikeVote }, { where: { articleSlug: slugId, userId: disliker } });
+          const removeDislike = await Reaction.update(
+            { dislikes: dislikeVote },
+            { where: { articleSlug: slugId, userId: disliker } }
+          );
 
           if (removeDislike) {
-            const updatedArticle = await Reaction.findOne({ where: { articleSlug: slugId, userId: disliker } });
+            const updatedArticle = await Reaction.findOne({
+              where: { articleSlug: slugId, userId: disliker }
+            });
             await Article.decrement({ dislikes: 1 }, { where: { slug: slugId } });
 
-            const {
-              articleSlug, userId, dislikes,
-            } = updatedArticle;
+            const { articleSlug, userId, dislikes } = updatedArticle;
 
             return res.status(200).json({
               message: 'You have removed your dislike',
               reaction: {
                 articleSlug,
                 userId,
-                dislikes,
+                dislikes
               }
             });
           }
@@ -403,63 +433,72 @@ class ArticleController {
         const { likes } = reactedAlready;
 
         if (likes > 0) {
-          const removeLike = await Reaction.update({ likes: dislikeVote }, { where: { articleSlug: slugId, userId: disliker } });
+          const removeLike = await Reaction.update(
+            { likes: dislikeVote },
+            { where: { articleSlug: slugId, userId: disliker } }
+          );
 
           if (removeLike) {
             await Article.decrement({ likes: 1 }, { where: { slug: slugId } });
-            const dislikeArticleAgain = await Reaction.update({ dislikes: likeVote }, { where: { articleSlug: slugId, userId: disliker } });
+            const dislikeArticleAgain = await Reaction.update(
+              { dislikes: likeVote },
+              { where: { articleSlug: slugId, userId: disliker } }
+            );
 
             if (dislikeArticleAgain) {
               await Article.increment({ dislikes: 1 }, { where: { slug: slugId } });
-              const updatedArticle = await Reaction.findOne({ where: { articleSlug: slugId, userId: disliker } });
+              const updatedArticle = await Reaction.findOne({
+                where: { articleSlug: slugId, userId: disliker }
+              });
 
-              const {
-                articleSlug, userId, dislikes,
-              } = updatedArticle;
+              const { articleSlug, userId, dislikes } = updatedArticle;
 
               return res.status(200).json({
                 message: 'You have disliked the article',
                 reaction: {
                   articleSlug,
                   userId,
-                  dislikes,
+                  dislikes
                 }
               });
             }
           }
         } else {
-          const dislikeArticleAgain = await Reaction.update({ dislikes: likeVote }, { where: { articleSlug: slugId, userId: disliker } });
+          const dislikeArticleAgain = await Reaction.update(
+            { dislikes: likeVote },
+            { where: { articleSlug: slugId, userId: disliker } }
+          );
 
           if (dislikeArticleAgain) {
             await Article.increment({ dislikes: 1 }, { where: { slug: slugId } });
-            const updatedArticle = await Reaction.findOne({ where: { articleSlug: slugId, userId: disliker } });
+            const updatedArticle = await Reaction.findOne({
+              where: { articleSlug: slugId, userId: disliker }
+            });
 
-            const {
-              articleSlug, userId, dislikes,
-            } = updatedArticle;
+            const { articleSlug, userId, dislikes } = updatedArticle;
 
             return res.status(200).json({
               message: 'You have disliked the article',
               reaction: {
                 articleSlug,
                 userId,
-                dislikes,
+                dislikes
               }
             });
           }
         }
       }
     } catch (err) {
-      throw (err);
+      throw err;
     }
   }
 
   /**
-  * @description get an article
-  * @param {object} req
-  * @param {object} res
-  * @return {object} return object with a disliked article
-  */
+   * @description get an article
+   * @param {object} req
+   * @param {object} res
+   * @return {object} return object with a disliked article
+   */
   static async getSingleArticle(req, res) {
     try {
       const article = await Article.findOne({
@@ -477,14 +516,166 @@ class ArticleController {
           message: 'Sorry! The requested article was not found.'
         });
       }
+      const readTimeOfArticle = readTime(article.body);
+      article.get().readTime = readTimeOfArticle;
       return res.status(200).json({
         article
       });
     } catch (err) {
-      throw (err);
+      throw err;
     }
   }
-}
 
+  /**
+   * @param {object} req
+   * @param {object} res
+   * @returns {object} returns an object containing a commented article response
+   */
+  static async commentArticle(req, res) {
+    const commenter = req.userData.id;
+    const slugId = req.params.articleSlug;
+    const { comment } = req.body;
+
+    const authorProfile = await User.findOne({ where: { id: commenter } });
+
+    const findArticle = await Article.findOne({ where: { slug: slugId } });
+
+    if (!findArticle) {
+      return res.status(404).json({
+        message: 'Article not found'
+      });
+    }
+
+    const { id } = findArticle;
+    const { userName, image } = authorProfile;
+
+    const articleComment = await Comment.create({
+      articleId: id,
+      articleSlug: slugId,
+      userId: commenter,
+      comment: comment.trim(),
+    });
+
+    return res.status(201).json({
+      message: 'You have commented on the article',
+      articleComment: {
+        id: articleComment.id,
+        articleSlug: articleComment.articleSlug,
+        comment: articleComment.comment,
+        updatedAt: articleComment.updatedAt,
+        createdAt: articleComment.createdAt,
+        commenter: {
+          username: userName,
+          image
+        }
+      }
+    });
+  }
+
+  /**
+   * @param {object} req
+   * @param {object} res
+   * @returns {object} returns an object containing an updated comment
+   */
+  static async updateComment(req, res) {
+    const commenter = req.userData.id;
+    const slugId = req.params.articleSlug;
+    const specificComment = req.params.commentId;
+    let { comment } = req.body;
+
+    const findArticle = await Article.findOne({ where: { slug: slugId } });
+
+    if (!findArticle) {
+      return res.status(404).json({
+        message: 'Article not found'
+      });
+    }
+
+    comment = comment.trim();
+
+    const findCommenter = await Comment.findOne({ where: { articleSlug: slugId, userId: commenter, id: specificComment } });
+
+    if (!findCommenter) {
+      return res.status(404).json({
+        message: 'Comment cannot be found'
+      });
+    }
+
+    await Comment.update({ comment }, { where: { id: specificComment } });
+    const updatedComment = await Comment.findOne({ where: { id: specificComment } });
+
+    return res.status(200).json({
+      message: 'Comment updated',
+      updatedComment: {
+        id: updatedComment.id,
+        articleSlug: updatedComment.articleSlug,
+        comment: updatedComment.comment,
+        updatedAt: updatedComment.updatedAt,
+        createdAt: updatedComment.createdAt,
+      }
+    });
+  }
+
+  /**
+   * @param {object} req
+   * @param {object} res
+   * @returns {object} returns an object containing an article's comments
+   */
+  static async retrieveComments(req, res) {
+    const slugId = req.params.articleSlug;
+
+    const findArticle = await Article.findOne({ where: { slug: slugId } });
+
+    if (!findArticle) {
+      return res.status(404).json({
+        message: 'Article not found'
+      });
+    }
+
+    const comments = await Comment.findAll({ where: { articleSlug: slugId } });
+
+    if (!comments.length) {
+      return res.status(404).json({
+        message: 'The article has no comments at the moment'
+      });
+    }
+
+    return res.status(200).json({
+      message: 'Comments retrieved',
+      comments
+    });
+  }
+
+  /**
+   * @param {object} req
+   * @param {object} res
+   * @returns {object} returns an object containing an article's comments
+   */
+  static async deleteComment(req, res) {
+    const commenter = req.userData.id;
+    const slugId = req.params.articleSlug;
+    const specificComment = req.params.commentId;
+
+    const findArticle = await Article.findOne({ where: { slug: slugId } });
+
+    if (!findArticle) {
+      return res.status(404).json({
+        message: 'Article not found'
+      });
+    }
+
+    const removeComment = await Comment.destroy({ where: { articleSlug: slugId, userId: commenter, id: specificComment } });
+
+    if (!removeComment) {
+      return res.status(404).json({
+        message: 'Comment cannot be found'
+      });
+    }
+
+    return res.status(200).json({
+      message: 'Comment deleted'
+    });
+  }
+}
 
 export default ArticleController;

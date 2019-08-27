@@ -1289,6 +1289,192 @@
             }
           }
        },
+       "/api/v1/articles/{articleSlug}/comments": {
+        "post": {
+          "tags": [
+            "Articles"
+          ],
+          "summary": "Comment on an article",
+          "produces": [
+            "application/json"
+          ],
+          "parameters": [
+              {
+                "name": "Authorization",
+                "in": "header",
+                "description": "Token",
+                "required": true
+              },
+            {
+              "name": "articleSlug",
+              "in": "path",
+              "description": "A slug of an article",
+              "required": true,
+              "type": "string"
+            },
+            {
+                "in": "body",
+                "name": "body",
+                "required": true,
+                "schema": {
+                    "$ref": "#/definitions/Comment"
+                }
+              }
+          ],
+          "responses": {
+            "201": {
+              "description": "Commented on the article"
+            },
+            "400": {
+              "description": "Bad Request"
+            },
+            "404": {
+              "description": "Article Not Found"
+            },
+            "401": {
+              "description": "Unauthorized Access"
+            }
+          }
+        },
+        "get": {
+            "tags": [
+              "Articles"
+            ],
+            "summary": "Retrieve an article's comments",
+            "produces": [
+              "application/json"
+            ],
+            "parameters": [
+                {
+                  "name": "Authorization",
+                  "in": "header",
+                  "description": "Token",
+                  "required": true
+                },
+              {
+                "name": "articleSlug",
+                "in": "path",
+                "description": "A slug of an article",
+                "required": true,
+                "type": "string"
+              }
+            ],
+            "responses": {
+              "200": {
+                "description": "Comments retrieved"
+              },
+              "400": {
+                "description": "Bad Request"
+              },
+              "404": {
+                "description": "Comments not found"
+              },
+              "401": {
+                "description": "Unauthorized Access"
+              }
+            }
+          }
+      },
+      "/api/v1/articles/{articleSlug}/comments/{commentId}": {
+        "patch": {
+          "tags": [
+            "Articles"
+          ],
+          "summary": "Update a comment",
+          "produces": [
+            "application/json"
+          ],
+          "parameters": [
+              {
+                "name": "Authorization",
+                "in": "header",
+                "description": "Token",
+                "required": true
+              },
+            {
+              "name": "articleSlug",
+              "in": "path",
+              "description": "A slug of an article",
+              "required": true,
+              "type": "string"
+            },
+            {
+                "name": "commentId",
+                "in": "path",
+                "description": "An identifier of a comment",
+                "required": true,
+                "type": "integer"
+              },
+            {
+                "in": "body",
+                "name": "body",
+                "required": true,
+                "schema": {
+                    "$ref": "#/definitions/Comment"
+                }
+              }
+          ],
+          "responses": {
+            "200": {
+              "description": "Comment updated"
+            },
+            "400": {
+              "description": "Bad Request"
+            },
+            "404": {
+              "description": "Comment not found"
+            },
+            "401": {
+              "description": "Unauthorized Access"
+            }
+          }
+        },
+        "delete": {
+            "tags": [
+              "Articles"
+            ],
+            "summary": "Delete a comment",
+            "produces": [
+              "application/json"
+            ],
+            "parameters": [
+                {
+                  "name": "Authorization",
+                  "in": "header",
+                  "description": "Token",
+                  "required": true
+                },
+              {
+                "name": "articleSlug",
+                "in": "path",
+                "description": "A slug of an article",
+                "required": true,
+                "type": "string"
+              },
+              {
+                "name": "commentId",
+                "in": "path",
+                "description": "An identifier of a comment",
+                "required": true,
+                "type": "integer"
+              }
+            ],
+            "responses": {
+              "200": {
+                "description": "Comment deleted"
+              },
+              "400": {
+                "description": "Bad Request"
+              },
+              "404": {
+                "description": "Comment not found"
+              },
+              "401": {
+                "description": "Unauthorized Access"
+              }
+            }
+          }
+      },
        "/api/v1/articles/{id}/rate": {
         "post": {
             "tags": [
@@ -1776,6 +1962,16 @@
         }
 
     }
+},
+"Comment": {
+    "required": [
+        "comment"
+      ],
+      "properties": {
+        "comment": {
+          "type": "string"
+        }
+}
 },
         "Error": {
             "properties": {

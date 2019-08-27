@@ -7,6 +7,9 @@ const verifyToken = async (req, res, next) => {
     res.status(401).json({ error: 'Please log in or Register' });
   } else {
     jwt.verify(token, process.env.SECRET_KEY, async (error, decoded) => {
+      if (error) {
+        return res.status(403).json({ error: `${error.message}` });
+      }
       if (token) {
         const identifier = token.match(/\d+/g).join('');
         const droppedToken = await DroppedToken.findOne({ where: { identifier }, logging: false });
@@ -17,9 +20,6 @@ const verifyToken = async (req, res, next) => {
             message: 'You are already logged out!'
           });
         }
-      }
-      if (error) {
-        return res.status(403).json({ error: `${error.message}` });
       }
       req.userData = decoded;
       next();
