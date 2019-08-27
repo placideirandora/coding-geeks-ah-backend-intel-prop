@@ -18,6 +18,7 @@ import ArticleMiddleware from '../middleware/articleMiddleware';
 import Notification from '../controllers/notificationController';
 import findOwner from '../middleware/findOwner';
 import Bookmark from '../controllers/bookmarkController';
+import findUser from '../middleware/findUser';
 
 const router = express.Router();
 
@@ -67,8 +68,8 @@ router.patch('/api/v1/profiles/:username/notifications/:subscribe', [verifyToken
 router.get('/api/v1/profiles/notifications/all', verifyToken, Notification.getNotification);
 router.patch('/api/v1/profiles/notifications/:id/read', verifyToken, Notification.readOneNotification);
 router.patch('/api/v1/profiles/notifications/read/all', verifyToken, Notification.readAllNotification);
-router.post('/api/v1/bookmarks/:slug', verifyToken, Bookmark.createBookmark);
-router.get('/api/v1/bookmarks', verifyToken, Bookmark.getBookmarks);
-router.delete('/api/v1/bookmarks/:slug', verifyToken, Bookmark.deleteBookmark);
+router.post('/api/v1/bookmarks/:slug', [verifyToken, findUser], Bookmark.createBookmark);
+router.get('/api/v1/bookmarks', [verifyToken, findUser], Bookmark.getBookmarks);
+router.delete('/api/v1/bookmarks/:slug', [verifyToken, findUser], Bookmark.deleteBookmark);
 
 export default router;

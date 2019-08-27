@@ -1,4 +1,4 @@
-import { Bookmark, User, Article } from '../sequelize/models';
+import { Bookmark, Article } from '../sequelize/models';
 
 /**
  * @description holds bookmarks logic
@@ -14,12 +14,6 @@ class BookmarkController {
     try {
       const userId = req.userData.id;
       const articleSlug = req.params.slug;
-      const user = await User.findOne({ where: { id: userId } });
-      if (!user) {
-        return res.status(403).json({
-          error: 'Provided token is not registered to you'
-        });
-      }
       const article = await Article.findOne({ where: { slug: articleSlug } });
       if (!article) {
         return res.status(404).json({
@@ -86,6 +80,11 @@ class BookmarkController {
       const userId = req.userData.id;
       const articleSlug = req.params.slug;
       const article = await Article.findOne({ where: { slug: articleSlug } });
+      if (!article) {
+        return res.status(404).json({
+          message: 'Sorry! The specified article could not be found. '
+        });
+      }
       const bookmark = await Bookmark.findOne({ where: { articleId: article.id, userId } });
       if (!bookmark) {
         return res.status(404).json({

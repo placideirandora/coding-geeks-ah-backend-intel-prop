@@ -60,7 +60,7 @@ describe('POST AND GET AND DELETE /api/v1/Bookmarks', () => {
   it('Should receive a message after adding a bookmark', (done) => {
     chai
       .request(app)
-      .post(`/api/v1/bookmarks/${articleSlug}`)
+      .get(`/api/v1/bookmarks/${articleSlug}`)
       .set('Authorization', userToken1)
       .end((err, res) => {
         if (err) done(err);
@@ -89,7 +89,7 @@ describe('POST AND GET AND DELETE /api/v1/Bookmarks', () => {
   it('Should return message if article is already bookmarked ', (done) => {
     chai
       .request(app)
-      .post(`/api/v1/bookmarks/${articleSlug}`)
+      .get(`/api/v1/bookmarks/${articleSlug}`)
       .set('Authorization', userToken1)
       .end((err, res) => {
         if (err) done(err);
