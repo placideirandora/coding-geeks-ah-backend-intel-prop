@@ -471,7 +471,7 @@ class ArticleController {
     }
 
     const { id } = findArticle;
-    const { userName, bio, image } = authorProfile;
+    const { userName, image } = authorProfile;
 
     const articleComment = await Comment.create({
       articleId: id,
@@ -490,7 +490,6 @@ class ArticleController {
         createdAt: articleComment.createdAt,
         commenter: {
           username: userName,
-          bio,
           image
         }
       }
