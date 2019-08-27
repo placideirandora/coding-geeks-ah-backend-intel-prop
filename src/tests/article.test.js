@@ -406,7 +406,93 @@ describe('POST AND GET /api/v1/articles', () => {
         if (err) done(err);
         expect(res).have.status(200);
         expect(res).to.be.an('object');
-        expect(res.body).to.have.keys('articles');
+        expect(res.body)
+          .to.have.keys('articles', 'firstPage', 'lastPage', 'currentPage', 'nextPage', 'previousPage');
+        done();
+      });
+  });
+  it('Should return the previous page', (done) => {
+    chai
+      .request(app)
+      .get('/api/v1/articles?page=2&limit=1')
+      .set('Authorization', userToken1)
+      .end((err, res) => {
+        if (err) done(err);
+        expect(res).have.status(200);
+        expect(res).to.be.an('object');
+        expect(res.body)
+          .to.have.keys('articles', 'firstPage', 'lastPage', 'currentPage', 'nextPage', 'previousPage');
+        expect(res.body.previousPage).to.deep.equal('http://localhost:3000/api/v1/articles?page=1&limit=1');
+        done();
+      });
+  });
+  it('Should return articles if paginary page query is not specified', (done) => {
+    chai
+      .request(app)
+      .get('/api/v1/articles?limit=2')
+      .set('Authorization', userToken1)
+      .end((err, res) => {
+        if (err) done(err);
+        expect(res).have.status(200);
+        expect(res).to.be.an('object');
+        expect(res.body)
+          .to.have.keys('articles', 'firstPage', 'lastPage', 'currentPage', 'nextPage', 'previousPage');
+        done();
+      });
+  });
+  it('Should return articles if pagination limit query is not specified', (done) => {
+    chai
+      .request(app)
+      .get('/api/v1/articles?page=2')
+      .set('Authorization', userToken1)
+      .end((err, res) => {
+        if (err) done(err);
+        expect(res).have.status(200);
+        expect(res).to.be.an('object');
+        expect(res.body)
+          .to.have.keys('articles', 'firstPage', 'lastPage', 'currentPage', 'nextPage', 'previousPage');
+        done();
+      });
+  });
+  it('Should return articles if pagination page is negative', (done) => {
+    chai
+      .request(app)
+      .get('/api/v1/articles?page=-2')
+      .set('Authorization', userToken1)
+      .end((err, res) => {
+        if (err) done(err);
+        expect(res).have.status(200);
+        expect(res).to.be.an('object');
+        expect(res.body)
+          .to.have.keys('articles', 'firstPage', 'lastPage', 'currentPage', 'nextPage', 'previousPage');
+        done();
+      });
+  });
+  it('Should return articles if pagination limit is negative', (done) => {
+    chai
+      .request(app)
+      .get('/api/v1/articles?limit=-2')
+      .set('Authorization', userToken1)
+      .end((err, res) => {
+        if (err) done(err);
+        expect(res).have.status(200);
+        expect(res).to.be.an('object');
+        expect(res.body)
+          .to.have.keys('articles', 'firstPage', 'lastPage', 'currentPage', 'nextPage', 'previousPage');
+        done();
+      });
+  });
+  it('Should return articles if wrong values are provided for pagination', (done) => {
+    chai
+      .request(app)
+      .get('/api/v1/articles?page=one&limit=ten')
+      .set('Authorization', userToken1)
+      .end((err, res) => {
+        if (err) done(err);
+        expect(res).have.status(200);
+        expect(res).to.be.an('object');
+        expect(res.body)
+          .to.have.keys('articles', 'firstPage', 'lastPage', 'currentPage', 'nextPage', 'previousPage');
         expect(res.body.articles).to.be.an('array');
         expect(res.body.articles[0]).to.have.keys(
           'id',

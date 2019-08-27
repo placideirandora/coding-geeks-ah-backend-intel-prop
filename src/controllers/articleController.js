@@ -1,11 +1,13 @@
 /* eslint-disable no-shadow */
 /* eslint-disable max-len */
+import { config } from 'dotenv';
 import {
   User, Article, Reaction, Comment
 } from '../sequelize/models';
 import { slugGen, uploadImage } from '../helpers/articles/articleHelper';
 import readTime from '../helpers/articles/readTimeForArticle';
 
+config();
 /**
  * @description holds article logic
  */
@@ -80,7 +82,38 @@ class ArticleController {
    */
   static async getAllArticles(req, res) {
     try {
+      let page = parseInt(req.query.page, 10);
+      let limit = parseInt(req.query.limit, 10);
+      if (!page) {
+        page = 1;
+      }
+      if (!limit) {
+        limit = 10;
+      }
+      if (page < 1) {
+        page = 1;
+      }
+      if (limit < 1 || limit > 10) {
+        limit = 10;
+      }
+
+      const { count } = await Article.findAndCountAll();
+      if (!count) {
+        return res.status(404).json({
+          message: 'No articles found at the moment! please come back later'
+        });
+      }
+      const pages = Math.ceil(count / limit);
+      if (page > pages) {
+        page = pages;
+      }
+      const previous = page === 1 ? 1 : page - 1;
+      const next = page === pages ? page : page + 1;
+
+      const offset = (page - 1) * limit;
       const articles = await Article.findAll({
+        offset,
+        limit,
         order: [['createdAt', 'DESC']],
         include: [
           {
@@ -90,11 +123,11 @@ class ArticleController {
           }
         ]
       });
-      if (!articles.length) {
-        return res.status(404).json({
-          message: 'No articles found at the moment! please come back later'
-        });
-      }
+      const previousURL = new URL(`?page=${previous}&limit=${limit}`, `${process.env.APP_URL}/articles`);
+      const nextURL = new URL(`?page=${next}&limit=${limit}`, `${process.env.APP_URL}/articles`);
+      const firstPage = new URL(`?page=1&limit=${limit}`, `${process.env.APP_URL}/articles`);
+      const lastPage = new URL(`?page=${pages}&limit=${limit}`, `${process.env.APP_URL}/articles`);
+
       articles.map((article) => {
         const readTimeOfArticle = readTime(article.body);
         article.get().readTime = readTimeOfArticle;
@@ -102,6 +135,11 @@ class ArticleController {
         return true;
       });
       res.status(200).json({
+        firstPage,
+        previousPage: previousURL,
+        currentPage: page,
+        nextPage: nextURL,
+        lastPage,
         articles
       });
     } catch (err) {
