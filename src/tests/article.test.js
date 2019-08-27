@@ -6,7 +6,6 @@ import dummy from './dummyData';
 import { Follow } from '../sequelize/models';
 import { genToken } from '../helpers/auth';
 
-
 chai.use(chaiHttp);
 const { expect } = chai;
 const { dummyArticle, dummyUser } = dummy;
@@ -238,8 +237,7 @@ describe('POST AND GET /api/v1/articles', () => {
         articleSlug = res.body.article.slug;
         if (err) done(err);
         expect(res).have.status(201);
-        expect(res.body.article)
-          .to.have.property('images');
+        expect(res.body.article).to.have.property('images');
         expect(res.body).to.have.key('article');
         articleSlug = res.body.article.slug;
         articleId = res.body.article.id;
@@ -342,6 +340,24 @@ describe('POST AND GET /api/v1/articles', () => {
         expect(res).to.be.an('object');
         expect(res.body)
           .to.have.keys('articles', 'firstPage', 'lastPage', 'currentPage', 'nextPage', 'previousPage');
+        expect(res.body.articles).to.be.an('array');
+        expect(res.body.articles[0]).to.have.keys(
+          'id',
+          'slug',
+          'title',
+          'description',
+          'body',
+          'category',
+          'tagList',
+          'images',
+          'authorId',
+          'likes',
+          'dislikes',
+          'createdAt',
+          'updatedAt',
+          'author',
+          'readTime'
+        );
         done();
       });
   });
@@ -355,6 +371,23 @@ describe('POST AND GET /api/v1/articles', () => {
         expect(res).have.status(200);
         expect(res).to.be.an('object');
         expect(res.body).to.have.keys('article');
+        expect(res.body.article).to.have.keys(
+          'id',
+          'slug',
+          'title',
+          'description',
+          'body',
+          'category',
+          'tagList',
+          'images',
+          'authorId',
+          'likes',
+          'dislikes',
+          'createdAt',
+          'updatedAt',
+          'author',
+          'readTime'
+        );
         done();
       });
   });
@@ -367,9 +400,7 @@ describe('POST AND GET /api/v1/articles', () => {
         if (err) done(err);
         expect(res).have.status(404);
         expect(res.body).to.have.keys('message');
-        expect(res.body.message).to.deep.equal(
-          'Sorry! The requested article was not found.'
-        );
+        expect(res.body.message).to.deep.equal('Sorry! The requested article was not found.');
         done();
       });
   });
@@ -416,7 +447,9 @@ describe('UPDATE /api/v1/articles/:slug', () => {
         if (err) done(err);
         expect(res).have.status(403);
         expect(res.body).to.have.key('error');
-        expect(res.body.error).to.deep.equal('Sorry! You are not allowed to make changes to this resource');
+        expect(res.body.error).to.deep.equal(
+          'Sorry! You are not allowed to make changes to this resource'
+        );
         done();
       });
   });
@@ -497,7 +530,9 @@ describe('UPDATE /api/v1/articles/:slug', () => {
       .end((err, res) => {
         if (err) done(err);
         expect(res).have.status(200);
-        expect(res.body.article.description).to.deep.equal('How to demonstrate growth mindset from a new perspective');
+        expect(res.body.article.description).to.deep.equal(
+          'How to demonstrate growth mindset from a new perspective'
+        );
         done();
       });
   });
@@ -523,7 +558,9 @@ describe('UPDATE /api/v1/articles/:slug', () => {
       .end((err, res) => {
         if (err) done(err);
         expect(res).have.status(200);
-        expect(res.body.article.body).to.deep.equal('is simply dummy text of the printing and typesetting industry Lorem Ipsum has');
+        expect(res.body.article.body).to.deep.equal(
+          'is simply dummy text of the printing and typesetting industry Lorem Ipsum has'
+        );
         done();
       });
   });
@@ -630,7 +667,6 @@ describe('POST /api/v1/articles/{id}/rate', () => {
   });
 });
 
-
 // Deleting article Tests.
 describe('DELETE /api/v1/articles/:slug', () => {
   it('Should return an error if the the user is not the author', (done) => {
@@ -642,7 +678,9 @@ describe('DELETE /api/v1/articles/:slug', () => {
         if (err) done(err);
         expect(res).have.status(403);
         expect(res.body).to.have.key('error');
-        expect(res.body.error).to.deep.equal('Sorry! You are not allowed to make changes to this resource');
+        expect(res.body.error).to.deep.equal(
+          'Sorry! You are not allowed to make changes to this resource'
+        );
         done();
       });
   });
