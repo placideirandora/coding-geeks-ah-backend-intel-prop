@@ -118,10 +118,10 @@ class ArticleController {
           }
         ]
       });
-      const previousURL = new URL(`?page=${previous}&limit=${limit}`, process.env.ARTICLE_URL);
-      const nextURL = new URL(`?page=${next}&limit=${limit}`, process.env.ARTICLE_URL);
-      const firstPage = new URL(`?page=1&limit=${limit}`, process.env.ARTICLE_URL);
-      const lastPage = new URL(`?page=${pages}&limit=${limit}`, process.env.ARTICLE_URL);
+      const previousURL = new URL(`?page=${previous}&limit=${limit}`, `${process.env.APP_URL}/articles`);
+      const nextURL = new URL(`?page=${next}&limit=${limit}`, `${process.env.APP_URL}/articles`);
+      const firstPage = new URL(`?page=1&limit=${limit}`, `${process.env.APP_URL}/articles`);
+      const lastPage = new URL(`?page=${pages}&limit=${limit}`, `${process.env.APP_URL}/articles`);
       res.status(200).json({
         firstPage,
         previousPage: previousURL,
