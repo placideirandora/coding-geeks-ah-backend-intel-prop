@@ -1844,7 +1844,183 @@
                 }
             }
           }
-        },    
+        }, 
+        "/api/v1/bookmarks/{slug}": {
+            "post": {
+                "tags": [
+                    "Bookmarks"
+                ],
+                "description": "Authenticated user can add bookmarks",
+                "parameters": [
+                    {
+                    "name":"Authorization",
+                    "in": "header",
+                    "description" :"The user token",
+                    "required":true
+                          
+                     },
+                     {
+                    "name": "slug",
+                    "in": "path",
+                    "description": "Articles slug",
+                    "required":true,
+                    "type":"string"
+                    }],
+                "responses": {
+                    "201": {
+                        "description": "Bookmark added successfully",
+                        "schema": {
+                            "properties": {
+                                "message": {
+                                    "type": "string"
+                                },
+                                "data": {
+                                    "$ref": "#/definitions/Bookmark"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "User is not authenticated",
+                        "schema": {
+                            "properties": {
+                                "error": {
+                                    "type": "string"
+                                },
+                                "me": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Article not found",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "409": {
+                        "description": "Article already bookmarked",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                  "Bookmarks"
+                ],
+                "description": "Delete a bookmark",
+                "parameters": [
+                    {
+                        "name":"Authorization",
+                        "in": "header",
+                        "description" :"The user token",
+                        "required":true
+                          
+                     },
+                     {
+                        "name": "slug",
+                        "in": "path",
+                        "description": "Bookmark slug",
+                        "required":true,
+                        "type":"string"
+                      }],
+                "produces": [
+                  "application/json"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successfully deleted the bookmark",
+                        "schema": {
+                            "properties": {
+                                "status": {
+                                    "type": "integer"
+                                },
+                                "me": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "User is not authenticated",
+                        "schema": {
+                            "properties": {
+                                "error": {
+                                    "type": "string"
+                                },
+                                "me": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Bookmark not found",
+                        "schema": {
+                            "properties": {
+                                "error": {
+                                    "type": "string"
+                                },
+                                "me": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }
+                }
+              }
+            },
+         "/api/v1/bookmarks": {
+            "get": {
+                "tags": [
+                  "Bookmarks"
+                ],
+                "description": "Get all bookmarks by a user",
+                "parameters": [
+                    {
+                        "name":"Authorization",
+                        "in": "header",
+                        "description" :"The user token",
+                        "required":true
+                              
+                         }],
+                "produces": [
+                  "application/json"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "List of all bookmarks",
+                        "schema": {
+                            "properties": {
+                                "status": {
+                                    "type": "integer"
+                                },
+                                "data": {
+                                    "type": "string",
+                                    "$ref": "#/definitions/Bookmarks"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Bookmarks not found",
+                        "schema": {
+                            "properties": {
+                                "error": {
+                                    "type": "string"
+                                },
+                                "me": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }
+                }
+              }
+            },       
     "definitions": {
         "User": {
             "properties": {
@@ -1970,9 +2146,31 @@
       "properties": {
         "comment": {
           "type": "string"
+        },
+"Bookmarks": {
+    "properties": {
+        "id": {
+            "type": "integer"
+            },
+        "articleId": {
+            "type": "integer"
+            },
+        "userId": {
+            "type": "interger"
+            },
+        "Article": {
+            "slug": {
+              "type": "string"
+                    },
+            "title": {
+              "type": "string"
+                    },
+            "description": {
+                "type": "string"
+                    }
+                }
         }
-}
-},
+        },
         "Error": {
             "properties": {
                 "error": {
@@ -1984,4 +2182,6 @@
     }
     
  }
+}
+}
 }

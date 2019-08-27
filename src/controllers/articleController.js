@@ -70,7 +70,9 @@ class ArticleController {
         });
       }
     } catch (err) {
-      throw err;
+      return res.status(400).json({
+        error: 'Please ensure Title or Description is not more than 255 characters'
+      });
     }
   }
 
