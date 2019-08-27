@@ -1,7 +1,9 @@
 /* eslint-disable no-shadow */
 /* eslint-disable max-len */
 import { config } from 'dotenv';
-import { User, Article, Reaction } from '../sequelize/models';
+import {
+  User, Article, Reaction, Comment
+} from '../sequelize/models';
 import { slugGen, uploadImage } from '../helpers/articles/articleHelper';
 import readTime from '../helpers/articles/readTimeForArticle';
 
@@ -523,6 +525,157 @@ class ArticleController {
     } catch (err) {
       throw err;
     }
+  }
+
+  /**
+   * @param {object} req
+   * @param {object} res
+   * @returns {object} returns an object containing a commented article response
+   */
+  static async commentArticle(req, res) {
+    const commenter = req.userData.id;
+    const slugId = req.params.articleSlug;
+    const { comment } = req.body;
+
+    const authorProfile = await User.findOne({ where: { id: commenter } });
+
+    const findArticle = await Article.findOne({ where: { slug: slugId } });
+
+    if (!findArticle) {
+      return res.status(404).json({
+        message: 'Article not found'
+      });
+    }
+
+    const { id } = findArticle;
+    const { userName, image } = authorProfile;
+
+    const articleComment = await Comment.create({
+      articleId: id,
+      articleSlug: slugId,
+      userId: commenter,
+      comment: comment.trim(),
+    });
+
+    return res.status(201).json({
+      message: 'You have commented on the article',
+      articleComment: {
+        id: articleComment.id,
+        articleSlug: articleComment.articleSlug,
+        comment: articleComment.comment,
+        updatedAt: articleComment.updatedAt,
+        createdAt: articleComment.createdAt,
+        commenter: {
+          username: userName,
+          image
+        }
+      }
+    });
+  }
+
+  /**
+   * @param {object} req
+   * @param {object} res
+   * @returns {object} returns an object containing an updated comment
+   */
+  static async updateComment(req, res) {
+    const commenter = req.userData.id;
+    const slugId = req.params.articleSlug;
+    const specificComment = req.params.commentId;
+    let { comment } = req.body;
+
+    const findArticle = await Article.findOne({ where: { slug: slugId } });
+
+    if (!findArticle) {
+      return res.status(404).json({
+        message: 'Article not found'
+      });
+    }
+
+    comment = comment.trim();
+
+    const findCommenter = await Comment.findOne({ where: { articleSlug: slugId, userId: commenter, id: specificComment } });
+
+    if (!findCommenter) {
+      return res.status(404).json({
+        message: 'Comment cannot be found'
+      });
+    }
+
+    await Comment.update({ comment }, { where: { id: specificComment } });
+    const updatedComment = await Comment.findOne({ where: { id: specificComment } });
+
+    return res.status(200).json({
+      message: 'Comment updated',
+      updatedComment: {
+        id: updatedComment.id,
+        articleSlug: updatedComment.articleSlug,
+        comment: updatedComment.comment,
+        updatedAt: updatedComment.updatedAt,
+        createdAt: updatedComment.createdAt,
+      }
+    });
+  }
+
+  /**
+   * @param {object} req
+   * @param {object} res
+   * @returns {object} returns an object containing an article's comments
+   */
+  static async retrieveComments(req, res) {
+    const slugId = req.params.articleSlug;
+
+    const findArticle = await Article.findOne({ where: { slug: slugId } });
+
+    if (!findArticle) {
+      return res.status(404).json({
+        message: 'Article not found'
+      });
+    }
+
+    const comments = await Comment.findAll({ where: { articleSlug: slugId } });
+
+    if (!comments.length) {
+      return res.status(404).json({
+        message: 'The article has no comments at the moment'
+      });
+    }
+
+    return res.status(200).json({
+      message: 'Comments retrieved',
+      comments
+    });
+  }
+
+  /**
+   * @param {object} req
+   * @param {object} res
+   * @returns {object} returns an object containing an article's comments
+   */
+  static async deleteComment(req, res) {
+    const commenter = req.userData.id;
+    const slugId = req.params.articleSlug;
+    const specificComment = req.params.commentId;
+
+    const findArticle = await Article.findOne({ where: { slug: slugId } });
+
+    if (!findArticle) {
+      return res.status(404).json({
+        message: 'Article not found'
+      });
+    }
+
+    const removeComment = await Comment.destroy({ where: { articleSlug: slugId, userId: commenter, id: specificComment } });
+
+    if (!removeComment) {
+      return res.status(404).json({
+        message: 'Comment cannot be found'
+      });
+    }
+
+    return res.status(200).json({
+      message: 'Comment deleted'
+    });
   }
 }
 
