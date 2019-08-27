@@ -63,6 +63,7 @@ module.exports = (sequelize, DataTypes) => {
     Article.belongsTo(models.User, { foreignKey: 'authorId', as: 'author', onDelete: 'CASCADE' });
     Article.hasMany(models.Reaction, { foreignKey: 'articleId', as: 'Article', onDelete: 'CASCADE' });
     Article.hasMany(models.Comment, { foreignKey: 'articleId', as: 'ArticleComment', onDelete: 'CASCADE' });
+    Article.hasMany(models.Bookmark, { foreignKey: 'articleId', onDelete: 'CASCADE' });
   };
   return Article;
 };
