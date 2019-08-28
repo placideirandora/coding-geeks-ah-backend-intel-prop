@@ -29,4 +29,5 @@ const uploadImage = async (filename) => {
     return url.secure_url;
   }
 };
+
 export { slugGen, uploadImage };

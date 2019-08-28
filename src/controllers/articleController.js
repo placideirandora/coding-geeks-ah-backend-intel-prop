@@ -2,10 +2,11 @@
 /* eslint-disable max-len */
 import { config } from 'dotenv';
 import {
-  User, Article, Reaction, Comment
+  User, Article, Reaction, Comment, Share
 } from '../sequelize/models';
 import { slugGen, uploadImage } from '../helpers/articles/articleHelper';
 import readTime from '../helpers/articles/readTimeForArticle';
+import ShareArticleHelper from '../helpers/articles/shareHelper';
 
 config();
 /**
@@ -525,6 +526,31 @@ class ArticleController {
       });
     } catch (err) {
       throw err;
+    }
+  }
+
+  /**
+ * @param  {object} req - Request object
+ * @param {object} res - Response object
+ * @returns {object} response
+ *  @static
+ */
+  static async shareArticle(req, res) {
+    const { option } = req.params;
+    const { slug } = req.params;
+    const { id } = req.userData;
+    const article = await ShareArticleHelper.findArticleBySlug(req.params.slug);
+    if (!article) { return res.status(404).json({ error: 'article not found' }); }
+    const result = await ShareArticleHelper.shareArticle(req);
+    if (result) {
+      const createShare = await Share.create({
+        userId: id,
+        slug,
+        platform: [option],
+        createdAt: new Date(),
+        updatedAt: new Date()
+      });
+      return res.status(201).json({ message: `Successfully shared the article on ${option}`, share: createShare });
     }
   }
 
