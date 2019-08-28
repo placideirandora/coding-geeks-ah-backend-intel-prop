@@ -1474,7 +1474,7 @@
                 }
             }
         },
-        "/api/v1/comments/{id}/like": {
+        "/api/v1/comments/{commentId}/like": {
             "put": {
                 "tags": [
                     "Articles"
@@ -1517,7 +1517,7 @@
                 }
             } 
         },
-        "/api/v1/comments/{id}/dislike": {
+        "/api/v1/comments/{commentId}/dislike": {
             "put": {
                 "tags": [
                     "Articles"
@@ -1560,7 +1560,7 @@
                 }
             } 
         },
-        "/api/v1/articles/{id}/rate": {
+        "/api/v1/articles/{articleId}/rate": {
             "post": {
                 "tags": [
                     "Articles"
@@ -1573,7 +1573,7 @@
                         "description": "The user token"
                     },
                     {
-                        "name": "id",
+                        "name": "articleId",
                         "in": "path",
                         "description": "id of the article you want to rate",
                         "type": "integer"
@@ -1594,6 +1594,7 @@
                         }
                     }
                 ],
+                "summary": "Retrieve an article's comments",
                 "produces": [
                     "application/json"
                 ],
@@ -1617,6 +1618,116 @@
                         "description": "Successfully updated the rate",
                         "schema": {
                             "$ref": "#/definitions/RateArticle"
+                        }
+                    },
+                    "400": {
+                        "description": "Missing fields or invalid value",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "403": {
+                        "description": "Wrong token",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                }
+            },
+            "get": {
+                "tags": [
+                    "Articles"
+                ],
+                "description": "User should be able to get rates of an article",
+                "parameters": [
+                    {
+                        "name": "Authorization",
+                        "in": "header",
+                        "description": "The user token"
+                    },
+                    {
+                        "name": "articleId",
+                        "in": "path",
+                        "description": "id of the article you want to rate",
+                        "type": "integer"
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Article successfully rates retrieved",
+                        "schema": {
+                            "properties": {
+                                "message": {
+                                    "type": "string"
+                                },
+                                "data": {
+                                    "schema": {
+                                        "$ref": "#/definitions/RateArticle"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Missing fields or invalid value",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "403": {
+                        "description": "Wrong token",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/articles/{slug}/share/{option}": {
+            "post": {
+                "tags": [
+                    "Articles"
+                ],
+                "description": "User should be able to share an article on different channels",
+                "parameters": [
+                    {
+                        "name": "Authorization",
+                        "in": "header",
+                        "description": "The user token"
+                    },
+                    {
+                        "name": "slug",
+                        "in": "path",
+                        "description": "slug of the article you want to rate",
+                        "type": "string"
+                    },
+                    {
+                        "name": "option",
+                        "in": "path",
+                        "description": "channel you want to share the article",
+                        "type": "string"
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Article successfully rate",
+                        "schema": {
+                            "properties": {
+                                "message": {
+                                    "type": "string"
+                                },
+                                "data": {
+                                    "schema": {
+                                        "$ref": "#/definitions/channels"
+                                    }
+                                }
+                            }
                         }
                     },
                     "400": {

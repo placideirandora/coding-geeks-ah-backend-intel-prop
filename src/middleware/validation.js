@@ -144,7 +144,7 @@ export default {
   },
   idInParamsValidation(req, res, next) {
     const idSchema = Joi.object().keys({
-      id: validationRules.id,
+      articleId: validationRules.articleId,
     });
 
     const { error } = Joi.validate(req.params, idSchema, options);

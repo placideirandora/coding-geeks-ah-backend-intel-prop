@@ -256,7 +256,7 @@ export default {
       });
       return errors;
     }),
-  id: Joi.number(),
+  articleId: Joi.number(),
   commentId: Joi.number().integer()
     .required(),
   reason: Joi.string().trim()
