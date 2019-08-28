@@ -328,5 +328,14 @@ export default {
   validFollower: {
     follower: 3,
     following: 1
+  },
+  newUserForReport: {
+    firstName: 'shema',
+    lastName: 'fils',
+    userName: 'reporter',
+    email: 'reporter@gmail.com',
+    password: 'Jamal1230!',
+    confirmPassword: 'Jamal1230!',
+    verified: true
   }
 };
