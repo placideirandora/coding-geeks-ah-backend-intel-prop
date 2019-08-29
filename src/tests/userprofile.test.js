@@ -67,7 +67,7 @@ describe('GET /api/v1/profiles', () => {
         expect(res).to.have.status(200);
         expect(res.body).to.be.an('object');
         expect(res.body).to.have.keys('message', 'data');
-        expect(res.body.message).to.deep.equal('8 Users found');
+        expect(res.body.message).to.deep.equal('10 Users found');
         expect(res.body.data[0]).to.have.keys('userName', 'role', 'bio', 'image');
         done();
       });

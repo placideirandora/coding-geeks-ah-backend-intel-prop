@@ -16,8 +16,10 @@ before(async () => {
   await Follow.create(dummyUser.validFollower);
 });
 
-let userToken1 = '';
-let userToken2 = '';
+let userToken1;
+let userToken2;
+let userToken3;
+let userToken4;
 let articleSlug;
 let newArticleSlug;
 
@@ -50,6 +52,34 @@ before((done) => {
     .end((err, res) => {
       if (err) done(err);
       userToken2 = res.body.data.token;
+      done();
+    });
+});
+before((done) => {
+  chai
+    .request(app)
+    .post('/api/v1/users/login')
+    .send({
+      email: 'cyuba@gmail.com',
+      password: 'cr7-f00t!b0L'
+    })
+    .end((err, res) => {
+      if (err) done(err);
+      userToken3 = res.body.data.token;
+      done();
+    });
+});
+before((done) => {
+  chai
+    .request(app)
+    .post('/api/v1/users/login')
+    .send({
+      email: 'kate@gmail.com',
+      password: 'gotoBora-j00p!b0L'
+    })
+    .end((err, res) => {
+      if (err) done(err);
+      userToken4 = res.body.data.token;
       done();
     });
 });
@@ -244,6 +274,35 @@ describe('POST AND GET /api/v1/articles', () => {
         done();
       });
   });
+  it('Should create and return a second article', (done) => {
+    chai
+      .request(app)
+      .post('/api/v1/articles')
+      .set('Authorization', userToken4)
+      .field(dummyArticle.validArticle)
+      .attach('image', fs.readFileSync('src/tests/dummyData/avatar.jpg'), 'avatar.jpg')
+      .end((err, res) => {
+        if (err) done(err);
+        expect(res).have.status(201);
+        expect(res.body.article).to.have.property('images');
+        expect(res.body).to.have.key('article');
+        done();
+      });
+  });
+  it('Should not retrieve reading statistics because the author\'s articles have never been read', (done) => {
+    chai
+      .request(app)
+      .get('/api/v1/reading-statistics/kate')
+      .set('Authorization', userToken4)
+      .end((err, res) => {
+        if (err) done(err);
+        expect(res).have.status(404);
+        expect(res).to.be.an('object');
+        expect(res.body).to.have.keys('message');
+        expect(res.body.message).to.deep.equal('None of your articles has been read so far. Statistics not found');
+        done();
+      });
+  });
   it('Should return all avaiable articles', (done) => {
     chai
       .request(app)
@@ -332,6 +391,36 @@ describe('POST AND GET /api/v1/articles', () => {
         done();
       });
   });
+  // Reading statistics
+  it('Should retrieve reading statistics', (done) => {
+    chai
+      .request(app)
+      .get('/api/v1/reading-statistics/super-admin')
+      .set('Authorization', userToken1)
+      .end((err, res) => {
+        if (err) done(err);
+        expect(res).have.status(200);
+        expect(res).to.be.an('object');
+        expect(res.body).to.have.keys('message', 'statistics');
+        expect(res.body.message).to.deep.equal('Reading statistics retrieved');
+        expect(res.body.statistics).to.be.an('array');
+        done();
+      });
+  });
+});
+it('Should not retrieve reading statistics because the author has no article', (done) => {
+  chai
+    .request(app)
+    .get('/api/v1/reading-statistics/cyubahiro')
+    .set('Authorization', userToken3)
+    .end((err, res) => {
+      if (err) done(err);
+      expect(res).have.status(404);
+      expect(res).to.be.an('object');
+      expect(res.body).to.have.keys('message');
+      expect(res.body.message).to.deep.equal('No reading statistics because you do not have any articles');
+      done();
+    });
 });
 // Update Article Tests
 describe('UPDATE /api/v1/articles/:slug', () => {
