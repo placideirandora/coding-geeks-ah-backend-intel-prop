@@ -16,27 +16,27 @@ class reportArticleController {
     const { reason, description } = req.body;
 
     const authorProfile = await User.findOne({ where: { id: userId } });
-    const findArticle = await Article.findOne({ where: { slug: articleSlug } });
-    const findReported = await Report.findOne({ where: { slug: articleSlug } });
+    const article = await Article.findOne({ where: { slug: articleSlug } });
+    const reported = await Report.findOne({ where: { slug: articleSlug } });
 
-    if (!findArticle) {
+    if (!article) {
       return res.status(404).json({
         message: 'Article not found'
       });
     }
-    if (findArticle.authorId === userId) {
+    if (article.authorId === userId) {
       return res.status(403).json({
         message: 'Sorry! You cannot report your own article'
       });
     }
-    if (findReported && findReported.slug === articleSlug && findReported.reporterId === userId) {
+    if (reported && reported.slug === articleSlug && reported.reporterId === userId) {
       return res.status(409).json({
         message: 'Sorry! You already reported this article'
       });
     }
     const payload = {
       reporterId: userId,
-      articleId: findArticle.id,
+      articleId: article.id,
       slug: articleSlug,
       reason: reason.trim(),
       description: description.trim()
@@ -65,9 +65,9 @@ class reportArticleController {
    *
    * @param {object} req
    * @param {object} res
-   * @returns {object} return object containg data of all report
+   * @returns {object} return object with all reported article
    */
-  static async getAllReport(req, res) {
+  static async getAllReports(req, res) {
     const reports = await Report.findAll({
       order: [['createdAt', 'DESC']],
       include: [
@@ -93,14 +93,14 @@ class reportArticleController {
    *
    * @param {object} req
    * @param {object} res
-   * @returns {object} return object containg data of report of specific slug
+   * @returns {object} return object with reported data of specific slug
    */
-  static async getSingleReport(req, res) {
+  static async getArticleReports(req, res) {
     const { articleSlug } = req.params;
 
-    const findArticle = await Article.findOne({ where: { slug: articleSlug } });
+    const article = await Article.findOne({ where: { slug: articleSlug } });
 
-    if (!findArticle) {
+    if (!article) {
       return res.status(404).json({
         message: 'Article not found'
       });
@@ -129,18 +129,49 @@ class reportArticleController {
   }
 
   /**
+   *
    * @param {object} req
    * @param {object} res
-   * @returns {object} returns an object containing an article's comments
+   * @returns {object} return object with reported data of specific slug
+   */
+  static async getSingleReport(req, res) {
+    const { reportId } = req.params;
+    const { articleSlug } = req.params;
+
+    const report = await Report.findOne({
+      where: { id: reportId, slug: articleSlug },
+      include: [
+        {
+          model: User,
+          as: 'reporter',
+          attributes: ['userName', 'image']
+        }
+      ]
+    });
+
+    if (!report) {
+      return res.status(404).json({
+        message: 'Report not found'
+      });
+    }
+    res.status(200).json({
+      report
+    });
+  }
+
+  /**
+   * @param {object} req
+   * @param {object} res
+   * @returns {object} returns an object with a message of Report deleted Successfully
    */
   static async deleteReport(req, res) {
-    const reporter = req.userData.id;
+    const Id = req.userData.id;
     const { articleSlug } = req.params;
     const { reportId } = req.params;
 
-    const findArticle = await Article.findOne({ where: { slug: articleSlug } });
+    const article = await Article.findOne({ where: { slug: articleSlug } });
 
-    if (!findArticle) {
+    if (!article) {
       return res.status(404).json({
         message: 'Article not found'
       });
@@ -148,7 +179,7 @@ class reportArticleController {
 
     const removeReport = await Report.destroy({
       where: {
-        slug: articleSlug, reporterId: reporter, id: reportId
+        slug: articleSlug, reporterId: Id, id: reportId
       }
     });
 

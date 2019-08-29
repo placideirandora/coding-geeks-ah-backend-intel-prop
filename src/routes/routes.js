@@ -75,8 +75,9 @@ router.get('/api/v1/bookmarks', [verifyToken, findUser], Bookmark.getBookmarks);
 router.delete('/api/v1/bookmarks/:slug', [verifyToken, findUser], Bookmark.deleteBookmark);
 
 router.post('/api/v1/articles/:articleSlug/reports', [verifyToken, Validation.reportValidation], Report.createReport);
-router.get('/api/v1/articles/reports/all', [verifyToken, admin], Report.getAllReport);
-router.get('/api/v1/articles/:articleSlug/reports', [verifyToken, admin], Report.getSingleReport);
+router.get('/api/v1/articles/reports/all', [verifyToken, admin], Report.getAllReports);
+router.get('/api/v1/articles/:articleSlug/reports', [verifyToken, admin], Report.getArticleReports);
 router.delete('/api/v1/articles/:articleSlug/reports/:reportId', verifyToken, Validation.reportParamsValidation, Report.deleteReport);
+router.get('/api/v1/articles/:articleSlug/reports/:reportId', [verifyToken, admin, Validation.reportParamsValidation], Report.getSingleReport);
 
 export default router;

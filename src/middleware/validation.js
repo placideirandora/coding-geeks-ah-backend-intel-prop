@@ -175,7 +175,7 @@ export default {
     const { error } = Joi.validate(req.body, reportSchema, options);
     if (error) {
       return res.status(400).json({
-        error: error.details[0].message
+        error: error.details[0].message.replace(/\\|(")/g, '')
       });
     }
     next();

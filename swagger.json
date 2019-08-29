@@ -1778,6 +1778,52 @@
             }
         },
         "/api/v1/articles/{articleSlug}/reports/{reportId}": {
+            "get": {
+                "tags": [
+                    "Articles"
+                ],
+                "description": "User should be able to retreive the reports of a specific article",
+                "parameters": [
+                    {
+                        "name": "Authorization",
+                        "in": "header",
+                        "description": "The user token"
+                    },
+                    {
+                        "name": "articleSlug",
+                        "in": "path",
+                        "description": "Slug of an article to report",
+                        "type": "string"
+                    },
+                    {
+                        "name": "reportId",
+                        "in": "path",
+                        "description": "id of a specific report",
+                        "type": "integer"
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Report retreived successfully",
+                        "schema": {
+                            "properties": {
+                                "data": {
+                                    "$ref": "#/definitions/Report"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Unauthorized access",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                }
+            },
             "delete": {
                 "tags": [
                     "Articles"

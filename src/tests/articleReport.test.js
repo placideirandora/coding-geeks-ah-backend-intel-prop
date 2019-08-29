@@ -262,6 +262,19 @@ describe('POST /api/v1/articles/:articleSlug/reports', () => {
         done();
       });
   });
+  it('Should be able to retreive a specific report', (done) => {
+    chai.request(app)
+      .get(`/api/v1/articles/${articleSlug}/reports/1`)
+      .set('Authorization', userToken4)
+      .end((err, res) => {
+        if (err) done(err);
+        expect(res).to.have.status(200);
+        expect(res.body).to.be.an('object');
+        expect(res.body).to.have.keys('report');
+        expect(res.body.report).to.have.keys('id', 'slug', 'reason', 'description', 'updatedAt', 'createdAt', 'reporter', 'reporterId', 'articleId');
+        done();
+      });
+  });
   it('Should be able to delete report of a specific article', (done) => {
     chai.request(app)
       .delete(`/api/v1/articles/${articleSlug}/reports/1`)

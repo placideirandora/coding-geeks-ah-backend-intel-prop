@@ -1,12 +1,10 @@
 const checkAdmin = (req, res, next) => {
   const userRole = req.userData.role;
 
-  if (userRole !== 'super-admin') {
-    if (userRole !== 'admin') {
-      return res.status(403).json({
-        error: 'Unathorized access'
-      });
-    }
+  if (userRole !== 'admin' && userRole !== 'super-admin') {
+    return res.status(403).json({
+      error: 'Unathorized access'
+    });
   }
   next();
 };
