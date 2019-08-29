@@ -71,5 +71,6 @@ router.patch('/api/v1/profiles/notifications/read/all', verifyToken, Notificatio
 router.post('/api/v1/bookmarks/:slug', [verifyToken, findUser], Bookmark.createBookmark);
 router.get('/api/v1/bookmarks', [verifyToken, findUser], Bookmark.getBookmarks);
 router.delete('/api/v1/bookmarks/:slug', [verifyToken, findUser], Bookmark.deleteBookmark);
+router.get('/api/v1/statistics/:author', verifyToken, Article.readingStats);
 
 export default router;

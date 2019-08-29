@@ -2,10 +2,11 @@
 /* eslint-disable max-len */
 import { config } from 'dotenv';
 import {
-  User, Article, Reaction, Comment
+  User, Article, Reaction, Comment, Statistic
 } from '../sequelize/models';
 import { slugGen, uploadImage } from '../helpers/articles/articleHelper';
 import readTime from '../helpers/articles/readTimeForArticle';
+import recordStats from '../helpers/articles/recordStats';
 
 config();
 /**
@@ -520,6 +521,7 @@ class ArticleController {
       }
       const readTimeOfArticle = readTime(article.body);
       article.get().readTime = readTimeOfArticle;
+      recordStats(article);
       return res.status(200).json({
         article
       });
@@ -676,6 +678,44 @@ class ArticleController {
 
     return res.status(200).json({
       message: 'Comment deleted'
+    });
+  }
+
+  /**
+   * @param {object} req
+   * @param {object} res
+   * @returns {object} returns an object containing an article's statistics
+   */
+  static async readingStats(req, res) {
+    const authorIdentifier = req.userData.id;
+    const realAuthor = req.userData.username;
+    const proposedAuthor = req.params.author;
+
+    if (realAuthor !== proposedAuthor) {
+      return res.status(400).json({
+        message: 'Invalid username',
+      });
+    }
+
+    const findArticles = await Article.findAll({ where: { authorId: authorIdentifier } });
+
+    if (!findArticles.length) {
+      return res.status(404).json({
+        message: 'No reading statistics because you do not have any articles',
+      });
+    }
+
+    const statistics = await Statistic.findAll({ where: { authorId: authorIdentifier } });
+
+    if (!statistics.length) {
+      return res.status(404).json({
+        message: 'None of your articles has been read so far. Statistics not found'
+      });
+    }
+
+    return res.status(200).json({
+      message: 'Reading statistics retrieved',
+      statistics
     });
   }
 }
