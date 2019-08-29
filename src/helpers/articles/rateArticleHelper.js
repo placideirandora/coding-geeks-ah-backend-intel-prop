@@ -1,6 +1,6 @@
 import db from '../../sequelize/models';
 
-const { Article } = db;
+const { Article, Rating } = db;
 
 /**
  * @exports ArticRatelehelper
@@ -43,6 +43,24 @@ class ArticleRatelehelper {
       return 'Rate must be between 1 and 5';
     }
     return true;
+  }
+
+  /**
+     * Check the environment
+     * @function getRatings
+     * @param  {integer} article - Check the articleId
+     * @return {string} Validate the rate
+     */
+  static async getRatings(article) {
+    const ratings = await Rating.findAll({ where: { articleId: article } });
+
+    let sum = 0;
+    ratings.map((rate) => {
+      sum += rate.get().rate;
+      return sum;
+    });
+    const average = sum / (ratings.length * 5);
+    return average;
   }
 }
 

@@ -539,6 +539,7 @@ describe('POST AND GET /api/v1/articles', () => {
           'createdAt',
           'updatedAt',
           'author',
+          'averageRatings',
           'readTime'
         );
         done();
@@ -834,7 +835,7 @@ describe('GET /api/v1/articles/{articleId}/rate', () => {
         done();
       });
   });
-  it('Should not be be able to get ratings', (done) => {
+  it('Should not be be able to get ratings when the article id is not a number', (done) => {
     chai
       .request(app)
       .get('/api/v1/articles/m/rate')

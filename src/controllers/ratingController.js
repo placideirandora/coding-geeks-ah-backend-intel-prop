@@ -42,12 +42,10 @@ class ArticleRate {
   }
 
   /**
-     * Check the environment
-     * @function getArticleRating
+     * @description get article rating
      * @param  {object} req - accept object with user info
      * @param  {object} res - accept object with user info
      * @return {json} Returns json object
-     * @static
      */
   static async getArticleRating(req, res) {
     const { articleId } = req.params;
@@ -61,9 +59,9 @@ class ArticleRate {
       where: { articleId },
     });
     if (!getRate.length) {
-      return res.status(200).json({ message: 'This article has no rates so far' });
+      return res.status(200).json({ message: 'This article has no ratings so far' });
     }
-    return res.status(200).json({ message: 'Successfully rates retrieved', rates: getRate });
+    return res.status(200).json({ message: 'Successfully ratings retrieved', ratings: getRate });
   }
 }
 
