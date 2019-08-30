@@ -235,11 +235,16 @@ export default {
     }),
   updateTitle: Joi.string().trim()
     .min(10),
+
   updateBody: Joi.string().trim(),
+
   updateDescription: Joi.string().trim()
     .min(10),
+
   category: Joi.string(),
+
   tags: Joi.string(),
+
   roles: Joi.string()
     .required()
     .valid('user', 'admin')
@@ -256,9 +261,54 @@ export default {
       });
       return errors;
     }),
+
   id: Joi.number(),
+
   commentId: Joi.number().integer()
     .required(),
+
   articleSlug: Joi.string()
     .required(),
+
+  comments: Joi.string().strict().trim()
+    .error((errors) => {
+      errors.forEach((err) => {
+        switch (err.type) {
+          case 'string.base':
+            err.message = 'Comment must be a string';
+            break;
+        }
+      });
+      return errors;
+    }),
+
+  start: Joi.number().integer()
+    .required()
+    .error((errors) => {
+      errors.forEach((err) => {
+        switch (err.type) {
+          case 'any.required':
+            err.message = 'Start Index is required';
+            break;
+        }
+      });
+      return errors;
+    }),
+
+  text: Joi.string().trim()
+    .required()
+    .error((errors) => {
+      errors.forEach((err) => {
+        switch (err.type) {
+          case 'any.required':
+            err.message = 'Text to highlight is required';
+            break;
+          case 'string.base':
+            err.message = 'Text must be a string';
+            break;
+        }
+      });
+      return errors;
+    })
+
 };

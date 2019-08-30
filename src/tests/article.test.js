@@ -54,7 +54,7 @@ before((done) => {
       done();
     });
 });
-describe('POST AND GET /api/v1/articles', () => {
+describe('GET /api/v1/articles', () => {
   it('Should receive a message if no articles found', (done) => {
     chai
       .request(app)
@@ -71,6 +71,8 @@ describe('POST AND GET /api/v1/articles', () => {
         done();
       });
   });
+});
+describe('POST AND GET /api/v1/articles', () => {
   it('Should return error if wrong content-type is used', (done) => {
     chai
       .request(app)
@@ -793,7 +795,7 @@ describe('POST /api/v1/articles/{id}/rate', () => {
   it('Should not be able to rate the article which does not exist', (done) => {
     chai
       .request(app)
-      .post('/api/v1/articles/5/rate')
+      .post('/api/v1/articles/5098/rate')
       .set('Authorization', userToken2)
       .send({ rate: 3 })
       .end((err, res) => {

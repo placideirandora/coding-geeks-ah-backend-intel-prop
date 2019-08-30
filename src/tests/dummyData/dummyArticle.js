@@ -6,6 +6,13 @@ export default {
     body:
       'is simply dummy text of the printing and typesetting industry Lorem Ipsum has'
   },
+  anotherArticle: {
+    title: 'Growth mindset other',
+    description: 'How to demonstrate growth mindsewt other',
+    category: 'Eductaion',
+    body:
+      'is simply dummy text of the printing and typesetting industry Lorem Ipsum has. Other'
+  },
   lessCategory: {
     title: 'Growth mindset',
     description: 'How to demonstrate growth mindsewt',
