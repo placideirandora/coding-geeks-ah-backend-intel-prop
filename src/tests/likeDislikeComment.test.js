@@ -56,7 +56,7 @@ describe('POST LIKES OR DISLIKES /api/v1/comments/id/{like/dislike}', () => {
   it('Should return a message of failure when a user likes unavailable comment', (done) => {
     chai
       .request(app)
-      .post('/api/v1/comments/10/like')
+      .put('/api/v1/comments/10/like')
       .set('Authorization', userToken1)
       .end((err, res) => {
         if (err) done(err);
@@ -72,7 +72,7 @@ describe('POST LIKES OR DISLIKES /api/v1/comments/id/{like/dislike}', () => {
   it('Should return a message of failure when a user dislikes unavailable comment', (done) => {
     chai
       .request(app)
-      .post('/api/v1/comments/10/dislike')
+      .put('/api/v1/comments/10/dislike')
       .set('Authorization', userToken1)
       .end((err, res) => {
         if (err) done(err);
@@ -88,7 +88,7 @@ describe('POST LIKES OR DISLIKES /api/v1/comments/id/{like/dislike}', () => {
   it('Should return a message of success when a like is registered', (done) => {
     chai
       .request(app)
-      .post(`/api/v1/comments/${commentId}/like`)
+      .put(`/api/v1/comments/${commentId}/like`)
       .set('Authorization', userToken1)
       .end((err, res) => {
         if (err) done(err);
@@ -117,7 +117,7 @@ describe('POST LIKES OR DISLIKES /api/v1/comments/id/{like/dislike}', () => {
   it('Should return a message of success if a like is removed', (done) => {
     chai
       .request(app)
-      .post(`/api/v1/comments/${commentId}/like`)
+      .put(`/api/v1/comments/${commentId}/like`)
       .set('Authorization', userToken1)
       .end((err, res) => {
         if (err) done(err);
@@ -133,7 +133,7 @@ describe('POST LIKES OR DISLIKES /api/v1/comments/id/{like/dislike}', () => {
   it('Should return a message of success when a comment is liked for a third time', (done) => {
     chai
       .request(app)
-      .post(`/api/v1/comments/${commentId}/like`)
+      .put(`/api/v1/comments/${commentId}/like`)
       .set('Authorization', userToken1)
       .end((err, res) => {
         if (err) done(err);
@@ -149,7 +149,7 @@ describe('POST LIKES OR DISLIKES /api/v1/comments/id/{like/dislike}', () => {
   it('Should return a message of sucess if a dislike is registered', (done) => {
     chai
       .request(app)
-      .post(`/api/v1/comments/${commentId}/dislike`)
+      .put(`/api/v1/comments/${commentId}/dislike`)
       .set('Authorization', userToken1)
       .end((err, res) => {
         if (err) done(err);
@@ -165,7 +165,7 @@ describe('POST LIKES OR DISLIKES /api/v1/comments/id/{like/dislike}', () => {
   it('Should return a message of success when a comment is liked after the user disliked it', (done) => {
     chai
       .request(app)
-      .post(`/api/v1/comments/${commentId}/like`)
+      .put(`/api/v1/comments/${commentId}/like`)
       .set('Authorization', userToken1)
       .end((err, res) => {
         if (err) done(err);
@@ -194,7 +194,7 @@ describe('POST LIKES OR DISLIKES /api/v1/comments/id/{like/dislike}', () => {
   it('Should return  a message sucess if a dislike is registered again', (done) => {
     chai
       .request(app)
-      .post(`/api/v1/comments/${commentId}/dislike`)
+      .put(`/api/v1/comments/${commentId}/dislike`)
       .set('Authorization', userToken1)
       .end((err, res) => {
         if (err) done(err);
@@ -210,7 +210,7 @@ describe('POST LIKES OR DISLIKES /api/v1/comments/id/{like/dislike}', () => {
   it('Should return a message sucess if a dislike again ', (done) => {
     chai
       .request(app)
-      .post(`/api/v1/comments/${commentId}/dislike`)
+      .put(`/api/v1/comments/${commentId}/dislike`)
       .set('Authorization', userToken1)
       .end((err, res) => {
         if (err) done(err);
@@ -223,7 +223,7 @@ describe('POST LIKES OR DISLIKES /api/v1/comments/id/{like/dislike}', () => {
         done();
       });
   });
-  it('Should retrieve comments of the article with correct number of dislikes', (done) => {
+  it('Should retrieve comments of the article with correct number of likes and dislikes', (done) => {
     chai
       .request(app)
       .get(`/api/v1/articles/${articleSlug}/comments`)
@@ -239,7 +239,7 @@ describe('POST LIKES OR DISLIKES /api/v1/comments/id/{like/dislike}', () => {
   it('Should return a message sucess if a dislike is registered again', (done) => {
     chai
       .request(app)
-      .post(`/api/v1/comments/${commentId}/dislike`)
+      .put(`/api/v1/comments/${commentId}/dislike`)
       .set('Authorization', userToken1)
       .end((err, res) => {
         if (err) done(err);
