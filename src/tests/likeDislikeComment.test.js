@@ -53,7 +53,7 @@ describe('POST LIKES OR DISLIKES /api/v1/comments/id/{like/dislike}', () => {
       });
   });
 
-  it('Should a message of failure when a user likes unavailable comment', (done) => {
+  it('Should return a message of failure when a user likes unavailable comment', (done) => {
     chai
       .request(app)
       .post('/api/v1/comments/10/like')
@@ -69,7 +69,7 @@ describe('POST LIKES OR DISLIKES /api/v1/comments/id/{like/dislike}', () => {
         done();
       });
   });
-  it('Should a message of failure when a user dislikes unavailable comment', (done) => {
+  it('Should return a message of failure when a user dislikes unavailable comment', (done) => {
     chai
       .request(app)
       .post('/api/v1/comments/10/dislike')
@@ -85,7 +85,7 @@ describe('POST LIKES OR DISLIKES /api/v1/comments/id/{like/dislike}', () => {
         done();
       });
   });
-  it('Should a message of success when a like is registered', (done) => {
+  it('Should return a message of success when a like is registered', (done) => {
     chai
       .request(app)
       .post(`/api/v1/comments/${commentId}/like`)
@@ -232,11 +232,11 @@ describe('POST LIKES OR DISLIKES /api/v1/comments/id/{like/dislike}', () => {
         if (err) done(err);
         expect(res).have.status(200);
         expect(res.body.comments[0].likes).to.equal(0);
-        expect(res.body.comments[0].likes).to.equal(0);
+        expect(res.body.comments[0].dislikes).to.equal(0);
         done();
       });
   });
-  it('Should a message sucess if a dislike is registered again', (done) => {
+  it('Should return a message sucess if a dislike is registered again', (done) => {
     chai
       .request(app)
       .post(`/api/v1/comments/${commentId}/dislike`)
