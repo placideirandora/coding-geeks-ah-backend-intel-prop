@@ -8,11 +8,13 @@
     "coverage": "nyc npm test && nyc report --reporter=text-lcov | coveralls",
     "build": "rm -rf build && babel -d ./build ./src -s",
     "start": "npm run build && npm run seed && node ./build/index.js",
-    "pretest": "cross-env NODE_ENV=test npm run down && NODE_ENV=test npm run migrate  && NODE_ENV=test npm run seed",
+    "pretest": "cross-env NODE_ENV=test npm run down && cross-env NODE_ENV=test npm run migrate  && cross-env NODE_ENV=test npm run seed",
     "test": "cross-env NODE_ENV=test nyc --reporter=text mocha  --require @babel/register --require @babel/polyfill  ./src/tests/*.js --timeout 50000 --exit",
-    "down": "cross-env NODE_ENV=test node_modules/.bin/sequelize db:migrate:undo",
-    "migrate": "cross-env NODE_ENV=test node_modules/.bin/sequelize db:migrate",
-    "seed": "node_modules/.bin/sequelize db:seed:all"
+    "down": "node_modules/.bin/sequelize db:migrate:undo:all",
+    "migrate": "node_modules/.bin/sequelize db:migrate",
+    "seed": "node_modules/.bin/sequelize db:seed:all",
+    "drop:db": "cross-env NODE_ENV=test node_modules/.bin/sequelize db:drop authors_haven_test",
+    "create:db": "cross-env NODE_ENV=test node_modules/.bin/sequelize db:create authors_haven_test"
   },
   "engines": {
     "node": "10.16.0"

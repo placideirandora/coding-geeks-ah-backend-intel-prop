@@ -19,6 +19,7 @@ import Notification from '../controllers/notificationController';
 import findOwner from '../middleware/findOwner';
 import Bookmark from '../controllers/bookmarkController';
 import findUser from '../middleware/findUser';
+import Highlights from '../controllers/higlightController';
 
 const router = express.Router();
 
@@ -71,5 +72,6 @@ router.patch('/api/v1/profiles/notifications/read/all', verifyToken, Notificatio
 router.post('/api/v1/bookmarks/:slug', [verifyToken, findUser], Bookmark.createBookmark);
 router.get('/api/v1/bookmarks', [verifyToken, findUser], Bookmark.getBookmarks);
 router.delete('/api/v1/bookmarks/:slug', [verifyToken, findUser], Bookmark.deleteBookmark);
+router.post('/api/v1/articles/:slug/highlights', verifyToken, Validation.highlightValidation, Highlights.highlightText);
 
 export default router;
