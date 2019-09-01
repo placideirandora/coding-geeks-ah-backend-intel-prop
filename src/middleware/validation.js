@@ -167,12 +167,38 @@ export default {
     }
     next();
   },
+  reportValidation(req, res, next) {
+    const reportSchema = Joi.object().keys({
+      reason: validationRules.reason,
+      description: validationRules.description
+    });
+    const { error } = Joi.validate(req.body, reportSchema, options);
+    if (error) {
+      return res.status(400).json({
+        error: error.details[0].message.replace(/\\|(")/g, '')
+      });
+    }
+    next();
+  },
   commentParamsValidation(req, res, next) {
     const commentParamsSchema = Joi.object().keys({
       commentId: validationRules.commentId,
       articleSlug: validationRules.articleSlug,
     });
     const { error } = Joi.validate(req.params, commentParamsSchema, options);
+    if (error) {
+      return res.status(400).json({
+        error: error.details[0].message.replace(/\\|(")/g, '')
+      });
+    }
+    next();
+  },
+  reportParamsValidation(req, res, next) {
+    const reportParamsSchema = Joi.object().keys({
+      reportId: validationRules.reportId,
+      articleSlug: validationRules.articleSlug
+    });
+    const { error } = Joi.validate(req.params, reportParamsSchema, options);
     if (error) {
       return res.status(400).json({
         error: error.details[0].message.replace(/\\|(")/g, '')

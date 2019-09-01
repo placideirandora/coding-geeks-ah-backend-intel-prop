@@ -46,41 +46,43 @@
                     "Users"
                 ],
                 "description": "Create new user in system",
-                "parameters": [{
-                    "name": "user",
-                    "in": "body",
-                    "description": "User that we want to create",
-                    "schema": {
-                        "required": [
-                            "firstName",
-                            "lastName",
-                            "userName",
-                            "email",
-                            "password",
-                            "confirmPassword"
-                        ],
-                        "properties": {
-                            "firstName": {
-                                "type": "string"
-                            },
-                            "lastName": {
-                                "type": "string"
-                            },
-                            "userName": {
-                                "type": "string"
-                            },
-                            "email": {
-                                "type": "string"
-                            },
-                            "password": {
-                                "type": "string"
-                            },
-                            "confirmPassword": {
-                                "type": "string"
+                "parameters": [
+                    {
+                        "name": "user",
+                        "in": "body",
+                        "description": "User that we want to create",
+                        "schema": {
+                            "required": [
+                                "firstName",
+                                "lastName",
+                                "userName",
+                                "email",
+                                "password",
+                                "confirmPassword"
+                            ],
+                            "properties": {
+                                "firstName": {
+                                    "type": "string"
+                                },
+                                "lastName": {
+                                    "type": "string"
+                                },
+                                "userName": {
+                                    "type": "string"
+                                },
+                                "email": {
+                                    "type": "string"
+                                },
+                                "password": {
+                                    "type": "string"
+                                },
+                                "confirmPassword": {
+                                    "type": "string"
+                                }
                             }
                         }
                     }
-                }],
+                ],
                 "produces": [
                     "application/json"
                 ],
@@ -107,7 +109,6 @@
                             "$ref": "#/definitions/Error"
                         }
                     },
-
                     "409": {
                         "description": "User already exist",
                         "schema": {
@@ -128,55 +129,56 @@
                         "name": "Authorization",
                         "in": "header",
                         "description": "User token",
-                        "required":false,
-                        "type":"string"
-                      },
+                        "required": false,
+                        "type": "string"
+                    },
                     {
-                    "name": "user",
-                    "in": "body",
-                    "description": "The User we want to create",
-                    "schema": {
-                        "required": [
-                            "firstName",
-                            "lastName",
-                            "userName",
-                            "email",
-                            "password",
-                            "confirmPassword",
-                            "role"
-                        ],
-                        "properties": {
-                            "firstName": {
-                                "type": "string",
-                                "required": true
-                            },
-                            "lastName": {
-                                "type": "string",
-                                "required": true
-                            },
-                            "userName": {
-                                "type": "string",
-                                "required": true
-                            },
-                            "email": {
-                                "type": "string",
-                                "required": true
-                            },
-                            "password": {
-                                "type": "string",
-                                "required": true
-                            },
-                            "confirmPassword": {
-                                "type": "string",
-                                "required": true
-                            },
-                            "role": {
-                                "type": "string",
-                                "required": false
+                        "name": "user",
+                        "in": "body",
+                        "description": "The User we want to create",
+                        "schema": {
+                            "required": [
+                                "firstName",
+                                "lastName",
+                                "userName",
+                                "email",
+                                "password",
+                                "confirmPassword",
+                                "role"
+                            ],
+                            "properties": {
+                                "firstName": {
+                                    "type": "string",
+                                    "required": true
+                                },
+                                "lastName": {
+                                    "type": "string",
+                                    "required": true
+                                },
+                                "userName": {
+                                    "type": "string",
+                                    "required": true
+                                },
+                                "email": {
+                                    "type": "string",
+                                    "required": true
+                                },
+                                "password": {
+                                    "type": "string",
+                                    "required": true
+                                },
+                                "confirmPassword": {
+                                    "type": "string",
+                                    "required": true
+                                },
+                                "role": {
+                                    "type": "string",
+                                    "required": false
+                                }
                             }
                         }
                     }
-                }],
+                ],
                 "produces": [
                     "application/json"
                 ],
@@ -203,7 +205,6 @@
                             "$ref": "#/definitions/Error"
                         }
                     },
-
                     "409": {
                         "description": "User already exist",
                         "schema": {
@@ -243,24 +244,25 @@
                         "name": "Authorization",
                         "in": "header",
                         "description": "User token",
-                        "required":false,
-                        "type":"string"
-                      },
+                        "required": false,
+                        "type": "string"
+                    },
                     {
-                    "name": "user",
-                    "in": "body",
-                    "description": "The User we want to create",
-                    "schema": {
-                        "required": [
-                            "role"
-                        ],
-                        "properties": {
-                            "role": {
-                                "type": "string"
+                        "name": "user",
+                        "in": "body",
+                        "description": "The User we want to create",
+                        "schema": {
+                            "required": [
+                                "role"
+                            ],
+                            "properties": {
+                                "role": {
+                                    "type": "string"
+                                }
                             }
                         }
                     }
-                }],
+                ],
                 "produces": [
                     "application/json"
                 ],
@@ -315,9 +317,10 @@
                         "name": "Authorization",
                         "in": "header",
                         "description": "User token",
-                        "required":false,
-                        "type":"string"
-                      }],
+                        "required": false,
+                        "type": "string"
+                    }
+                ],
                 "produces": [
                     "application/json"
                 ],
@@ -356,25 +359,27 @@
                     "Users"
                 ],
                 "description": "Login user in system",
-                "parameters": [{
-                    "name": "user",
-                    "in": "body",
-                    "description": "User that we want to login",
-                    "schema": {
-                        "required": [
-                            "email",
-                            "password"
-                        ],
-                        "properties": {
-                            "email": {
-                                "type": "string"
-                            },
-                            "password": {
-                                "type": "string"
+                "parameters": [
+                    {
+                        "name": "user",
+                        "in": "body",
+                        "description": "User that we want to login",
+                        "schema": {
+                            "required": [
+                                "email",
+                                "password"
+                            ],
+                            "properties": {
+                                "email": {
+                                    "type": "string"
+                                },
+                                "password": {
+                                    "type": "string"
+                                }
                             }
                         }
                     }
-                }],
+                ],
                 "produces": [
                     "application/json"
                 ],
@@ -398,7 +403,6 @@
                             "$ref": "#/definitions/Error"
                         }
                     },
-
                     "401": {
                         "description": "Wrong login credentials",
                         "schema": {
@@ -414,11 +418,13 @@
                     "Users"
                 ],
                 "description": "Logout a user in system",
-                "parameters": [{
-                    "name": "Authorization",
-                    "in": "header",
-                    "description": "Token of the user wants to logout"
-                }],
+                "parameters": [
+                    {
+                        "name": "Authorization",
+                        "in": "header",
+                        "description": "Token of the user wants to logout"
+                    }
+                ],
                 "produces": [
                     "application/json"
                 ],
@@ -436,7 +442,6 @@
                             }
                         }
                     },
-
                     "401": {
                         "description": "You are already logged out",
                         "schema": {
@@ -459,21 +464,23 @@
                     "Users"
                 ],
                 "description": "Send email to the user",
-                "parameters": [{
-                    "name": "user",
-                    "in": "body",
-                    "description": "User that want to reset password",
-                    "schema": {
-                        "required": [
-                            "email"
-                        ],
-                        "properties": {
-                            "email": {
-                                "type": "string"
+                "parameters": [
+                    {
+                        "name": "user",
+                        "in": "body",
+                        "description": "User that want to reset password",
+                        "schema": {
+                            "required": [
+                                "email"
+                            ],
+                            "properties": {
+                                "email": {
+                                    "type": "string"
+                                }
                             }
                         }
                     }
-                }],
+                ],
                 "produces": [
                     "application/json"
                 ],
@@ -494,13 +501,12 @@
                             "$ref": "#/definitions/Error"
                         }
                     },
-
                     "404": {
                         "description": "User not found",
                         "schema": {
-                            "properties":{
-                                "errors":{
-                                    "type":"string"
+                            "properties": {
+                                "errors": {
+                                    "type": "string"
                                 }
                             }
                         }
@@ -508,7 +514,6 @@
                 }
             }
         },
-
         "/api/v1/reset-password/{token}": {
             "post": {
                 "tags": [
@@ -520,28 +525,29 @@
                         "name": "token",
                         "in": "path",
                         "description": "token",
-                        "required":true,
-                        "type":"string"
+                        "required": true,
+                        "type": "string"
                     },
                     {
-                    "name": "user",
-                    "in": "body",
-                    "description": "User that want to reset password",
-                    "schema": {
-                        "required": [
-                            "password",
-                            "confirmPassword"
-                        ],
-                        "properties": {
-                            "password": {
-                                "type": "string"
-                            },
-                            "confirmPassword": {
-                                "type": "string"
+                        "name": "user",
+                        "in": "body",
+                        "description": "User that want to reset password",
+                        "schema": {
+                            "required": [
+                                "password",
+                                "confirmPassword"
+                            ],
+                            "properties": {
+                                "password": {
+                                    "type": "string"
+                                },
+                                "confirmPassword": {
+                                    "type": "string"
+                                }
                             }
                         }
                     }
-                }],
+                ],
                 "produces": [
                     "application/json"
                 ],
@@ -562,7 +568,6 @@
                             "$ref": "#/definitions/Error"
                         }
                     },
-
                     "404": {
                         "description": "User not found",
                         "schema": {
@@ -583,16 +588,17 @@
                         "name": "username",
                         "in": "path",
                         "description": "username",
-                        "required":true,
-                        "type":"string"
+                        "required": true,
+                        "type": "string"
                     },
                     {
                         "name": "Authorization",
                         "in": "header",
                         "description": "The user token",
-                        "required":true,
-                        "type":"string"
-                    }],
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
                 "produces": [
                     "application/json"
                 ],
@@ -613,7 +619,6 @@
                             "$ref": "#/definitions/Error"
                         }
                     },
-
                     "404": {
                         "description": "User not found",
                         "schema": {
@@ -634,16 +639,17 @@
                         "name": "username",
                         "in": "path",
                         "description": "username",
-                        "required":true,
-                        "type":"string"
+                        "required": true,
+                        "type": "string"
                     },
                     {
                         "name": "Authorization",
                         "in": "header",
                         "description": "The user token",
-                        "required":true,
-                        "type":"string"
-                    }],
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
                 "produces": [
                     "application/json"
                 ],
@@ -664,7 +670,6 @@
                             "$ref": "#/definitions/Error"
                         }
                     },
-
                     "404": {
                         "description": "User not found",
                         "schema": {
@@ -685,16 +690,17 @@
                         "name": "username",
                         "in": "path",
                         "description": "username",
-                        "required":true,
-                        "type":"string"
+                        "required": true,
+                        "type": "string"
                     },
                     {
                         "name": "Authorization",
                         "in": "header",
                         "description": "The user token",
-                        "required":true,
-                        "type":"string"
-                    }],
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
                 "produces": [
                     "application/json"
                 ],
@@ -715,7 +721,6 @@
                             "$ref": "#/definitions/Error"
                         }
                     },
-
                     "404": {
                         "description": "User not found",
                         "schema": {
@@ -736,16 +741,17 @@
                         "name": "username",
                         "in": "path",
                         "description": "username",
-                        "required":true,
-                        "type":"string"
+                        "required": true,
+                        "type": "string"
                     },
                     {
                         "name": "Authorization",
                         "in": "header",
                         "description": "The user token",
-                        "required":true,
-                        "type":"string"
-                    }],
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
                 "produces": [
                     "application/json"
                 ],
@@ -766,7 +772,6 @@
                             "$ref": "#/definitions/Error"
                         }
                     },
-
                     "404": {
                         "description": "User not found",
                         "schema": {
@@ -787,8 +792,8 @@
                         "name": "token",
                         "in": "path",
                         "description": "token",
-                        "required":true,
-                        "type":"string"
+                        "required": true,
+                        "type": "string"
                     }
                 ],
                 "produces": [
@@ -796,113 +801,111 @@
                 ],
                 "responses": {
                     "200": {
-                      "description": "Email verified successfully"
+                        "description": "Email verified successfully"
                     },
                     "403": {
-                      "description": "Invalid token or signature"
+                        "description": "Invalid token or signature"
                     }
-                  }
                 }
-            },
-      "/api/v1/profiles/{username}": {
-        "put": {
-          "tags": [
-            "Profile"
-          ],
-          "summary": "update the user profile",
-          "description": "update the user profile",
-          "parameters": [
-            {
-                "name":"Authorization",
-                "in": "header",
-                "description" :"The user token",
-                "required":true
-              
-              },
-            {
-              "name": "username",
-              "in": "path",
-              "description": "your current username",
-              "required":true,
-              "type":"string"
-            },
-            {
-                "name": "username",
-                "description": "username you want to change to",
-                "in": "forrmData",
-                "paramType": "body",
-                "type": "string"
-            },
-            {
-                "name": "bio",
-                "description": "biograpaphy",
-                "in": "forrmData",
-                "paramType": "body",
-                "type": "string"
-            },
-            {
-                "name": "image",
-                "in": "forrmData",
-                "type": "file"
             }
-          ],
-          "produces": [
-            "application/json"
-          ],
-          "responses": {
-            "200": {
-                "description": "success: when a profile is sucessfully updated"
-              },
-              "404": {
-                "description": "Error: user profile not found"
-              },
-              "403": {
-                "description": "Error: forbiden"
-              },
-              "401": {
-                "description": " Error: unauthorized"
-              },
-              "500": {
-                "description": "Error: Server Error"
-              }
-          }
         },
-        "get": {
-            "tags": [
-              "Profile"
-            ],
-            "summary": "get the user profile",
-            "description": "get the user profile",
-            "parameters": [
-              {
-                "name": "username",
-                "in": "path",
-                "description": "put your username here",
-                "required":true,
-                "type":"string"
-              }
-            ],
-            "produces": [
-              "application/json"
-            ],
-            "responses": {
-              "200": {
-                  "description": "success: when a profile is sucessfully retrieved"
-                },
-                "404": {
-                  "description": "Error: user profile not found"
-                },
-                "401": {
-                  "description": " unauthorized"
-                },
-                "500": {
-                  "description": "Server Error"
+        "/api/v1/profiles/{username}": {
+            "put": {
+                "tags": [
+                    "Profile"
+                ],
+                "summary": "update the user profile",
+                "description": "update the user profile",
+                "parameters": [
+                    {
+                        "name": "Authorization",
+                        "in": "header",
+                        "description": "The user token",
+                        "required": true
+                    },
+                    {
+                        "name": "username",
+                        "in": "path",
+                        "description": "your current username",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "username",
+                        "description": "username you want to change to",
+                        "in": "forrmData",
+                        "paramType": "body",
+                        "type": "string"
+                    },
+                    {
+                        "name": "bio",
+                        "description": "biograpaphy",
+                        "in": "forrmData",
+                        "paramType": "body",
+                        "type": "string"
+                    },
+                    {
+                        "name": "image",
+                        "in": "forrmData",
+                        "type": "file"
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "success: when a profile is sucessfully updated"
+                    },
+                    "404": {
+                        "description": "Error: user profile not found"
+                    },
+                    "403": {
+                        "description": "Error: forbiden"
+                    },
+                    "401": {
+                        "description": " Error: unauthorized"
+                    },
+                    "500": {
+                        "description": "Error: Server Error"
+                    }
+                }
+            },
+            "get": {
+                "tags": [
+                    "Profile"
+                ],
+                "summary": "get the user profile",
+                "description": "get the user profile",
+                "parameters": [
+                    {
+                        "name": "username",
+                        "in": "path",
+                        "description": "put your username here",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "success: when a profile is sucessfully retrieved"
+                    },
+                    "404": {
+                        "description": "Error: user profile not found"
+                    },
+                    "401": {
+                        "description": " unauthorized"
+                    },
+                    "500": {
+                        "description": "Server Error"
+                    }
                 }
             }
-          
-        }
-       },
-       "/api/v1/profiles/{username}/notifications/{subscribe}": {
+        },
+        "/api/v1/profiles/{username}/notifications/{subscribe}": {
             "patch": {
                 "tags": [
                     "Profile"
@@ -913,23 +916,24 @@
                         "name": "username",
                         "in": "path",
                         "description": "username",
-                        "required":true,
-                        "type":"string"
+                        "required": true,
+                        "type": "string"
                     },
                     {
                         "name": "subscribe",
                         "in": "path",
                         "description": "subscription",
-                        "required":true,
-                        "type":"string"
+                        "required": true,
+                        "type": "string"
                     },
                     {
                         "name": "Authorization",
                         "in": "header",
                         "description": "The user token",
-                        "required":true,
-                        "type":"string"
-                    }],
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
                 "produces": [
                     "application/json"
                 ],
@@ -950,7 +954,6 @@
                             "$ref": "#/definitions/Error"
                         }
                     },
-
                     "404": {
                         "description": "User not found",
                         "schema": {
@@ -971,16 +974,17 @@
                         "name": "id",
                         "in": "path",
                         "description": "Notification Id",
-                        "required":true,
-                        "type":"string"
+                        "required": true,
+                        "type": "string"
                     },
                     {
                         "name": "Authorization",
                         "in": "header",
                         "description": "The user token",
-                        "required":true,
-                        "type":"string"
-                    }],
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
                 "produces": [
                     "application/json"
                 ],
@@ -1001,7 +1005,6 @@
                             "$ref": "#/definitions/Error"
                         }
                     },
-
                     "404": {
                         "description": "User not found",
                         "schema": {
@@ -1010,7 +1013,7 @@
                     }
                 }
             }
-        }, 
+        },
         "/api/v1/profiles/notifications/read/all": {
             "patch": {
                 "tags": [
@@ -1022,9 +1025,10 @@
                         "name": "Authorization",
                         "in": "header",
                         "description": "The user token",
-                        "required":true,
-                        "type":"string"
-                    }],
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
                 "produces": [
                     "application/json"
                 ],
@@ -1045,7 +1049,6 @@
                             "$ref": "#/definitions/Error"
                         }
                     },
-
                     "404": {
                         "description": "User not found",
                         "schema": {
@@ -1066,9 +1069,10 @@
                         "name": "Authorization",
                         "in": "header",
                         "description": "The user token",
-                        "required":true,
-                        "type":"string"
-                    }],
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
                 "produces": [
                     "application/json"
                 ],
@@ -1089,7 +1093,6 @@
                             "$ref": "#/definitions/Error"
                         }
                     },
-
                     "404": {
                         "description": "User not found",
                         "schema": {
@@ -1099,752 +1102,1000 @@
                 }
             }
         },
-
-       "/api/v1/profiles": {
-        "get": {
-            "tags": [
-              "Profile"
-            ],
-            "summary": "All profiles",
-            "description": "Fetch all user profiles",
-            "parameters": [
-              {
-                "name": "Authorization",
-                "in": "header",
-                "description": "User token",
-                "required":false,
-                "type":"string"
-              }
-            ],
-            "produces": [
-              "application/json"
-            ],
-            "responses": {
-                "200": {
-                    "description": "Successfully retrieved all profiles",
-                    "schema": {
-                        "properties": {
-                            "status": {
-                                "type": "integer"
-                            },
-                            "data": {
-                                "type": "array",
-                                "$ref": "#/definitions/Profile"
-                            }
-                        }
-                    }
-                },
-                "401": {
-                    "description": "User is not authenticated",
-                    "schema": {
-                        "properties": {
-                            "error": {
-                                "type": "string"
-                            },
-                            "me": {
-                                "type": "string"
-                            }
-                        }
-                    }
-                }
-            }
-          }
-       },
-       "/api/v1/articles": {
-        "post": {
-            "tags": [
-                "Articles"
-            ],
-            "description": "Authenticated user can create articles",
-            "parameters": [
-                {
-                        "name":"Authorization",
+        "/api/v1/profiles": {
+            "get": {
+                "tags": [
+                    "Profile"
+                ],
+                "summary": "All profiles",
+                "description": "Fetch all user profiles",
+                "parameters": [
+                    {
+                        "name": "Authorization",
                         "in": "header",
-                        "description" :"The user token",
-                        "required":true
-                      
-                 },
-                {
-                "name": "title",
-                "in": "formData",
-                "description": "",
-                "type": "string",
-                "required": true
-                },
-                {
-                "name": "description",
-                "in": "formData",
-                "description": "",
-                "type": "string",
-                "required": true
-                    },
-                {
-                "name": "body",
-                "in": "formData",
-                "description": "",
-                "type": "string",
-                "required": true
-               },
-                {
-                "name": "tagList",
-                "in": "formData",
-                "description": "",
-                "type": "string",
-                "required": false
-                },
-                {
-                "name": "category",
-                "in": "formData",
-                "description": "",
-                "type": "string",
-                "required": false
-                    },
-                {
-                    "name": "image",
-                    "in": "formData",
-                    "description": "",
-                    "type": "file",
-                    "required": false
-                        }
-
-                        ],
-            "responses": {
-                "201": {
-                    "description": "Article created successfully",
-                    "schema": {
-                        "properties": {
-                            "message": {
-                                "type": "string"
-                            },
-                            "data": {
-                                "$ref": "#/definitions/Articles"
-                            }
-                        }
+                        "description": "User token",
+                        "required": false,
+                        "type": "string"
                     }
-                },
-                "400": {
-                    "description": "Missing fields or invalid value",
-                    "schema": {
-                        "$ref": "#/definitions/Error"
-                    }
-                },
-
-                "403": {
-                    "description": "Wrong token",
-                    "schema": {
-                        "$ref": "#/definitions/Error"
-                    }
-                }
-            }
-        },
-        "get": {
-            "tags": [
-              "Articles"
-            ],
-            "description": "Fetch all user articles",
-            "produces": [
-              "application/json"
-            ],
-            "responses": {
-                "200": {
-                    "description": "Successfully retrieved all articles",
-                    "schema": {
-                        "properties": {
-                            "status": {
-                                "type": "integer"
-                            },
-                            "data": {
-                                "type": "array",
-                                "$ref": "#/definitions/Articles"
-                            }
-                        }
-                    }
-                },
-                "401": {
-                    "description": "User is not authenticated",
-                    "schema": {
-                        "properties": {
-                            "error": {
-                                "type": "string"
-                            },
-                            "me": {
-                                "type": "string"
-                            }
-                        }
-                    }
-                },
-                "404": {
-                    "description": "Article not found",
-                    "schema": {
-                        "properties": {
-                            "error": {
-                                "type": "string"
-                            },
-                            "me": {
-                                "type": "string"
-                            }
-                        }
-                    }
-                }
-            }
-          }
-       },
-       "/api/v1/articles/{articleSlug}/comments": {
-        "post": {
-          "tags": [
-            "Articles"
-          ],
-          "summary": "Comment on an article",
-          "produces": [
-            "application/json"
-          ],
-          "parameters": [
-              {
-                "name": "Authorization",
-                "in": "header",
-                "description": "Token",
-                "required": true
-              },
-            {
-              "name": "articleSlug",
-              "in": "path",
-              "description": "A slug of an article",
-              "required": true,
-              "type": "string"
-            },
-            {
-                "in": "body",
-                "name": "body",
-                "required": true,
-                "schema": {
-                    "$ref": "#/definitions/Comment"
-                }
-              }
-          ],
-          "responses": {
-            "201": {
-              "description": "Commented on the article"
-            },
-            "400": {
-              "description": "Bad Request"
-            },
-            "404": {
-              "description": "Article Not Found"
-            },
-            "401": {
-              "description": "Unauthorized Access"
-            }
-          }
-        },
-        "get": {
-            "tags": [
-              "Articles"
-            ],
-            "summary": "Retrieve an article's comments",
-            "produces": [
-              "application/json"
-            ],
-            "parameters": [
-                {
-                  "name": "Authorization",
-                  "in": "header",
-                  "description": "Token",
-                  "required": true
-                },
-              {
-                "name": "articleSlug",
-                "in": "path",
-                "description": "A slug of an article",
-                "required": true,
-                "type": "string"
-              }
-            ],
-            "responses": {
-              "200": {
-                "description": "Comments retrieved"
-              },
-              "400": {
-                "description": "Bad Request"
-              },
-              "404": {
-                "description": "Comments not found"
-              },
-              "401": {
-                "description": "Unauthorized Access"
-              }
-            }
-          }
-      },
-      "/api/v1/articles/{articleSlug}/comments/{commentId}": {
-        "patch": {
-          "tags": [
-            "Articles"
-          ],
-          "summary": "Update a comment",
-          "produces": [
-            "application/json"
-          ],
-          "parameters": [
-              {
-                "name": "Authorization",
-                "in": "header",
-                "description": "Token",
-                "required": true
-              },
-            {
-              "name": "articleSlug",
-              "in": "path",
-              "description": "A slug of an article",
-              "required": true,
-              "type": "string"
-            },
-            {
-                "name": "commentId",
-                "in": "path",
-                "description": "An identifier of a comment",
-                "required": true,
-                "type": "integer"
-              },
-            {
-                "in": "body",
-                "name": "body",
-                "required": true,
-                "schema": {
-                    "$ref": "#/definitions/Comment"
-                }
-              }
-          ],
-          "responses": {
-            "200": {
-              "description": "Comment updated"
-            },
-            "400": {
-              "description": "Bad Request"
-            },
-            "404": {
-              "description": "Comment not found"
-            },
-            "401": {
-              "description": "Unauthorized Access"
-            }
-          }
-        },
-        "delete": {
-            "tags": [
-              "Articles"
-            ],
-            "summary": "Delete a comment",
-            "produces": [
-              "application/json"
-            ],
-            "parameters": [
-                {
-                  "name": "Authorization",
-                  "in": "header",
-                  "description": "Token",
-                  "required": true
-                },
-              {
-                "name": "articleSlug",
-                "in": "path",
-                "description": "A slug of an article",
-                "required": true,
-                "type": "string"
-              },
-              {
-                "name": "commentId",
-                "in": "path",
-                "description": "An identifier of a comment",
-                "required": true,
-                "type": "integer"
-              }
-            ],
-            "responses": {
-              "200": {
-                "description": "Comment deleted"
-              },
-              "400": {
-                "description": "Bad Request"
-              },
-              "404": {
-                "description": "Comment not found"
-              },
-              "401": {
-                "description": "Unauthorized Access"
-              }
-            }
-          }
-      },
-       "/api/v1/articles/{id}/rate": {
-        "post": {
-            "tags": [
-                "Articles"
-            ],
-            "description": "User should be able to rate an article",
-            "parameters": [
-                {
-                "name":"Authorization",
-                "in": "header",
-                "description" :"The user token"
-                      
-                },
-                {
-                "name": "id",
-                "in": "path",
-                "description": "id of the article you want to rate",
-                "type": "integer"
-                },
-                {
-                "name": "Rate",
-                "in": "body",
-                "description": "Your rating to this article betwee 1 and 5",
-                "schema": {
-                    "required": [
-                        "rate"
-                    ],
-                    "properties": {
-                        "rate": {
-                            "type": "integer"
-                        }
-                    }
-                }
-                }
-
                 ],
                 "produces": [
                     "application/json"
-                  ],
-            "responses": {
-                "201": {
-                    "description": "Article successfully rate",
-                    "schema": {
-                        "properties": {
-                            "message": {
-                                "type": "string"
-                            },
-                            "data": {
-                                "schema": {
-                                    "$ref": "#/definitions/RateArticle"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successfully retrieved all profiles",
+                        "schema": {
+                            "properties": {
+                                "status": {
+                                    "type": "integer"
+                                },
+                                "data": {
+                                    "type": "array",
+                                    "$ref": "#/definitions/Profile"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "User is not authenticated",
+                        "schema": {
+                            "properties": {
+                                "error": {
+                                    "type": "string"
+                                },
+                                "me": {
+                                    "type": "string"
                                 }
                             }
                         }
                     }
-                },
-                "200": {
-                    "description": "Successfully updated the rate",
-                    "schema": {
-                        "$ref": "#/definitions/RateArticle"
-                    }
-                },
-                "400": {
-                    "description": "Missing fields or invalid value",
-                    "schema": {
-                        "$ref": "#/definitions/Error"
-                    }
-                },
-
-                "403": {
-                    "description": "Wrong token",
-                    "schema": {
-                        "$ref": "#/definitions/Error"
-                    }
                 }
             }
-        }
-       },
-       "/api/v1/articles/{articleSlug}/like": {
-        "put": {
-          "tags": [
-            "Articles"
-          ],
-          "summary": "Like an article",
-          "produces": [
-            "application/json"
-          ],
-          "parameters": [
-              {
-                "name": "Authorization",
-                "in": "header",
-                "description": "Token",
-                "required": true
-              },
-            {
-              "name": "articleSlug",
-              "in": "path",
-              "description": "A slug of an article",
-              "required": true,
-              "type": "string"
-            }
-          ],
-          "responses": {
-            "200": {
-              "description": "Article Liked"
-            },
-            "400": {
-              "description": "Bad Request"
-            },
-            "404": {
-              "description": "Article Not Found"
-            },
-            "401": {
-              "description": "Unauthorized Access"
-            }
-          }
-        }
-      }, "/api/v1/articles/{articleSlug}/dislike": {
-        "put": {
-          "tags": [
-            "Articles"
-          ],
-          "summary": "Dislike an article",
-          "produces": [
-            "application/json"
-          ],
-          "parameters": [
-              {
-                "name": "Authorization",
-                "in": "header",
-                "description": "Token",
-                "required": true
-              },
-            {
-              "name": "articleSlug",
-              "in": "path",
-              "description": "A slug of an article",
-              "required": true,
-              "type": "string"
-            }
-          ],
-          "responses": {
-            "200": {
-              "description": "Article Disliked"
-            },
-            "400": {
-              "description": "Bad Request"
-            },
-            "404": {
-              "description": "Article Not Found"
-            },
-            "401": {
-              "description": "Unauthorized Access"
-            }
-          }
-        }
-      },
-       "/api/v1/articles/{slug}": {
-        "put": {
-            "tags": [
-                "Articles"
-            ],
-            "description": "Authenticated user can update articles",
-            "parameters": [
-                {
-                "name":"Authorization",
-                "in": "header",
-                "description" :"The user token",
-                "required":true
-                      
-                 },
-                 {
-                "name": "slug",
-                "in": "path",
-                "description": "Articles slug",
-                "required":true,
-                "type":"string"
-                },
-                {
-                "name": "title",
-                "in": "formData",
-                "description": "",
-                "type": "string"
-                },
-                {
-                "name": "description",
-                "in": "formData",
-                "description": "",
-                "type": "string"
-                },
-                {
-                "name": "body",
-                "in": "formData",
-                "description": "",
-                "type": "string"
-               },
-                {
-                "name": "tagList",
-                "in": "formData",
-                "description": "",
-                "type": "string"
-                },
-                {
-                "name": "category",
-                "in": "formData",
-                "description": "",
-                "type": "string"
-                },
-                {
-                "name": "image",
-                "in": "formData",
-                "description": "",
-                "type": "file",
-                "required": false
+        },
+        "/api/v1/articles": {
+            "post": {
+                "tags": [
+                    "Articles"
+                ],
+                "description": "Authenticated user can create articles",
+                "parameters": [
+                    {
+                        "name": "Authorization",
+                        "in": "header",
+                        "description": "The user token",
+                        "required": true
+                    },
+                    {
+                        "name": "title",
+                        "in": "formData",
+                        "description": "",
+                        "type": "string",
+                        "required": true
+                    },
+                    {
+                        "name": "description",
+                        "in": "formData",
+                        "description": "",
+                        "type": "string",
+                        "required": true
+                    },
+                    {
+                        "name": "body",
+                        "in": "formData",
+                        "description": "",
+                        "type": "string",
+                        "required": true
+                    },
+                    {
+                        "name": "tagList",
+                        "in": "formData",
+                        "description": "",
+                        "type": "string",
+                        "required": false
+                    },
+                    {
+                        "name": "category",
+                        "in": "formData",
+                        "description": "",
+                        "type": "string",
+                        "required": false
+                    },
+                    {
+                        "name": "image",
+                        "in": "formData",
+                        "description": "",
+                        "type": "file",
+                        "required": false
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Article created successfully",
+                        "schema": {
+                            "properties": {
+                                "message": {
+                                    "type": "string"
+                                },
+                                "data": {
+                                    "$ref": "#/definitions/Articles"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Missing fields or invalid value",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "403": {
+                        "description": "Wrong token",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
                 }
-
-                        ],
-            "responses": {
-                "200": {
-                    "description": "Article updated successfully",
-                    "schema": {
-                        "properties": {
-                            "message": {
-                                "type": "string"
-                            },
-                            "data": {
-                                "$ref": "#/definitions/Articles"
+            },
+            "get": {
+                "tags": [
+                    "Articles"
+                ],
+                "description": "Fetch all user articles",
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successfully retrieved all articles",
+                        "schema": {
+                            "properties": {
+                                "status": {
+                                    "type": "integer"
+                                },
+                                "data": {
+                                    "type": "array",
+                                    "$ref": "#/definitions/Articles"
+                                }
                             }
                         }
-                    }
-                },
-                "401": {
-                    "description": "User is not authenticated",
-                    "schema": {
-                        "properties": {
-                            "error": {
-                                "type": "string"
-                            },
-                            "me": {
-                                "type": "string"
+                    },
+                    "401": {
+                        "description": "User is not authenticated",
+                        "schema": {
+                            "properties": {
+                                "error": {
+                                    "type": "string"
+                                },
+                                "me": {
+                                    "type": "string"
+                                }
                             }
                         }
-                    }
-                },
-                "403": {
-                    "description": "Fobidden to make changes",
-                    "schema": {
-                        "$ref": "#/definitions/Error"
-                    }
-                },
-                "404": {
-                    "description": "Article not found",
-                    "schema": {
-                        "$ref": "#/definitions/Error"
+                    },
+                    "404": {
+                        "description": "Article not found",
+                        "schema": {
+                            "properties": {
+                                "error": {
+                                    "type": "string"
+                                },
+                                "me": {
+                                    "type": "string"
+                                }
+                            }
+                        }
                     }
                 }
             }
         },
-        "get": {
-            "tags": [
-              "Articles"
-            ],
-            "description": "Delate an article",
-            "parameters": [
-                 {
-                    "name": "slug",
-                    "in": "path",
-                    "description": "Articles slug",
-                    "required":true,
-                    "type":"string"
-                  }],
-            "produces": [
-              "application/json"
-            ],
-            "responses": {
-                "200": {
-                    "description": "",
-                    "schema": {
-                        "properties": {
-                            "status": {
-                                "type": "integer"
-                            },
-                            "data": {
-                                "type": "string",
-                                "$ref": "#/definitions/Articles"
+        "/api/v1/articles/{articleSlug}/comments": {
+            "post": {
+                "tags": [
+                    "Articles"
+                ],
+                "summary": "Comment on an article",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "Authorization",
+                        "in": "header",
+                        "description": "Token",
+                        "required": true
+                    },
+                    {
+                        "name": "articleSlug",
+                        "in": "path",
+                        "description": "A slug of an article",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/Comment"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Commented on the article"
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "404": {
+                        "description": "Article Not Found"
+                    },
+                    "401": {
+                        "description": "Unauthorized Access"
+                    }
+                }
+            },
+            "get": {
+                "tags": [
+                    "Articles"
+                ],
+                "summary": "Retrieve an article's comments",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "Authorization",
+                        "in": "header",
+                        "description": "Token",
+                        "required": true
+                    },
+                    {
+                        "name": "articleSlug",
+                        "in": "path",
+                        "description": "A slug of an article",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Comments retrieved"
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "404": {
+                        "description": "Comments not found"
+                    },
+                    "401": {
+                        "description": "Unauthorized Access"
+                    }
+                }
+            }
+        },
+        "/api/v1/articles/{articleSlug}/comments/{commentId}": {
+            "patch": {
+                "tags": [
+                    "Articles"
+                ],
+                "summary": "Update a comment",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "Authorization",
+                        "in": "header",
+                        "description": "Token",
+                        "required": true
+                    },
+                    {
+                        "name": "articleSlug",
+                        "in": "path",
+                        "description": "A slug of an article",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "commentId",
+                        "in": "path",
+                        "description": "An identifier of a comment",
+                        "required": true,
+                        "type": "integer"
+                    },
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/Comment"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Comment updated"
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "404": {
+                        "description": "Comment not found"
+                    },
+                    "401": {
+                        "description": "Unauthorized Access"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Articles"
+                ],
+                "summary": "Delete a comment",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "Authorization",
+                        "in": "header",
+                        "description": "Token",
+                        "required": true
+                    },
+                    {
+                        "name": "articleSlug",
+                        "in": "path",
+                        "description": "A slug of an article",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "commentId",
+                        "in": "path",
+                        "description": "An identifier of a comment",
+                        "required": true,
+                        "type": "integer"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Comment deleted"
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "404": {
+                        "description": "Comment not found"
+                    },
+                    "401": {
+                        "description": "Unauthorized Access"
+                    }
+                }
+            }
+        },
+        "/api/v1/articles/{id}/rate": {
+            "post": {
+                "tags": [
+                    "Articles"
+                ],
+                "description": "User should be able to rate an article",
+                "parameters": [
+                    {
+                        "name": "Authorization",
+                        "in": "header",
+                        "description": "The user token"
+                    },
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "id of the article you want to rate",
+                        "type": "integer"
+                    },
+                    {
+                        "name": "Rate",
+                        "in": "body",
+                        "description": "Your rating to this article betwee 1 and 5",
+                        "schema": {
+                            "required": [
+                                "rate"
+                            ],
+                            "properties": {
+                                "rate": {
+                                    "type": "integer"
+                                }
                             }
                         }
                     }
-                },
-                "404": {
-                    "description": "Article not found",
-                    "schema": {
-                        "properties": {
-                            "error": {
-                                "type": "string"
-                            },
-                            "me": {
-                                "type": "string"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Article successfully rate",
+                        "schema": {
+                            "properties": {
+                                "message": {
+                                    "type": "string"
+                                },
+                                "data": {
+                                    "schema": {
+                                        "$ref": "#/definitions/RateArticle"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "200": {
+                        "description": "Successfully updated the rate",
+                        "schema": {
+                            "$ref": "#/definitions/RateArticle"
+                        }
+                    },
+                    "400": {
+                        "description": "Missing fields or invalid value",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "403": {
+                        "description": "Wrong token",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/articles/{articleSlug}/like": {
+            "put": {
+                "tags": [
+                    "Articles"
+                ],
+                "summary": "Like an article",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "Authorization",
+                        "in": "header",
+                        "description": "Token",
+                        "required": true
+                    },
+                    {
+                        "name": "articleSlug",
+                        "in": "path",
+                        "description": "A slug of an article",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Article Liked"
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "404": {
+                        "description": "Article Not Found"
+                    },
+                    "401": {
+                        "description": "Unauthorized Access"
+                    }
+                }
+            }
+        },
+        "/api/v1/articles/{articleSlug}/dislike": {
+            "put": {
+                "tags": [
+                    "Articles"
+                ],
+                "summary": "Dislike an article",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "Authorization",
+                        "in": "header",
+                        "description": "Token",
+                        "required": true
+                    },
+                    {
+                        "name": "articleSlug",
+                        "in": "path",
+                        "description": "A slug of an article",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Article Disliked"
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "404": {
+                        "description": "Article Not Found"
+                    },
+                    "401": {
+                        "description": "Unauthorized Access"
+                    }
+                }
+            }
+        },
+        "/api/v1/articles/{articleSlug}/reports": {
+            "post": {
+                "tags": [
+                    "Articles"
+                ],
+                "description": "User should be able to report an article",
+                "parameters": [
+                    {
+                        "name": "Authorization",
+                        "in": "header",
+                        "description": "The user token"
+                    },
+                    {
+                        "name": "articleSlug",
+                        "in": "path",
+                        "description": "Slug of an article to report",
+                        "type": "string"
+                    },
+                    {
+                        "name": "Report",
+                        "in": "body",
+                        "description": "Report an article",
+                        "schema": {
+                            "required": [
+                                "reason",
+                                "description"
+                            ],
+                            "properties": {
+                                "reason": {
+                                    "type": "string"
+                                },
+                                "description": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Article successfully reported",
+                        "schema": {
+                            "properties": {
+                                "data": {
+                                    "$ref": "#/definitions/Report"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Missing fields or invalid value",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "403": {
+                        "description": "Unauthorized access",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                }
+            },
+            "get": {
+                "tags": [
+                    "Articles"
+                ],
+                "description": "User should be able to retreive the reports of a specific article",
+                "parameters": [
+                    {
+                        "name": "Authorization",
+                        "in": "header",
+                        "description": "The user token"
+                    },
+                    {
+                        "name": "articleSlug",
+                        "in": "path",
+                        "description": "Slug of an article to report",
+                        "type": "string"
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Report retreived successfully",
+                        "schema": {
+                            "properties": {
+                                "data": {
+                                    "$ref": "#/definitions/Report"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Unauthorized access",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/articles/reports/all": {
+            "get": {
+                "tags": [
+                    "Articles"
+                ],
+                "description": "Admin should be able to get all reports",
+                "parameters": [
+                    {
+                        "name": "Authorization",
+                        "in": "header",
+                        "description": "The user token"
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Report successfully retreived",
+                        "schema": {
+                            "properties": {
+                                "data": {
+                                    "$ref": "#/definitions/Report"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "No report found",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "403": {
+                        "description": "Unauthorized access",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/articles/{articleSlug}/reports/{reportId}": {
+            "get": {
+                "tags": [
+                    "Articles"
+                ],
+                "description": "User should be able to retreive the reports of a specific article",
+                "parameters": [
+                    {
+                        "name": "Authorization",
+                        "in": "header",
+                        "description": "The user token"
+                    },
+                    {
+                        "name": "articleSlug",
+                        "in": "path",
+                        "description": "Slug of an article to report",
+                        "type": "string"
+                    },
+                    {
+                        "name": "reportId",
+                        "in": "path",
+                        "description": "id of a specific report",
+                        "type": "integer"
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Report retreived successfully",
+                        "schema": {
+                            "properties": {
+                                "data": {
+                                    "$ref": "#/definitions/Report"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Unauthorized access",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Articles"
+                ],
+                "description": "User should be able to delete his report",
+                "parameters": [
+                    {
+                        "name": "Authorization",
+                        "in": "header",
+                        "description": "The user token"
+                    },
+                    {
+                        "name": "articleSlug",
+                        "in": "path",
+                        "description": "Slug of an article to report",
+                        "type": "string"
+                    },
+                    {
+                        "name": "reportId",
+                        "in": "path",
+                        "description": "id of a specific report",
+                        "type": "integer"
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Report successfully deleted",
+                        "schema": {
+                            "properties": {
+                                "data": {
+                                    "$ref": "#/definitions/Report"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "No report found",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "403": {
+                        "description": "Unauthorized access",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/articles/{slug}": {
+            "put": {
+                "tags": [
+                    "Articles"
+                ],
+                "description": "Authenticated user can update articles",
+                "parameters": [
+                    {
+                        "name": "Authorization",
+                        "in": "header",
+                        "description": "The user token",
+                        "required": true
+                    },
+                    {
+                        "name": "slug",
+                        "in": "path",
+                        "description": "Articles slug",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "title",
+                        "in": "formData",
+                        "description": "",
+                        "type": "string"
+                    },
+                    {
+                        "name": "description",
+                        "in": "formData",
+                        "description": "",
+                        "type": "string"
+                    },
+                    {
+                        "name": "body",
+                        "in": "formData",
+                        "description": "",
+                        "type": "string"
+                    },
+                    {
+                        "name": "tagList",
+                        "in": "formData",
+                        "description": "",
+                        "type": "string"
+                    },
+                    {
+                        "name": "category",
+                        "in": "formData",
+                        "description": "",
+                        "type": "string"
+                    },
+                    {
+                        "name": "image",
+                        "in": "formData",
+                        "description": "",
+                        "type": "file",
+                        "required": false
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Article updated successfully",
+                        "schema": {
+                            "properties": {
+                                "message": {
+                                    "type": "string"
+                                },
+                                "data": {
+                                    "$ref": "#/definitions/Articles"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "User is not authenticated",
+                        "schema": {
+                            "properties": {
+                                "error": {
+                                    "type": "string"
+                                },
+                                "me": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Fobidden to make changes",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "404": {
+                        "description": "Article not found",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                }
+            },
+            "get": {
+                "tags": [
+                    "Articles"
+                ],
+                "description": "Delate an article",
+                "parameters": [
+                    {
+                        "name": "slug",
+                        "in": "path",
+                        "description": "Articles slug",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "properties": {
+                                "status": {
+                                    "type": "integer"
+                                },
+                                "data": {
+                                    "type": "string",
+                                    "$ref": "#/definitions/Articles"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Article not found",
+                        "schema": {
+                            "properties": {
+                                "error": {
+                                    "type": "string"
+                                },
+                                "me": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Articles"
+                ],
+                "description": "Delate an article",
+                "parameters": [
+                    {
+                        "name": "Authorization",
+                        "in": "header",
+                        "description": "The user token",
+                        "required": true
+                    },
+                    {
+                        "name": "slug",
+                        "in": "path",
+                        "description": "Articles slug",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successfully deleted the article",
+                        "schema": {
+                            "properties": {
+                                "status": {
+                                    "type": "integer"
+                                },
+                                "data": {
+                                    "type": "string",
+                                    "$ref": "#/definitions/Articles"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "User is not authenticated",
+                        "schema": {
+                            "properties": {
+                                "error": {
+                                    "type": "string"
+                                },
+                                "me": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "User is fobidden to delete",
+                        "schema": {
+                            "properties": {
+                                "error": {
+                                    "type": "string"
+                                },
+                                "me": {
+                                    "type": "string"
+                                }
                             }
                         }
                     }
                 }
             }
-          },
-        "delete": {
-            "tags": [
-              "Articles"
-            ],
-            "description": "Delate an article",
-            "parameters": [
-                {
-                    "name":"Authorization",
-                    "in": "header",
-                    "description" :"The user token",
-                    "required":true
-                      
-                 },
-                 {
-                    "name": "slug",
-                    "in": "path",
-                    "description": "Articles slug",
-                    "required":true,
-                    "type":"string"
-                  }],
-            "produces": [
-              "application/json"
-            ],
-            "responses": {
-                "200": {
-                    "description": "Successfully deleted the article",
-                    "schema": {
-                        "properties": {
-                            "status": {
-                                "type": "integer"
-                            },
-                            "data": {
-                                "type": "string",
-                                "$ref": "#/definitions/Articles"
-                            }
-                        }
-                    }
-                },
-                "401": {
-                    "description": "User is not authenticated",
-                    "schema": {
-                        "properties": {
-                            "error": {
-                                "type": "string"
-                            },
-                            "me": {
-                                "type": "string"
-                            }
-                        }
-                    }
-                },
-                "403": {
-                    "description": "User is fobidden to delete",
-                    "schema": {
-                        "properties": {
-                            "error": {
-                                "type": "string"
-                            },
-                            "me": {
-                                "type": "string"
-                            }
-                        }
-                    }
-                }
-            }
-          }
-        }, 
+        },
         "/api/v1/bookmarks/{slug}": {
             "post": {
                 "tags": [
@@ -1853,19 +2104,19 @@
                 "description": "Authenticated user can add bookmarks",
                 "parameters": [
                     {
-                    "name":"Authorization",
-                    "in": "header",
-                    "description" :"The user token",
-                    "required":true
-                          
-                     },
-                     {
-                    "name": "slug",
-                    "in": "path",
-                    "description": "Articles slug",
-                    "required":true,
-                    "type":"string"
-                    }],
+                        "name": "Authorization",
+                        "in": "header",
+                        "description": "The user token",
+                        "required": true
+                    },
+                    {
+                        "name": "slug",
+                        "in": "path",
+                        "description": "Articles slug",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
                 "responses": {
                     "201": {
                         "description": "Bookmark added successfully",
@@ -1909,26 +2160,26 @@
             },
             "delete": {
                 "tags": [
-                  "Bookmarks"
+                    "Bookmarks"
                 ],
                 "description": "Delete a bookmark",
                 "parameters": [
                     {
-                        "name":"Authorization",
+                        "name": "Authorization",
                         "in": "header",
-                        "description" :"The user token",
-                        "required":true
-                          
-                     },
-                     {
+                        "description": "The user token",
+                        "required": true
+                    },
+                    {
                         "name": "slug",
                         "in": "path",
                         "description": "Bookmark slug",
-                        "required":true,
-                        "type":"string"
-                      }],
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
                 "produces": [
-                  "application/json"
+                    "application/json"
                 ],
                 "responses": {
                     "200": {
@@ -1971,24 +2222,24 @@
                         }
                     }
                 }
-              }
-            },
-         "/api/v1/bookmarks": {
+            }
+        },
+        "/api/v1/bookmarks": {
             "get": {
                 "tags": [
-                  "Bookmarks"
+                    "Bookmarks"
                 ],
                 "description": "Get all bookmarks by a user",
                 "parameters": [
                     {
-                        "name":"Authorization",
+                        "name": "Authorization",
                         "in": "header",
-                        "description" :"The user token",
-                        "required":true
-                              
-                         }],
+                        "description": "The user token",
+                        "required": true
+                    }
+                ],
                 "produces": [
-                  "application/json"
+                    "application/json"
                 ],
                 "responses": {
                     "200": {
@@ -2019,8 +2270,9 @@
                         }
                     }
                 }
-              }
-            },       
+            }
+        }
+    },
     "definitions": {
         "User": {
             "properties": {
@@ -2047,17 +2299,15 @@
                 "role": {
                     "type": "string"
                 }
-
             }
         },
-
         "Profile": {
             "properties": {
                 "username": {
-                    "type":"string"
+                    "type": "string"
                 },
                 "bio": {
-                    "type":"string"
+                    "type": "string"
                 },
                 "image": {
                     "type": "string"
@@ -2067,10 +2317,10 @@
         "Signout": {
             "properties": {
                 "token": {
-                    "type":"string"
+                    "type": "string"
                 },
                 "username": {
-                    "type":"string"
+                    "type": "string"
                 },
                 "email": {
                     "type": "file"
@@ -2090,98 +2340,114 @@
                     "type": "string",
                     "uniqueItems": true
                 }
-        }
-    },
-    "Articles": {
-        "properties": {
-            "title": {
-                "type": "string"
-            },
-            "description": {
-                "type": "string"
-            },
-            "body": {
-                "type": "string"
-            },
-            "category": {
-                "type": "string"
-            },
-            "images": {
-                "type": "string"
-            },
-            "tagList": {
-                "type": "string"
-            },
-            "author": {
-                "authorId": {
+            }
+        },
+        "Articles": {
+            "properties": {
+                "title": {
                     "type": "string"
                 },
-                "userName": {
+                "description": {
                     "type": "string"
                 },
-                "bio": {
+                "body": {
                     "type": "string"
                 },
-                "image": {
+                "category": {
+                    "type": "string"
+                },
+                "images": {
+                    "type": "string"
+                },
+                "tagList": {
+                    "type": "string"
+                },
+                "author": {
+                    "authorId": {
+                        "type": "string"
+                    },
+                    "userName": {
+                        "type": "string"
+                    },
+                    "bio": {
+                        "type": "string"
+                    },
+                    "image": {
+                        "type": "string"
+                    }
+                }
+            }
+        },
+        "RateArticle": {
+            "properties": {
+                "rating": {
+                    "type": "integer"
+                },
+                "Author": {
                     "type": "string"
                 }
             }
-    }
-},
-"RateArticle": {
-    "properties": {
-        "rating": {
-            "type":"integer"
         },
-        "Author": {
-            "type":"string"
-        }
-
-    }
-},
-"Comment": {
-    "required": [
-        "comment"
-      ],
-      "properties": {
-        "comment": {
-          "type": "string"
-        },
-"Bookmarks": {
-    "properties": {
-        "id": {
-            "type": "integer"
-            },
-        "articleId": {
-            "type": "integer"
-            },
-        "userId": {
-            "type": "interger"
-            },
-        "Article": {
-            "slug": {
-              "type": "string"
-                    },
-            "title": {
-              "type": "string"
-                    },
-            "description": {
-                "type": "string"
-                    }
+        "Comment": {
+            "required": [
+                "comment"
+            ],
+            "properties": {
+                "comment": {
+                    "type": "string"
                 }
-        }
+            }
+        },
+        "Bookmarks": {
+            "properties": {
+                "id": {
+                    "type": "integer"
+                },
+                "articleId": {
+                    "type": "integer"
+                },
+                "userId": {
+                    "type": "interger"
+                },
+                "slug": {
+                    "type": "string"
+                },
+                "title": {
+                    "type": "string"
+                },
+                "description": {
+                    "type": "string"
+                }
+            }
+        },
+        "Report": {
+            "properties": {
+                "id": {
+                    "type": "integer"
+                },
+                "articleId": {
+                    "type": "integer"
+                },
+                "slug": {
+                    "type": "string"
+                },
+                "reason": {
+                    "type": "string"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "reporter": {
+                    "type": "string"
+                }
+            }
         },
         "Error": {
             "properties": {
                 "error": {
                     "type": "string"
                 }
-
             }
         }
     }
-    
- }
-}
-}
 }
