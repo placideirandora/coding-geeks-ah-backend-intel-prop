@@ -1474,7 +1474,7 @@
                 }
             }
         },
-        "/api/v1/comments/{commentId}/like": {
+        "/api/v1/comments/{id}/like": {
             "put": {
                 "tags": [
                     "Articles"
@@ -1517,7 +1517,7 @@
                 }
             } 
         },
-        "/api/v1/comments/{commentId}/dislike": {
+        "/api/v1/comments/{id}/dislike": {
             "put": {
                 "tags": [
                     "Articles"

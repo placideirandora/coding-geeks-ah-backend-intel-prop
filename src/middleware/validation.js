@@ -144,13 +144,26 @@ export default {
   },
   idInParamsValidation(req, res, next) {
     const idSchema = Joi.object().keys({
-      articleId: validationRules.articleId,
+      id: validationRules.id,
     });
 
     const { error } = Joi.validate(req.params, idSchema, options);
     if (error) {
       return res.status(400).json({
         error: error.details[0].message
+      });
+    }
+    next();
+  },
+  idValidation(req, res, next) {
+    const idSchema = Joi.object().keys({
+      articleId: validationRules.id,
+    });
+
+    const { error } = Joi.validate(req.params, idSchema, options);
+    if (error) {
+      return res.status(400).json({
+        error: error.details[0].message.replace(/\\|(")/g, '')
       });
     }
     next();

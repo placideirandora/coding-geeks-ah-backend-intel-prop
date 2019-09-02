@@ -55,11 +55,11 @@ class ArticleRatelehelper {
     const ratings = await Rating.findAll({ where: { articleId: article } });
 
     let sum = 0;
-    ratings.map((rate) => {
+    ratings.forEach((rate) => {
       sum += rate.get().rate;
       return sum;
     });
-    const average = sum / (ratings.length * 5);
+    const average = sum / (ratings.length);
     return average;
   }
 }

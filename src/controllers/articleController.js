@@ -549,6 +549,7 @@ class ArticleController {
     if (result) {
       const createShare = await Share.create({
         userId: id,
+        articleId: article.id,
         slug,
         platform: [option],
         createdAt: new Date(),
