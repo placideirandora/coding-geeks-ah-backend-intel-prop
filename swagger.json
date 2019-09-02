@@ -1474,6 +1474,92 @@
                 }
             }
         },
+        "/api/v1/comments/{id}/like": {
+            "put": {
+                "tags": [
+                    "Articles"
+                ],
+                "summary": "Like a specific comment",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "Authorization",
+                        "in": "header",
+                        "description": "Token",
+                        "required": true
+                    },
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "An identifier of a comment",
+                        "required": true,
+                        "type": "integer"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Reaction updated successully"
+                    },
+                    "201": {
+                        "description": "Like registered successully"
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "401": {
+                        "description": "Unauthorized Access"
+                    },
+                    "404": {
+                        "description": "Comment not found"
+                    }
+                }
+            } 
+        },
+        "/api/v1/comments/{id}/dislike": {
+            "put": {
+                "tags": [
+                    "Articles"
+                ],
+                "summary": "Dislike a specific comment",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "Authorization",
+                        "in": "header",
+                        "description": "Token",
+                        "required": true
+                    },
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "An identifier of a comment",
+                        "required": true,
+                        "type": "integer"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Reaction updated successully"
+                    },
+                    "201": {
+                        "description": "Dislike registered successully"
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "401": {
+                        "description": "Unauthorized Access"
+                    },
+                    "404": {
+                        "description": "Comment not found"
+                    }
+                }
+            } 
+        },
         "/api/v1/articles/{id}/rate": {
             "post": {
                 "tags": [
