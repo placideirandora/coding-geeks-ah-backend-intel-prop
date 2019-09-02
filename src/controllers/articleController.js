@@ -592,6 +592,8 @@ class ArticleController {
         id: articleComment.id,
         articleSlug: articleComment.articleSlug,
         comment: articleComment.comment,
+        likes: articleComment.likes,
+        dislikes: articleComment.dislikes,
         updatedAt: articleComment.updatedAt,
         createdAt: articleComment.createdAt,
         commenter: {
@@ -640,6 +642,8 @@ class ArticleController {
         id: updatedComment.id,
         articleSlug: updatedComment.articleSlug,
         comment: updatedComment.comment,
+        likes: updatedComment.likes,
+        dislikes: updatedComment.dislikes,
         updatedAt: updatedComment.updatedAt,
         createdAt: updatedComment.createdAt,
       }
