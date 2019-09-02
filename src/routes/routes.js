@@ -75,7 +75,7 @@ router.patch('/api/v1/profiles/notifications/read/all', verifyToken, Notificatio
 router.post('/api/v1/bookmarks/:slug', [verifyToken, findUser], Bookmark.createBookmark);
 router.get('/api/v1/bookmarks', [verifyToken, findUser], Bookmark.getBookmarks);
 router.delete('/api/v1/bookmarks/:slug', [verifyToken, findUser], Bookmark.deleteBookmark);
-router.get('/api/v1/reading-statistics/:author', verifyToken, Article.readingStats);
+router.get('/api/v1/articles/:articleSlug/statistics', verifyToken, Article.readingStats);
 router.post('/api/v1/articles/:articleSlug/reports', [verifyToken, Validation.reportValidation], Report.createReport);
 router.get('/api/v1/articles/reports/all', [verifyToken, checkAdmin], Report.getAllReports);
 router.get('/api/v1/articles/:articleSlug/reports', [verifyToken, checkAdmin], Report.getArticleReports);

@@ -1714,12 +1714,12 @@
                 }
             }
         },
-        "/api/v1/reading-statistics/{username}": {
+        "/api/v1/articles/{articleSlug}/statistics": {
             "get": {
                 "tags": [
                     "Articles"
                 ],
-                "summary": "Retrieve author's articles' reading statistics",
+                "summary": "Retrieve an article's reading statistics",
                 "produces": [
                     "application/json"
                 ],
@@ -1731,9 +1731,9 @@
                         "required": true
                     },
                     {
-                        "name": "username",
+                        "name": "articleSlug",
                         "in": "path",
-                        "description": "Author's username",
+                        "description": "A slug of an article",
                         "required": true,
                         "type": "string"
                     }
@@ -1743,7 +1743,7 @@
                         "description": "Reading statistics retrieved"
                     },
                     "404": {
-                        "description": "Reading statistics not found"
+                        "description": "Reading statistics/Article not found"
                     },
                     "401": {
                         "description": "Unauthorized Access"

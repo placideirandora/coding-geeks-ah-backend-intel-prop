@@ -717,29 +717,21 @@ class ArticleController {
    * @returns {object} returns an object containing an article's statistics
    */
   static async readingStats(req, res) {
-    const authorIdentifier = req.userData.id;
-    const realAuthor = req.userData.username;
-    const proposedAuthor = req.params.author;
+    const slugId = req.params.articleSlug;
 
-    if (realAuthor !== proposedAuthor) {
-      return res.status(400).json({
-        message: 'Invalid username',
+    const findArticle = await Article.findOne({ where: { slug: slugId } });
+
+    if (!findArticle) {
+      return res.status(404).json({
+        message: 'Article not found'
       });
     }
 
-    const findArticles = await Article.findAll({ where: { authorId: authorIdentifier } });
+    const statistics = await Statistic.findOne({ where: { articleSlug: slugId } });
 
-    if (!findArticles.length) {
+    if (!statistics) {
       return res.status(404).json({
-        message: 'No reading statistics because you do not have any articles',
-      });
-    }
-
-    const statistics = await Statistic.findAll({ where: { authorId: authorIdentifier } });
-
-    if (!statistics.length) {
-      return res.status(404).json({
-        message: 'None of your articles has been read so far. Statistics not found'
+        message: 'The article has never been read so far'
       });
     }
 

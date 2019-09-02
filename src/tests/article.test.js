@@ -22,6 +22,7 @@ let userToken3;
 let userToken4;
 let articleSlug;
 let newArticleSlug;
+const invalidArticleSlug = 'something-new-w2zjzvm6o5sgad456';
 
 before(async () => {
   await Follow.create(dummyUser.validFollower);
@@ -289,17 +290,17 @@ describe('POST AND GET /api/v1/articles', () => {
         done();
       });
   });
-  it('Should not retrieve reading statistics because the author\'s articles have never been read', (done) => {
+  it('Should not retrieve reading statistics because the article will have never been read so far', (done) => {
     chai
       .request(app)
-      .get('/api/v1/reading-statistics/kate')
+      .get(`/api/v1/articles/${articleSlug}/statistics`)
       .set('Authorization', userToken4)
       .end((err, res) => {
         if (err) done(err);
         expect(res).have.status(404);
         expect(res).to.be.an('object');
         expect(res.body).to.have.keys('message');
-        expect(res.body.message).to.deep.equal('None of your articles has been read so far. Statistics not found');
+        expect(res.body.message).to.deep.equal('The article has never been read so far');
         done();
       });
   });
@@ -395,7 +396,7 @@ describe('POST AND GET /api/v1/articles', () => {
   it('Should retrieve reading statistics', (done) => {
     chai
       .request(app)
-      .get('/api/v1/reading-statistics/super-admin')
+      .get(`/api/v1/articles/${articleSlug}/statistics`)
       .set('Authorization', userToken1)
       .end((err, res) => {
         if (err) done(err);
@@ -403,22 +404,22 @@ describe('POST AND GET /api/v1/articles', () => {
         expect(res).to.be.an('object');
         expect(res.body).to.have.keys('message', 'statistics');
         expect(res.body.message).to.deep.equal('Reading statistics retrieved');
-        expect(res.body.statistics).to.be.an('array');
+        expect(res.body.statistics).to.be.an('object');
         done();
       });
   });
 });
-it('Should not retrieve reading statistics because the author has no article', (done) => {
+it('Should not retrieve reading statistics because the articles does not exist', (done) => {
   chai
     .request(app)
-    .get('/api/v1/reading-statistics/cyubahiro')
+    .get(`/api/v1/articles/${invalidArticleSlug}/statistics`)
     .set('Authorization', userToken3)
     .end((err, res) => {
       if (err) done(err);
       expect(res).have.status(404);
       expect(res).to.be.an('object');
       expect(res.body).to.have.keys('message');
-      expect(res.body.message).to.deep.equal('No reading statistics because you do not have any articles');
+      expect(res.body.message).to.deep.equal('Article not found');
       done();
     });
 });
