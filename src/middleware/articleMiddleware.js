@@ -17,7 +17,7 @@ class ArticleMiddleware {
   static async checkRatedArticle(req, res, next) {
     const errorMessage = [];
     const validateArticle = await ArticleRateHelper.validateArticleRated(
-      req.params.id, req.userData.id
+      req.params.articleId, req.userData.id
     );
     if (validateArticle !== true) {
       errorMessage.push(validateArticle);

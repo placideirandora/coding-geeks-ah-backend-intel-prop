@@ -14,14 +14,17 @@ export const up = (queryInterface, Sequelize) => queryInterface.createTable('Sha
       key: 'id'
     }
   },
-  slug: {
-    type: Sequelize.STRING,
+  articleId: {
+    type: Sequelize.INTEGER,
     onDelete: 'CASCADE',
     onUpdate: 'CASCADE',
     references: {
       model: 'Articles',
-      key: 'slug'
+      key: 'id'
     }
+  },
+  slug: {
+    type: Sequelize.STRING,
   },
   platform: {
     type: Sequelize.ARRAY(Sequelize.STRING),
