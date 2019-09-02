@@ -541,6 +541,7 @@ describe('POST AND GET /api/v1/articles', () => {
           'createdAt',
           'updatedAt',
           'author',
+          'averageRatings',
           'readTime'
         );
         done();
@@ -764,7 +765,7 @@ describe('UPDATE /api/v1/articles/:slug', () => {
 });
 // Rating Tests
 
-describe('POST /api/v1/articles/{id}/rate', () => {
+describe('POST /api/v1/articles/{articleId}/rate', () => {
   it('Should not be able to rate your own article', (done) => {
     chai
       .request(app)
@@ -816,7 +817,51 @@ describe('POST /api/v1/articles/{id}/rate', () => {
         if (err) done(err);
         expect(res).have.status(400);
         expect(res).to.be.an('object');
-        expect(res.body.error).to.deep.equal('id must be a number');
+        expect(res.body.error).to.deep.equal('articleId must be a number');
+        done();
+      });
+  });
+});
+
+// getting ratings
+describe('GET /api/v1/articles/{articleId}/rate', () => {
+  it('Should be be able to get ratings', (done) => {
+    chai
+      .request(app)
+      .get(`/api/v1/articles/${articleId}/rate`)
+      .set('Authorization', userToken1)
+      .end((err, res) => {
+        if (err) done(err);
+        expect(res).have.status(200);
+        expect(res).to.be.an('object');
+        done();
+      });
+  });
+  it('Should not be be able to get ratings when the article id is not a number', (done) => {
+    chai
+      .request(app)
+      .get('/api/v1/articles/m/rate')
+      .set('Authorization', userToken1)
+      .end((err, res) => {
+        if (err) done(err);
+        expect(res).have.status(400);
+        expect(res).to.be.an('object');
+        expect(res.body).to.have.key('error');
+        expect(res.body.error).to.deep.equal('articleId must be a number');
+        done();
+      });
+  });
+  it('Should not be be able to get ratings when the article is not found', (done) => {
+    chai
+      .request(app)
+      .get('/api/v1/articles/400/rate')
+      .set('Authorization', userToken1)
+      .end((err, res) => {
+        if (err) done(err);
+        expect(res).have.status(404);
+        expect(res).to.be.an('object');
+        expect(res.body).to.have.key('error');
+        expect(res.body.error).to.deep.equal('Article not found');
         done();
       });
   });

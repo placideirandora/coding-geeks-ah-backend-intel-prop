@@ -7,6 +7,7 @@ import {
 import { slugGen, uploadImage } from '../helpers/articles/articleHelper';
 import readTime from '../helpers/articles/readTimeForArticle';
 import ShareArticleHelper from '../helpers/articles/shareHelper';
+import ArticleRatelehelper from '../helpers/articles/rateArticleHelper';
 
 config();
 /**
@@ -519,6 +520,9 @@ class ArticleController {
           message: 'Sorry! The requested article was not found.'
         });
       }
+      const averageRatings = await ArticleRatelehelper.getRatings(article.id);
+      article.get().averageRatings = averageRatings;
+
       const readTimeOfArticle = readTime(article.body);
       article.get().readTime = readTimeOfArticle;
       return res.status(200).json({
@@ -545,6 +549,7 @@ class ArticleController {
     if (result) {
       const createShare = await Share.create({
         userId: id,
+        articleId: article.id,
         slug,
         platform: [option],
         createdAt: new Date(),
