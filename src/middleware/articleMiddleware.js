@@ -34,5 +34,23 @@ class ArticleMiddleware {
     }
     next();
   }
+
+  /**
+ * function for checking if a platform  is valid
+ * @function isShared
+ * @param {object} req
+ * @param {object} res
+ * @param {object} next
+ * @returns { string } appropriate message
+ */
+  static async validPlatform(req, res, next) {
+    const { option } = req.params;
+    const platforms = ['facebook', 'twitter', 'gmail'];
+    if (platforms.includes(option)) {
+      next();
+      return true;
+    }
+    return res.status(400).json({ error: 'invalid platform in path' });
+  }
 }
 export default ArticleMiddleware;

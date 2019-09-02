@@ -266,7 +266,24 @@ export default {
 
   commentId: Joi.number().integer()
     .required(),
-
+  reason: Joi.string().trim()
+    .required()
+    .min(5)
+    .error((errors) => {
+      errors.forEach((err) => {
+        switch (err.type) {
+          case 'any.required':
+            err.message = 'Reason is required';
+            break;
+          case 'string.min':
+            err.message = 'Reason must have atleast 5 characters';
+            break;
+        }
+      });
+      return errors;
+    }),
+  reportId: Joi.number().integer()
+    .required(),
   articleSlug: Joi.string()
     .required(),
 

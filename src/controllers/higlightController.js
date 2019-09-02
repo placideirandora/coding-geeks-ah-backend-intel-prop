@@ -31,11 +31,16 @@ class Highlights {
       let highlightedText = 'highlighted';
       let { comment } = payload;
       const { startIndex, text } = payload;
+      if (startIndex > body.length) {
+        return res.status(404).json({
+          error: 'Invalid index'
+        });
+      }
       const textToHighlight = body.slice(startIndex);
 
       if (!textToHighlight.includes(text)) {
         return res.status(404).json({
-          error: `Text ${text} not found in the article`
+          error: `Text ${text} not found`
         });
       }
 

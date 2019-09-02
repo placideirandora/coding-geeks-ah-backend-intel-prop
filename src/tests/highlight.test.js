@@ -178,6 +178,23 @@ describe('POST /api/v1/articles/:slug/highlights', () => {
 });
 
 describe('POST /api/v1/articles/:slug/highlights', () => {
+  it('Should return error message if index is invalid', (done) => {
+    chai
+      .request(app)
+      .post(`/api/v1/articles/${articleSlug}/highlights`)
+      .set('Authorization', userToken1)
+      .send(dummyHighlight.validIndex)
+      .end((err, res) => {
+        if (err) done(err);
+        expect(res).to.have.status(404);
+        expect(res.body).to.have.key('error');
+        expect(res.body.error).to.deep.equal('Invalid index');
+        done();
+      });
+  });
+});
+
+describe('POST /api/v1/articles/:slug/highlights', () => {
   it('Should return error if text to highlight is not found', (done) => {
     chai
       .request(app)
@@ -188,7 +205,7 @@ describe('POST /api/v1/articles/:slug/highlights', () => {
         if (err) done(err);
         expect(res).to.have.status(404);
         expect(res.body).to.have.key('error');
-        expect(res.body.error).to.deep.equal('Text texttexttext not found in the article');
+        expect(res.body.error).to.deep.equal('Text texttexttext not found');
         done();
       });
   });

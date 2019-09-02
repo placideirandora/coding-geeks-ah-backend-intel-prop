@@ -45,12 +45,12 @@ app.use((req, res) => {
   res.status(404).json({ error: 'route not found' });
 });
 
-// app.use((error, req, res, next) => {
-//   res.status(500).json({
-//     error: error.message,
-//     next
-//   });
-// });
+app.use((error, req, res, next) => {
+  res.status(500).json({
+    error: error.message,
+    next
+  });
+});
 
 const PORT = process.env.PORT || 3000;
 

@@ -822,6 +822,65 @@ describe('POST /api/v1/articles/{id}/rate', () => {
   });
 });
 
+//  sharing article
+describe('POST api/v1/articles/:slug/share/:option', () => {
+  it('Should share the post on gmail', (done) => {
+    chai.request(app)
+      .post(`/api/v1/articles/${newArticleSlug}/share/gmail`)
+      .set('Authorization', userToken1)
+      .end((err, res) => {
+        if (err) done(err);
+        expect(res).have.status(201);
+        expect(res).to.be.an('object');
+        expect(res.body).to.have.key('message', 'share');
+        expect(res.body.share).to.be.an('object');
+        expect(res.body.message).to.deep.equal('Successfully shared the article on gmail');
+        done();
+      });
+  });
+  it('Should share the post on twitter', (done) => {
+    chai.request(app)
+      .post(`/api/v1/articles/${newArticleSlug}/share/twitter`)
+      .set('Authorization', userToken2)
+      .end((err, res) => {
+        if (err) done(err);
+        expect(res).have.status(201);
+        expect(res).to.be.an('object');
+        expect(res.body).to.have.key('message', 'share');
+        expect(res.body.share).to.be.an('object');
+        expect(res.body.message).to.deep.equal('Successfully shared the article on twitter');
+        done();
+      });
+  });
+  it('Should share the post on facebook', (done) => {
+    chai.request(app)
+      .post(`/api/v1/articles/${newArticleSlug}/share/facebook`)
+      .set('Authorization', userToken2)
+      .end((err, res) => {
+        if (err) done(err);
+        expect(res).have.status(201);
+        expect(res).to.be.an('object');
+        expect(res.body).to.have.key('message', 'share');
+        expect(res.body.share).to.be.an('object');
+        expect(res.body.message).to.deep.equal('Successfully shared the article on facebook');
+        done();
+      });
+  });
+  it('Should not share the article if it is not found', (done) => {
+    chai.request(app)
+      .post('/api/v1/articles/this-article-is-not-valid/share/gmail')
+      .set('Authorization', userToken1)
+      .end((err, res) => {
+        if (err) done(err);
+        expect(res).have.status(404);
+        expect(res).to.be.an('object');
+        expect(res.body).to.have.key('error');
+        expect(res.body.error).to.deep.equal('article not found');
+        done();
+      });
+  });
+});
+
 // Deleting article Tests.
 describe('DELETE /api/v1/articles/:slug', () => {
   it('Should return an error if the the user is not the author', (done) => {

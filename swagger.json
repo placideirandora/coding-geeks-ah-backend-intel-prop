@@ -1883,79 +1883,6 @@
                 }
             }
         },
-        "/api/v1/articles/{slug}/highlights": {
-            "post": {
-                "tags": [
-                    "Highlights"
-                ],
-                "description": "User can highlight a text of an article and comment on it",
-                "parameters": [
-                    {
-                        "name": "Authorization",
-                        "in": "header",
-                        "description": "The user token"
-                    },
-                    {
-                        "name": "slug",
-                        "in": "path",
-                        "description": "Slug of an article to hightlight",
-                        "type": "string"
-                    },
-                    {
-                        "name": "Highliht",
-                        "in": "body",
-                        "description": "Highlight a text",
-                        "schema": {
-                            "required": [
-                                "startIndex",
-                                "text"
-                            ],
-                            "properties": {
-                                "startIndex": {
-                                    "type": "integer"
-                                },
-                                "text": {
-                                    "type": "string"
-                                },
-                                "comment": {
-                                    "type": "string"
-                                }
-                            }
-                        }
-                    }
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "responses": {
-                    "201": {
-                        "description": "Article successfully highlighted",
-                        "schema": {
-                            "properties": {
-                                "data": {
-                                    "$ref": "#/definitions/Highlight"
-                                }
-                            }
-                        }
-                    },
-                    "400": {
-                        "description": "Missing fields or invalid value",
-                        "schema": {
-                            "$ref": "#/definitions/Error"
-                        }
-                    },
-                    "403": {
-                        "description": "Unauthorized access",
-                        "schema": {
-                            "$ref": "#/definitions/Error"
-                        }
-                    },
-                    "200": {
-                        "description": "Highlight successfully deleted"
-                    }
-                }
-            }
-        },
         "/api/v1/articles/{slug}": {
             "put": {
                 "tags": [
@@ -2165,6 +2092,102 @@
                                 }
                             }
                         }
+                    }
+                }
+            }
+        },
+        "/api/v1/articles/{slug}/highlights": {
+            "post": {
+                "tags": [
+                    "Highlights"
+                ],
+                "description": "User can highlight a text of an article and comment on it",
+                "parameters": [
+                    {
+                        "name": "Authorization",
+                        "in": "header",
+                        "description": "The user token"
+                    },
+                    {
+                        "name": "slug",
+                        "in": "path",
+                        "description": "Slug of an article to hightlight",
+                        "type": "string"
+                    },
+                    {
+                        "name": "Highliht",
+                        "in": "body",
+                        "description": "Highlight a text",
+                        "schema": {
+                            "required": [
+                                "startIndex",
+                                "text"
+                            ],
+                            "properties": {
+                                "startIndex": {
+                                    "type": "integer"
+                                },
+                                "text": {
+                                    "type": "string"
+                                },
+                                "comment": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Commented on the article"
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "404": {
+                        "description": "Article Not Found"
+                    },
+                    "401": {
+                        "description": "Unauthorized Access"
+                    }
+                }
+            },
+            "get": {
+                "tags": [
+                    "Articles"
+                ],
+                "summary": "Retrieve an article's comments",
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Article successfully highlighted",
+                        "schema": {
+                            "properties": {
+                                "data": {
+                                    "$ref": "#/definitions/Highlight"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Missing fields or invalid value",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "403": {
+                        "description": "Unauthorized access",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "200": {
+                        "description": "Highlight successfully deleted"
                     }
                 }
             }

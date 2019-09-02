@@ -34,6 +34,11 @@ export default {
     text: 'text',
     comment: 'This is my comment'
   },
+  validIndex: {
+    startIndex: 53446,
+    text: 'text',
+    comment: 'This is my comment'
+  },
   noCommentHighlight: {
     startIndex: 0,
     text: 'text'
