@@ -1,46 +1,46 @@
 export default {
-  noText: {
+  noStop: {
     startIndex: 1
   },
   invalidIndex: {
     startIndex: 'one'
   },
-  invalidText: {
+  invalidStopIndex: {
     startIndex: 1,
-    text: ''
+    stopIndex: 'stop'
   },
   ivalidComment: {
     startIndex: 1,
-    text: 'h',
+    stopIndex: 2,
     comment: ''
   },
   nonStringComment: {
     startIndex: 1,
-    text: 'h',
+    stopIndex: 2,
     comment: 1
-  },
-  nonStringText: {
-    startIndex: 1,
-    text: 2,
-    comment: 'This is my comment'
-  },
-  textNotFound: {
-    startIndex: 0,
-    text: 'texttexttext',
-    comment: 'This is my comment'
   },
   validHighlight: {
     startIndex: 0,
-    text: 'text',
+    stopIndex: 1,
+    comment: 'This is my comment'
+  },
+  sameStartStop: {
+    startIndex: 0,
+    stopIndex: 0,
+    comment: 'This is my comment'
+  },
+  startGreater: {
+    startIndex: 1,
+    stopIndex: 0,
     comment: 'This is my comment'
   },
   validIndex: {
     startIndex: 53446,
-    text: 'text',
+    stopIndex: 5,
     comment: 'This is my comment'
   },
   noCommentHighlight: {
     startIndex: 0,
-    text: 'text'
+    stopIndex: 1
   }
 };

@@ -311,17 +311,13 @@ export default {
       });
       return errors;
     }),
-
-  text: Joi.string().trim()
+  stop: Joi.number().integer()
     .required()
     .error((errors) => {
       errors.forEach((err) => {
         switch (err.type) {
           case 'any.required':
-            err.message = 'Text to highlight is required';
-            break;
-          case 'string.base':
-            err.message = 'Text must be a string';
+            err.message = 'Stop Index is required';
             break;
         }
       });

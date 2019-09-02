@@ -8,7 +8,7 @@
     "coverage": "nyc npm test && nyc report --reporter=text-lcov | coveralls",
     "build": "rm -rf build && babel -d ./build ./src -s",
     "start": "npm run build && npm run seed && node ./build/index.js",
-    "pretest": "cross-env NODE_ENV=test npm run migrate  && cross-env NODE_ENV=test npm run seed",
+    "pretest": "cross-env NODE_ENV=test npm run down && cross-env NODE_ENV=test npm run migrate  && cross-env NODE_ENV=test npm run seed",
     "test": "cross-env NODE_ENV=test nyc --reporter=text mocha  --require @babel/register --require @babel/polyfill  ./src/tests/*.js --timeout 50000 --exit",
     "down": "node_modules/.bin/sequelize db:migrate:undo:all",
     "migrate": "node_modules/.bin/sequelize db:migrate",

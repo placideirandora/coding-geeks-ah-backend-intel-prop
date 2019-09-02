@@ -197,7 +197,7 @@ export default {
   highlightValidation(req, res, next) {
     const highlightSchema = Joi.object().keys({
       startIndex: validationRules.start,
-      text: validationRules.text,
+      stopIndex: validationRules.stop,
       comment: validationRules.comments
     });
     const { error } = Joi.validate(req.body, highlightSchema, options);

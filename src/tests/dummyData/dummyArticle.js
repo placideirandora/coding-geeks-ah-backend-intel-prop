@@ -51,6 +51,14 @@ export default {
     body:
       'is simply dummy text of the printing and typesetting industry Lorem Ipsum has'
   },
+  missingTitle: {
+    id: 1,
+    description: 'How to demonstrate growth mindsewt',
+    tags: 'Fixed mind, Confidence, low self-esteem',
+    category: 'Eductaion',
+    body:
+      'is simply dummy text of the printing and typesetting industry Lorem Ipsum has'
+  },
   validArticle2: {
     id: 2,
     title: 'Growth mindset',

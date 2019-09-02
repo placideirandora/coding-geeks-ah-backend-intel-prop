@@ -30,19 +30,18 @@ class Highlights {
       const { body } = article;
       let highlightedText = 'highlighted';
       let { comment } = payload;
-      const { startIndex, text } = payload;
-      if (startIndex > body.length) {
-        return res.status(404).json({
+      const { startIndex, stopIndex } = payload;
+      if ((startIndex > body.length) || (stopIndex > body.length)) {
+        return res.status(400).json({
           error: 'Invalid index'
         });
       }
-      const textToHighlight = body.slice(startIndex);
-
-      if (!textToHighlight.includes(text)) {
-        return res.status(404).json({
-          error: `Text ${text} not found`
+      if (+startIndex >= +stopIndex) {
+        return res.status(400).json({
+          error: 'Start Index cannot be greater or equal to stop index'
         });
       }
+      const textToHighlight = body.slice(startIndex, stopIndex);
 
       if (!comment) {
         comment = null;
@@ -52,7 +51,7 @@ class Highlights {
         where: {
           articleId: article.id,
           userId,
-          text,
+          text: textToHighlight,
           startIndex,
           comment
         }
@@ -77,7 +76,7 @@ class Highlights {
         articleId: article.id,
         userId,
         startIndex,
-        text,
+        text: textToHighlight,
         comment
       });
 

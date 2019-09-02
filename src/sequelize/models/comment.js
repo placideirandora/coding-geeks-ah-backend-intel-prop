@@ -23,6 +23,14 @@ export default (sequelize, DataTypes) => {
       comment: {
         allowNull: false,
         type: DataTypes.STRING
+      },
+      likes: {
+        type: DataTypes.INTEGER,
+        defaultValue: 0
+      },
+      dislikes: {
+        type: DataTypes.INTEGER,
+        defaultValue: 0
       }
     }, {
       timeStamps: true
@@ -31,6 +39,7 @@ export default (sequelize, DataTypes) => {
   Comment.associate = (models) => {
     Comment.belongsTo(models.User, { foreignKey: 'userId', as: 'Commenter', onDelete: 'CASCADE' });
     Comment.belongsTo(models.Article, { foreignKey: 'articleId', as: 'ArticleComment', onDelete: 'CASCADE' });
+    Comment.hasMany(models.CommentReaction, { foreignKey: 'commentId', onDelete: 'CASCADE' });
   };
   return Comment;
 };

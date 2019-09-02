@@ -64,12 +64,12 @@ describe('POST /api/v1/articles/:slug/highlights', () => {
       .request(app)
       .post(`/api/v1/articles/${articleSlug}/highlights`)
       .set('Authorization', userToken1)
-      .send(dummyHighlight.noText)
+      .send(dummyHighlight.noStop)
       .end((err, res) => {
         if (err) done(err);
         expect(res).to.have.status(400);
         expect(res.body).to.have.key('error');
-        expect(res.body.error).to.deep.equal('Text to highlight is required');
+        expect(res.body.error).to.deep.equal('Stop Index is required');
         done();
       });
   });
@@ -93,17 +93,17 @@ describe('POST /api/v1/articles/:slug/highlights', () => {
 });
 
 describe('POST /api/v1/articles/:slug/highlights', () => {
-  it('Should return error if text is an empty string', (done) => {
+  it('Should return error if Stop index is not a number', (done) => {
     chai
       .request(app)
       .post(`/api/v1/articles/${articleSlug}/highlights`)
       .set('Authorization', userToken1)
-      .send(dummyHighlight.invalidText)
+      .send(dummyHighlight.invalidStopIndex)
       .end((err, res) => {
         if (err) done(err);
         expect(res).to.have.status(400);
         expect(res.body).to.have.key('error');
-        expect(res.body.error).to.deep.equal('text is not allowed to be empty');
+        expect(res.body.error).to.deep.equal('stopIndex must be a number');
         done();
       });
   });
@@ -143,35 +143,35 @@ describe('POST /api/v1/articles/:slug/highlights', () => {
   });
 });
 
-describe('POST /api/v1/articles/:slug/highlights', () => {
-  it('Should return error if text is not a string', (done) => {
+describe(`/api/v1/articles/${articleSlug}/highlights`, () => {
+  it('Should return error if start index and stop indexes are equal', (done) => {
     chai
       .request(app)
       .post(`/api/v1/articles/${articleSlug}/highlights`)
       .set('Authorization', userToken1)
-      .send(dummyHighlight.nonStringText)
+      .send(dummyHighlight.sameStartStop)
       .end((err, res) => {
         if (err) done(err);
         expect(res).to.have.status(400);
         expect(res.body).to.have.key('error');
-        expect(res.body.error).to.deep.equal('Text must be a string');
+        expect(res.body.error).to.deep.equal('Start Index cannot be greater or equal to stop index');
         done();
       });
   });
 });
 
-describe('POST /api/v1/articles/:slug/highlights', () => {
-  it('Should return error if article is not found', (done) => {
+describe(`/api/v1/articles/${articleSlug}/highlights`, () => {
+  it('Should return error if start is grater than stop index', (done) => {
     chai
       .request(app)
-      .post('/api/v1/articles/897465/highlights')
+      .post(`/api/v1/articles/${articleSlug}/highlights`)
       .set('Authorization', userToken1)
-      .send(dummyHighlight.validHighlight)
+      .send(dummyHighlight.startGreater)
       .end((err, res) => {
         if (err) done(err);
-        expect(res).to.have.status(404);
+        expect(res).to.have.status(400);
         expect(res.body).to.have.key('error');
-        expect(res.body.error).to.deep.equal('Article 897465 does not exist');
+        expect(res.body.error).to.deep.equal('Start Index cannot be greater or equal to stop index');
         done();
       });
   });
@@ -186,7 +186,7 @@ describe('POST /api/v1/articles/:slug/highlights', () => {
       .send(dummyHighlight.validIndex)
       .end((err, res) => {
         if (err) done(err);
-        expect(res).to.have.status(404);
+        expect(res).to.have.status(400);
         expect(res.body).to.have.key('error');
         expect(res.body.error).to.deep.equal('Invalid index');
         done();
@@ -195,21 +195,38 @@ describe('POST /api/v1/articles/:slug/highlights', () => {
 });
 
 describe('POST /api/v1/articles/:slug/highlights', () => {
-  it('Should return error if text to highlight is not found', (done) => {
+  it('Should return error if article is not found', (done) => {
     chai
       .request(app)
-      .post(`/api/v1/articles/${articleSlug}/highlights`)
+      .post('/api/v1/articles/987757/highlights')
       .set('Authorization', userToken1)
-      .send(dummyHighlight.textNotFound)
+      .send(dummyHighlight.validHighlight)
       .end((err, res) => {
         if (err) done(err);
         expect(res).to.have.status(404);
         expect(res.body).to.have.key('error');
-        expect(res.body.error).to.deep.equal('Text texttexttext not found');
+        expect(res.body.error).to.deep.equal('Article 987757 does not exist');
         done();
       });
   });
 });
+
+// describe('POST /api/v1/articles/:slug/highlights', () => {
+//   it('Should return error if Start index is greater than stop index', (done) => {
+//     chai
+//       .request(app)
+//       .post(`/api/v1/articles/${articleSlug}/highlights`)
+//       .set('Authorization', userToken1)
+//       .send(dummyHighlight.startGreater)
+//       .end((err, res) => {
+//         if (err) done(err);
+//         expect(res).to.have.status(404);
+//         expect(res.body).to.have.key('error');
+//         expect(res.body.error).to.deep.equal('Text texttexttext not found');
+//         done();
+//       });
+//   });
+// });
 
 describe('POST /api/v1/articles/:slug/highlights', () => {
   it('Should return the highlighted text if found', (done) => {
