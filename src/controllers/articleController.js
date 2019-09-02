@@ -1,12 +1,14 @@
 /* eslint-disable no-shadow */
 /* eslint-disable max-len */
 import { config } from 'dotenv';
+import { Op } from 'sequelize';
 import {
   User, Article, Reaction, Comment, Share
 } from '../sequelize/models';
-import { slugGen, uploadImage } from '../helpers/articles/articleHelper';
+import { slugGen, uploadImage, queryFilterer } from '../helpers/articles/articleHelper';
 import readTime from '../helpers/articles/readTimeForArticle';
 import ShareArticleHelper from '../helpers/articles/shareHelper';
+import ArticleRatelehelper from '../helpers/articles/rateArticleHelper';
 
 config();
 /**
@@ -85,8 +87,11 @@ class ArticleController {
    */
   static async getAllArticles(req, res) {
     try {
+      const { title } = req.query;
       let page = parseInt(req.query.page, 10);
       let limit = parseInt(req.query.limit, 10);
+      const filter = queryFilterer(title);
+      console.log(filter);
       if (!page) {
         page = 1;
       }
@@ -100,7 +105,7 @@ class ArticleController {
         limit = 10;
       }
 
-      const { count } = await Article.findAndCountAll();
+      const { count } = await Article.findAndCountAll(filter);
       if (!count) {
         return res.status(404).json({
           message: 'No articles found at the moment! please come back later'
@@ -117,6 +122,15 @@ class ArticleController {
       const articles = await Article.findAll({
         offset,
         limit,
+        where: {
+          [Op.or]: [
+            {
+              title: {
+                [Op.iLike]: `%${title}%`
+              }
+            }
+          ]
+        },
         order: [['createdAt', 'DESC']],
         include: [
           {
@@ -519,6 +533,9 @@ class ArticleController {
           message: 'Sorry! The requested article was not found.'
         });
       }
+      const averageRatings = await ArticleRatelehelper.getRatings(article.id);
+      article.get().averageRatings = averageRatings;
+
       const readTimeOfArticle = readTime(article.body);
       article.get().readTime = readTimeOfArticle;
       return res.status(200).json({
@@ -545,6 +562,7 @@ class ArticleController {
     if (result) {
       const createShare = await Share.create({
         userId: id,
+        articleId: article.id,
         slug,
         platform: [option],
         createdAt: new Date(),

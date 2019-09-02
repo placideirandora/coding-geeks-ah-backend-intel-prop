@@ -1,6 +1,6 @@
 import model from '../sequelize/models';
 
-const { User, Rating } = model;
+const { User, Rating, Article } = model;
 
 /**
  * @description Rate the article
@@ -14,9 +14,10 @@ class ArticleRate {
      */
   static async rateArticle(req, res) {
     const { rate } = req.body;
+    const { articleId } = req.params;
     const rateAuthor = await User.findOne({ where: { id: req.userData.id } });
     const ratings = await Rating.findOne(
-      { where: { reviewerId: rateAuthor.id, articleId: req.params.id } }
+      { where: { reviewerId: rateAuthor.id, articleId } }
     );
 
     if (ratings) {
@@ -30,7 +31,7 @@ class ArticleRate {
     }
     const rating = await Rating.create({
       rate,
-      articleId: req.params.id,
+      articleId: req.params.articleId,
       reviewerId: rateAuthor.id
     });
 
@@ -38,6 +39,29 @@ class ArticleRate {
       message: 'Successfully rated this article',
       data: { rating }
     });
+  }
+
+  /**
+     * @description get article rating
+     * @param  {object} req - accept object with user info
+     * @param  {object} res - accept object with user info
+     * @return {json} Returns json object
+     */
+  static async getArticleRating(req, res) {
+    const { articleId } = req.params;
+    const getArticle = await Article.findOne({
+      where: { id: articleId }
+    });
+    if (!getArticle) {
+      return res.status(404).json({ error: 'Article not found' });
+    }
+    const getRate = await Rating.findAll({
+      where: { articleId },
+    });
+    if (!getRate.length) {
+      return res.status(200).json({ message: 'This article has no ratings so far' });
+    }
+    return res.status(200).json({ message: 'Successfully ratings retrieved', ratings: getRate });
   }
 }
 
