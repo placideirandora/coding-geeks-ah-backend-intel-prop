@@ -22,19 +22,19 @@ class permissionController {
         error: 'This permission is already defined'
       });
     }
-    const payload = {
+    const data = {
       roleId: id,
       permission: newPermission,
     };
 
-    const createPermission = await Permission.create(payload);
+    const createdPermission = await Permission.create(data);
     return res.status(201).json({
       permission: {
-        id: createPermission.id,
-        role,
-        permission: createPermission.permission,
-        createdAt: createPermission.createdAt,
-        updatedAt: createPermission.updatedAt
+        id: createdPermission.id,
+        roleId: createdPermission.roleId,
+        permission: createdPermission.permission,
+        createdAt: createdPermission.createdAt,
+        updatedAt: createdPermission.updatedAt
       }
     });
   }
@@ -43,7 +43,7 @@ class permissionController {
    *
    * @param {object} req
    * @param {object} res
-   * @returns {object} return object containing a list of permission to the different useres
+   * @returns {object} return object containing a list of permissions
    */
   static async getRolePermissions(req, res) {
     const { role } = req.params;
@@ -51,9 +51,9 @@ class permissionController {
 
     const permissions = await Permission.findAll({ where: { roleId: id } });
 
-    if (permissions.length === 0) {
+    if (!permissions.length) {
       return res.status(404).json({
-        message: 'Permission not found'
+        message: `No permissions found for ${role}`
       });
     }
     return res.status(200).json({

@@ -34,7 +34,7 @@ describe('POST /api/v1/users/:role/role', () => {
         expect(res).to.have.status(201);
         expect(res.body).to.be.an('object');
         expect(res.body).to.have.keys('permission');
-        expect(res.body.permission).to.have.keys('id', 'role', 'permission', 'updatedAt', 'createdAt');
+        expect(res.body.permission).to.have.keys('id', 'roleId', 'permission', 'updatedAt', 'createdAt');
         done();
       });
   });
