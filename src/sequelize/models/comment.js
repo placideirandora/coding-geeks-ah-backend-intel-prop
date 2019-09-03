@@ -40,6 +40,7 @@ export default (sequelize, DataTypes) => {
     Comment.belongsTo(models.User, { foreignKey: 'userId', as: 'Commenter', onDelete: 'CASCADE' });
     Comment.belongsTo(models.Article, { foreignKey: 'articleId', as: 'ArticleComment', onDelete: 'CASCADE' });
     Comment.hasMany(models.CommentReaction, { foreignKey: 'commentId', onDelete: 'CASCADE' });
+    Comment.hasMany(models.CommentHistory, { foreignKey: 'commentId', as: 'parentComment' });
   };
   return Comment;
 };

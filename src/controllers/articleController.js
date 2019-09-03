@@ -2,7 +2,7 @@
 /* eslint-disable max-len */
 import { config } from 'dotenv';
 import {
-  User, Article, Reaction, Comment, Share, Statistic, Report
+  User, Article, Reaction, Comment, Share, Statistic, Report, CommentHistory
 } from '../sequelize/models';
 import { slugGen, uploadImage } from '../helpers/articles/articleHelper';
 import readTime from '../helpers/articles/readTimeForArticle';
@@ -10,8 +10,10 @@ import ShareArticleHelper from '../helpers/articles/shareHelper';
 import recordStats from '../helpers/articles/recordStats';
 import ArticleRatelehelper from '../helpers/articles/rateArticleHelper';
 import Paginator from '../helpers/articles/pagination';
+import commentHistoryCreate from '../helpers/articles/commentHistory';
 
 config();
+
 /**
  * @description holds article logic
  */
@@ -622,6 +624,7 @@ class ArticleController {
 
     await Comment.update({ comment }, { where: { id: specificComment } });
     const updatedComment = await Comment.findOne({ where: { id: specificComment } });
+    await commentHistoryCreate(req, findCommenter);
 
     return res.status(200).json({
       message: 'Comment updated',
@@ -729,6 +732,7 @@ class ArticleController {
   }
 
   /**
+<<<<<<< HEAD
    * @param {object} req
    * @param {object} res
    * @returns {object} returns an object containing a blocked article response
@@ -783,6 +787,22 @@ class ArticleController {
     return res.status(200).json({
       message: 'Article unblocked',
     });
+  }
+
+  /**
+   * @description - Users should be able to track edit history
+   * @param {Object} req - Request Object
+   * @param {Object} res  - Response Object
+   * @returns {Object} - Response object
+   */
+  static async commentHistory(req, res) {
+    const { commentId } = req.params;
+    const findHistory = await CommentHistory.findAll({ where: { commentId }, order: [['updatedAt', 'DESC']] });
+    const history = findHistory.length;
+    if (!history) {
+      return res.status(404).json({ message: 'No edit history for this comment!' });
+    }
+    return res.status(200).json({ message: 'Successfully comment edit history retrieved', data: { commentHistory: findHistory } });
   }
 }
 

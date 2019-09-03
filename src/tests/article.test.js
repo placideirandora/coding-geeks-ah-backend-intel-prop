@@ -346,6 +346,35 @@ describe('POST AND GET /api/v1/articles', () => {
         done();
       });
   });
+  it('Should retrieve comment edit history of the article', (done) => {
+    chai
+      .request(app)
+      .get(`/api/v1/articles/${articleSlug2}/comments/1/history`)
+      .set('Authorization', userToken1)
+      .end((err, res) => {
+        if (err) done(err);
+        expect(res).have.status(200);
+        expect(res).to.be.an('object');
+        expect(res.body).to.have.keys('message', 'data');
+        expect(res.body.message).to.deep.equal('Successfully comment edit history retrieved');
+        expect(res.body.data).to.be.an('object');
+        done();
+      });
+  });
+  it('Should not retrieve comment edit history of the article when the user is not admin or super-admin', (done) => {
+    chai
+      .request(app)
+      .get(`/api/v1/articles/${articleSlug2}/comments/1/history`)
+      .set('Authorization', userToken2)
+      .end((err, res) => {
+        if (err) done(err);
+        expect(res).have.status(403);
+        expect(res).to.be.an('object');
+        expect(res.body).to.have.key('error');
+        expect(res.body.error).to.deep.equal('Sorry! You are not allowed to view this resource');
+        done();
+      });
+  });
   it('Should not update the comment if it cannot be found', (done) => {
     chai
       .request(app)
@@ -1239,6 +1268,21 @@ describe('DELETE /api/v1/articles/:slug', () => {
       .request(app)
       .delete(`/api/v1/articles/${newArticleSlug}`)
       .set('Authorization', invalidToken)
+      .end((err, res) => {
+        if (err) done(err);
+        expect(res).have.status(403);
+        expect(res.body).to.have.key('error');
+        expect(res.body.error).to.deep.equal(
+          'Sorry! You are not allowed to view or make changes to this resource'
+        );
+        done();
+      });
+  });
+  it('Should return an error if the the user is not the admin or superadmin', (done) => {
+    chai
+      .request(app)
+      .delete(`/api/v1/articles/${newArticleSlug}`)
+      .set('Authorization', userToken2)
       .end((err, res) => {
         if (err) done(err);
         expect(res).have.status(403);
