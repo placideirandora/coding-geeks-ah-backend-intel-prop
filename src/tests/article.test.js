@@ -16,11 +16,15 @@ before(async () => {
   await Follow.create(dummyUser.validFollower);
 });
 
-let userToken1 = '';
-let userToken2 = '';
+let userToken1;
+let userToken2;
+let userToken3;
+let userToken4;
 let articleSlug;
 let articleSlug2;
 let newArticleSlug;
+let commentId;
+const invalidArticleSlug = 'something-new-w2zjzvm6o5sgad456';
 
 before(async () => {
   await Follow.create(dummyUser.validFollower);
@@ -51,6 +55,34 @@ before((done) => {
     .end((err, res) => {
       if (err) done(err);
       userToken2 = res.body.data.token;
+      done();
+    });
+});
+before((done) => {
+  chai
+    .request(app)
+    .post('/api/v1/users/login')
+    .send({
+      email: 'cyuba@gmail.com',
+      password: 'cr7-f00t!b0L'
+    })
+    .end((err, res) => {
+      if (err) done(err);
+      userToken3 = res.body.data.token;
+      done();
+    });
+});
+before((done) => {
+  chai
+    .request(app)
+    .post('/api/v1/users/login')
+    .send({
+      email: 'kate@gmail.com',
+      password: 'gotoBora-j00p!b0L'
+    })
+    .end((err, res) => {
+      if (err) done(err);
+      userToken4 = res.body.data.token;
       done();
     });
 });
@@ -397,6 +429,20 @@ describe('POST AND GET /api/v1/articles', () => {
         done();
       });
   });
+  it('Should not retrieve reading statistics because the article will have never been read so far', (done) => {
+    chai
+      .request(app)
+      .get(`/api/v1/articles/${articleSlug}/statistics`)
+      .set('Authorization', userToken4)
+      .end((err, res) => {
+        if (err) done(err);
+        expect(res).have.status(404);
+        expect(res).to.be.an('object');
+        expect(res.body).to.have.keys('message');
+        expect(res.body.message).to.deep.equal('The article has never been read so far');
+        done();
+      });
+  });
   it('Should return all avaiable articles', (done) => {
     chai
       .request(app)
@@ -586,6 +632,263 @@ describe('POST AND GET /api/v1/articles', () => {
         expect(res.body).to.have.keys('message', 'reaction');
         expect(res.body.message).to.deep.equal('You have disliked the article');
         expect(res.body.reaction).to.be.an('object');
+        done();
+      });
+  });
+  // Reading statistics
+  it('Should retrieve reading statistics', (done) => {
+    chai
+      .request(app)
+      .get(`/api/v1/articles/${articleSlug}/statistics`)
+      .set('Authorization', userToken1)
+      .end((err, res) => {
+        if (err) done(err);
+        expect(res).have.status(200);
+        expect(res).to.be.an('object');
+        expect(res.body).to.have.keys('message', 'statistics');
+        expect(res.body.message).to.deep.equal('Reading statistics retrieved');
+        expect(res.body.statistics).to.be.an('object');
+        done();
+      });
+  });
+});
+it('Should not retrieve reading statistics because the articles does not exist', (done) => {
+  chai
+    .request(app)
+    .get(`/api/v1/articles/${invalidArticleSlug}/statistics`)
+    .set('Authorization', userToken3)
+    .end((err, res) => {
+      if (err) done(err);
+      expect(res).have.status(404);
+      expect(res).to.be.an('object');
+      expect(res.body).to.have.keys('message');
+      expect(res.body.message).to.deep.equal('Article not found');
+      done();
+    });
+});
+describe('POST LIKES OR DISLIKES /api/v1/comments/id/{like/dislike}', () => {
+  before((done) => {
+    chai
+      .request(app)
+      .post('/api/v1/articles')
+      .set('Authorization', userToken1)
+      .field(dummyArticle.validArticle)
+      .attach('image', fs.readFileSync('src/tests/dummyData/avatar.jpg'), 'avatar.jpg')
+      .end((err, res) => {
+        if (err) done(err);
+        articleSlug = res.body.article.slug;
+        done();
+      });
+  });
+  before((done) => {
+    chai
+      .request(app)
+      .post(`/api/v1/articles/${articleSlug}/comments`)
+      .set('Authorization', userToken1)
+      .send({ comment: 'This story is cool!' })
+      .end((err, res) => {
+        if (err) done(err);
+        commentId = res.body.articleComment.id;
+        done();
+      });
+  });
+
+  it('Should return a message of failure when a user likes unavailable comment', (done) => {
+    chai
+      .request(app)
+      .put('/api/v1/comments/10/like')
+      .set('Authorization', userToken1)
+      .end((err, res) => {
+        if (err) done(err);
+        expect(res).have.status(404);
+        expect(res).to.be.an('object');
+        expect(res.body).to.have.keys('message');
+        expect(res.body.message).to.deep.equal(
+          'Sorry! Comment not found.'
+        );
+        done();
+      });
+  });
+  it('Should return a message of failure when a user dislikes unavailable comment', (done) => {
+    chai
+      .request(app)
+      .put('/api/v1/comments/10/dislike')
+      .set('Authorization', userToken1)
+      .end((err, res) => {
+        if (err) done(err);
+        expect(res).have.status(404);
+        expect(res).to.be.an('object');
+        expect(res.body).to.have.keys('message');
+        expect(res.body.message).to.deep.equal(
+          'Sorry! Comment not found.'
+        );
+        done();
+      });
+  });
+  it('Should return a message of success when a like is registered', (done) => {
+    chai
+      .request(app)
+      .put(`/api/v1/comments/${commentId}/like`)
+      .set('Authorization', userToken1)
+      .end((err, res) => {
+        if (err) done(err);
+        expect(res).have.status(201);
+        expect(res).to.be.an('object');
+        expect(res.body).to.have.keys('message');
+        expect(res.body.message).to.deep.equal(
+          'You have successfully liked this comment.'
+        );
+        done();
+      });
+  });
+  it('Should retrieve comments of the article with correct number of likes and dislikes', (done) => {
+    chai
+      .request(app)
+      .get(`/api/v1/articles/${articleSlug}/comments`)
+      .set('Authorization', userToken1)
+      .end((err, res) => {
+        if (err) done(err);
+        expect(res).have.status(200);
+        expect(res.body.comments[0].likes).to.equal(1);
+        expect(res.body.comments[0].dislikes).to.equal(0);
+        done();
+      });
+  });
+  it('Should return a message of success if a like is removed', (done) => {
+    chai
+      .request(app)
+      .put(`/api/v1/comments/${commentId}/like`)
+      .set('Authorization', userToken1)
+      .end((err, res) => {
+        if (err) done(err);
+        expect(res).have.status(200);
+        expect(res).to.be.an('object');
+        expect(res.body).to.have.keys('message');
+        expect(res.body.message).to.deep.equal(
+          'You have successfully removed your like for this comment.'
+        );
+        done();
+      });
+  });
+  it('Should return a message of success when a comment is liked for a third time', (done) => {
+    chai
+      .request(app)
+      .put(`/api/v1/comments/${commentId}/like`)
+      .set('Authorization', userToken1)
+      .end((err, res) => {
+        if (err) done(err);
+        expect(res).have.status(200);
+        expect(res).to.be.an('object');
+        expect(res.body).to.have.keys('message');
+        expect(res.body.message).to.deep.equal(
+          'You have successfully liked this comment.'
+        );
+        done();
+      });
+  });
+  it('Should return a message of sucess if a dislike is registered', (done) => {
+    chai
+      .request(app)
+      .put(`/api/v1/comments/${commentId}/dislike`)
+      .set('Authorization', userToken1)
+      .end((err, res) => {
+        if (err) done(err);
+        expect(res).have.status(200);
+        expect(res).to.be.an('object');
+        expect(res.body).to.have.keys('message');
+        expect(res.body.message).to.deep.equal(
+          'You have successfully disliked this comment.'
+        );
+        done();
+      });
+  });
+  it('Should return a message of success when a comment is liked after the user disliked it', (done) => {
+    chai
+      .request(app)
+      .put(`/api/v1/comments/${commentId}/like`)
+      .set('Authorization', userToken1)
+      .end((err, res) => {
+        if (err) done(err);
+        expect(res).have.status(200);
+        expect(res).to.be.an('object');
+        expect(res.body).to.have.keys('message');
+        expect(res.body.message).to.deep.equal(
+          'You have successfully liked this comment.'
+        );
+        done();
+      });
+  });
+  it('Should retrieve comments of the article with correct number of likes and dislikes', (done) => {
+    chai
+      .request(app)
+      .get(`/api/v1/articles/${articleSlug}/comments`)
+      .set('Authorization', userToken1)
+      .end((err, res) => {
+        if (err) done(err);
+        expect(res).have.status(200);
+        expect(res.body.comments[0].likes).to.equal(1);
+        expect(res.body.comments[0].dislikes).to.equal(0);
+        done();
+      });
+  });
+  it('Should return  a message sucess if a dislike is registered again', (done) => {
+    chai
+      .request(app)
+      .put(`/api/v1/comments/${commentId}/dislike`)
+      .set('Authorization', userToken1)
+      .end((err, res) => {
+        if (err) done(err);
+        expect(res).have.status(200);
+        expect(res).to.be.an('object');
+        expect(res.body).to.have.keys('message');
+        expect(res.body.message).to.deep.equal(
+          'You have successfully disliked this comment.'
+        );
+        done();
+      });
+  });
+  it('Should return a message sucess if a dislike again ', (done) => {
+    chai
+      .request(app)
+      .put(`/api/v1/comments/${commentId}/dislike`)
+      .set('Authorization', userToken1)
+      .end((err, res) => {
+        if (err) done(err);
+        expect(res).have.status(200);
+        expect(res).to.be.an('object');
+        expect(res.body).to.have.keys('message');
+        expect(res.body.message).to.deep.equal(
+          'You have successfully removed your dislike for this comment.'
+        );
+        done();
+      });
+  });
+  it('Should retrieve comments of the article with correct number of likes and dislikes', (done) => {
+    chai
+      .request(app)
+      .get(`/api/v1/articles/${articleSlug}/comments`)
+      .set('Authorization', userToken1)
+      .end((err, res) => {
+        if (err) done(err);
+        expect(res).have.status(200);
+        expect(res.body.comments[0].likes).to.equal(0);
+        expect(res.body.comments[0].dislikes).to.equal(0);
+        done();
+      });
+  });
+  it('Should return a message sucess if a dislike is registered again', (done) => {
+    chai
+      .request(app)
+      .put(`/api/v1/comments/${commentId}/dislike`)
+      .set('Authorization', userToken1)
+      .end((err, res) => {
+        if (err) done(err);
+        expect(res).have.status(200);
+        expect(res).to.be.an('object');
+        expect(res.body).to.have.keys('message');
+        expect(res.body.message).to.deep.equal(
+          'You have successfully disliked this comment.'
+        );
         done();
       });
   });
@@ -794,7 +1097,7 @@ describe('POST /api/v1/articles/{articleId}/rate', () => {
   it('Should not be able to rate the article which does not exist', (done) => {
     chai
       .request(app)
-      .post('/api/v1/articles/5/rate')
+      .post('/api/v1/articles/11/rate')
       .set('Authorization', userToken2)
       .send({ rate: 3 })
       .end((err, res) => {

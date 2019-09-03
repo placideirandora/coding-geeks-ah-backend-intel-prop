@@ -1825,6 +1825,43 @@
                 }
             }
         },
+        "/api/v1/articles/{articleSlug}/statistics": {
+            "get": {
+                "tags": [
+                    "Articles"
+                ],
+                "summary": "Retrieve an article's reading statistics",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "Authorization",
+                        "in": "header",
+                        "description": "Token",
+                        "required": true
+                    },
+                    {
+                        "name": "articleSlug",
+                        "in": "path",
+                        "description": "A slug of an article",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Reading statistics retrieved"
+                    },
+                    "404": {
+                        "description": "Reading statistics/Article not found"
+                    },
+                    "401": {
+                        "description": "Unauthorized Access"
+                    }
+                }
+            }
+        },
         "/api/v1/articles/{articleSlug}/reports": {
             "post": {
                 "tags": [

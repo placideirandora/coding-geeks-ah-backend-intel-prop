@@ -5,7 +5,9 @@ import bcrypt from 'bcrypt';
 config();
 
 const genToken = user => jwt.sign(
-  { id: user.id, email: user.email, role: user.role },
+  {
+    id: user.id, email: user.email, role: user.role, username: user.userName
+  },
   process.env.SECRET_KEY,
   { expiresIn: '1d' }
 );

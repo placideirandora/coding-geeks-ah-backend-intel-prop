@@ -2,11 +2,12 @@
 /* eslint-disable max-len */
 import { config } from 'dotenv';
 import {
-  User, Article, Reaction, Comment, Share
+  User, Article, Reaction, Comment, Share, Statistic
 } from '../sequelize/models';
 import { slugGen, uploadImage } from '../helpers/articles/articleHelper';
 import readTime from '../helpers/articles/readTimeForArticle';
 import ShareArticleHelper from '../helpers/articles/shareHelper';
+import recordStats from '../helpers/articles/recordStats';
 import ArticleRatelehelper from '../helpers/articles/rateArticleHelper';
 
 config();
@@ -525,6 +526,7 @@ class ArticleController {
 
       const readTimeOfArticle = readTime(article.body);
       article.get().readTime = readTimeOfArticle;
+      recordStats(article);
       return res.status(200).json({
         article
       });
@@ -711,6 +713,36 @@ class ArticleController {
 
     return res.status(200).json({
       message: 'Comment deleted'
+    });
+  }
+
+  /**
+   * @param {object} req
+   * @param {object} res
+   * @returns {object} returns an object containing an article's statistics
+   */
+  static async readingStats(req, res) {
+    const slugId = req.params.articleSlug;
+
+    const findArticle = await Article.findOne({ where: { slug: slugId } });
+
+    if (!findArticle) {
+      return res.status(404).json({
+        message: 'Article not found'
+      });
+    }
+
+    const statistics = await Statistic.findOne({ where: { articleSlug: slugId } });
+
+    if (!statistics) {
+      return res.status(404).json({
+        message: 'The article has never been read so far'
+      });
+    }
+
+    return res.status(200).json({
+      message: 'Reading statistics retrieved',
+      statistics
     });
   }
 }
