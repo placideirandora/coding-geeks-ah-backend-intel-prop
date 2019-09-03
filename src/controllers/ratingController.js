@@ -72,7 +72,7 @@ class ArticleRate {
       currentPage,
       nextPage: nextURL,
       lastPage,
-      message: 'Successfully ratings retrieved',
+      message: 'Successfully retrieved ratings',
       ratings: data
     });
   }
