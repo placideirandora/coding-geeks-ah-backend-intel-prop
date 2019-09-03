@@ -1,6 +1,7 @@
 import model from '../sequelize/models';
+import Paginator from '../helpers/articles/pagination';
 
-const { User, Rating, Article } = model;
+const { User, Rating } = model;
 
 /**
  * @description Rate the article
@@ -49,19 +50,31 @@ class ArticleRate {
      */
   static async getArticleRating(req, res) {
     const { articleId } = req.params;
-    const getArticle = await Article.findOne({
-      where: { id: articleId }
-    });
-    if (!getArticle) {
-      return res.status(404).json({ error: 'Article not found' });
-    }
-    const getRate = await Rating.findAll({
+    const page = parseInt(req.query.page, 10);
+    const limit = parseInt(req.query.limit, 10);
+    const {
+      data, previous, next, pages, pageLimit, currentPage
+    } = await Paginator(Rating, {
       where: { articleId },
+      page,
+      limit
     });
-    if (!getRate.length) {
+    if (!data) {
       return res.status(200).json({ message: 'This article has no ratings so far' });
     }
-    return res.status(200).json({ message: 'Successfully ratings retrieved', ratings: getRate });
+    const previousURL = new URL(`?page=${previous}&limit=${pageLimit}`, `${process.env.APP_URL}/articles/${articleId}/rate`);
+    const nextURL = new URL(`?page=${next}&limit=${pageLimit}`, `${process.env.APP_URL}/articles/${articleId}/rate`);
+    const firstPage = new URL(`?page=1&limit=${pageLimit}`, `${process.env.APP_URL}/articles/${articleId}/rate`);
+    const lastPage = new URL(`?page=${pages}&limit=${pageLimit}`, `${process.env.APP_URL}/articles/${articleId}/rate`);
+    return res.status(200).json({
+      firstPage,
+      previousPage: previousURL,
+      currentPage,
+      nextPage: nextURL,
+      lastPage,
+      message: 'Successfully ratings retrieved',
+      ratings: data
+    });
   }
 }
 

@@ -905,7 +905,7 @@ describe('UPDATE /api/v1/articles/:slug', () => {
         expect(res).have.status(403);
         expect(res.body).to.have.key('error');
         expect(res.body.error).to.deep.equal(
-          'Sorry! You are not allowed to make changes to this resource'
+          'Sorry! You are not allowed to view or make changes to this resource'
         );
         done();
       });
@@ -1162,7 +1162,7 @@ describe('GET /api/v1/articles/{articleId}/rate', () => {
         expect(res).have.status(404);
         expect(res).to.be.an('object');
         expect(res.body).to.have.key('error');
-        expect(res.body.error).to.deep.equal('Article not found');
+        expect(res.body.error).to.deep.equal('Sorry! The specified article does not exist');
         done();
       });
   });
@@ -1239,7 +1239,7 @@ describe('DELETE /api/v1/articles/:slug', () => {
         expect(res).have.status(403);
         expect(res.body).to.have.key('error');
         expect(res.body.error).to.deep.equal(
-          'Sorry! You are not allowed to make changes to this resource'
+          'Sorry! You are not allowed to view or make changes to this resource'
         );
         done();
       });
