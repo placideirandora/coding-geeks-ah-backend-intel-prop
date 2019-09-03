@@ -1241,6 +1241,20 @@
                     "Articles"
                 ],
                 "description": "Fetch all user articles",
+                "parameters": [
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "type": "integer",
+                        "description": "The page to be loaded"
+                    },
+                    {
+                        "name": "limit",
+                        "in": "query",
+                        "type": "integer",
+                        "description": "The numbers of items to return"
+                    }
+                ],
                 "produces": [
                     "application/json"
                 ],
@@ -1650,6 +1664,18 @@
                         "in": "path",
                         "description": "id of the article you want to rate",
                         "type": "integer"
+                    },
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "type": "integer",
+                        "description": "The page to be loaded"
+                    },
+                    {
+                        "name": "limit",
+                        "in": "query",
+                        "type": "integer",
+                        "description": "The numbers of items to return"
                     }
                 ],
                 "produces": [
