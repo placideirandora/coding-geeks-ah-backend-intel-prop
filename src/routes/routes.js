@@ -21,6 +21,7 @@ import Bookmark from '../controllers/bookmarkController';
 import findUser from '../middleware/findUser';
 import Report from '../controllers/reportController';
 import CommentReaction from '../controllers/commentController';
+import Role from '../controllers/roleController';
 
 
 const router = express.Router();
@@ -84,4 +85,9 @@ router.get('/api/v1/articles/:articleSlug/reports/:reportId', [verifyToken, chec
 
 router.put('/api/v1/comments/:id/like', [verifyToken, findUser, Validation.idInParamsValidation], CommentReaction.likeComment);
 router.put('/api/v1/comments/:id/dislike', [verifyToken, findUser, Validation.idInParamsValidation], CommentReaction.dislikeComment);
+router.post('/api/v1/users/:role/roles', [verifyToken, adminPermission, Validation.permissionValidation, Validation.RoleParamsValidation], Role.createPermision);
+router.get('/api/v1/users/:role/roles', [verifyToken, checkAdmin, Validation.RoleParamsValidation], Role.getRolePermissions);
+router.patch('/api/v1/users/:permissionId/roles', [verifyToken, adminPermission, Validation.permissionValidation, Validation.idPermissionValidation], Role.updatePermission);
+router.delete('/api/v1/users/:permissionId/roles', [verifyToken, adminPermission, Validation.idPermissionValidation], Role.deletePermission);
+
 export default router;
