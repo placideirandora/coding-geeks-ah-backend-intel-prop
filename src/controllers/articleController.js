@@ -2,11 +2,14 @@
 /* eslint-disable max-len */
 import { config } from 'dotenv';
 import {
-  User, Article, Reaction, Comment, Share
+  User, Article, Reaction, Comment, Share, Statistic
 } from '../sequelize/models';
 import { slugGen, uploadImage } from '../helpers/articles/articleHelper';
 import readTime from '../helpers/articles/readTimeForArticle';
 import ShareArticleHelper from '../helpers/articles/shareHelper';
+import recordStats from '../helpers/articles/recordStats';
+import ArticleRatelehelper from '../helpers/articles/rateArticleHelper';
+import Paginator from '../helpers/articles/pagination';
 
 config();
 /**
@@ -85,37 +88,13 @@ class ArticleController {
    */
   static async getAllArticles(req, res) {
     try {
-      let page = parseInt(req.query.page, 10);
-      let limit = parseInt(req.query.limit, 10);
-      if (!page) {
-        page = 1;
-      }
-      if (!limit) {
-        limit = 10;
-      }
-      if (page < 1) {
-        page = 1;
-      }
-      if (limit < 1 || limit > 10) {
-        limit = 10;
-      }
+      const page = parseInt(req.query.page, 10);
+      const limit = parseInt(req.query.limit, 10);
 
-      const { count } = await Article.findAndCountAll();
-      if (!count) {
-        return res.status(404).json({
-          message: 'No articles found at the moment! please come back later'
-        });
-      }
-      const pages = Math.ceil(count / limit);
-      if (page > pages) {
-        page = pages;
-      }
-      const previous = page === 1 ? 1 : page - 1;
-      const next = page === pages ? page : page + 1;
-
-      const offset = (page - 1) * limit;
-      const articles = await Article.findAll({
-        offset,
+      const {
+        data, previous, next, pages, pageLimit, currentPage
+      } = await Paginator(Article, {
+        page,
         limit,
         order: [['createdAt', 'DESC']],
         include: [
@@ -126,12 +105,16 @@ class ArticleController {
           }
         ]
       });
-      const previousURL = new URL(`?page=${previous}&limit=${limit}`, `${process.env.APP_URL}/articles`);
-      const nextURL = new URL(`?page=${next}&limit=${limit}`, `${process.env.APP_URL}/articles`);
-      const firstPage = new URL(`?page=1&limit=${limit}`, `${process.env.APP_URL}/articles`);
-      const lastPage = new URL(`?page=${pages}&limit=${limit}`, `${process.env.APP_URL}/articles`);
-
-      articles.map((article) => {
+      if (!data) {
+        return res.status(404).json({
+          message: 'No articles found at the moment! please come back later'
+        });
+      }
+      const previousURL = new URL(`?page=${previous}&limit=${pageLimit}`, `${process.env.APP_URL}/articles`);
+      const nextURL = new URL(`?page=${next}&limit=${pageLimit}`, `${process.env.APP_URL}/articles`);
+      const firstPage = new URL(`?page=1&limit=${pageLimit}`, `${process.env.APP_URL}/articles`);
+      const lastPage = new URL(`?page=${pages}&limit=${pageLimit}`, `${process.env.APP_URL}/articles`);
+      data.map((article) => {
         const readTimeOfArticle = readTime(article.body);
         article.get().readTime = readTimeOfArticle;
         article.readTime = readTime;
@@ -140,10 +123,10 @@ class ArticleController {
       res.status(200).json({
         firstPage,
         previousPage: previousURL,
-        currentPage: page,
+        currentPage,
         nextPage: nextURL,
         lastPage,
-        articles
+        articles: data
       });
     } catch (err) {
       throw err;
@@ -519,8 +502,12 @@ class ArticleController {
           message: 'Sorry! The requested article was not found.'
         });
       }
+      const averageRatings = await ArticleRatelehelper.getRatings(article.id);
+      article.get().averageRatings = averageRatings;
+
       const readTimeOfArticle = readTime(article.body);
       article.get().readTime = readTimeOfArticle;
+      recordStats(article);
       return res.status(200).json({
         article
       });
@@ -545,6 +532,7 @@ class ArticleController {
     if (result) {
       const createShare = await Share.create({
         userId: id,
+        articleId: article.id,
         slug,
         platform: [option],
         createdAt: new Date(),
@@ -706,6 +694,36 @@ class ArticleController {
 
     return res.status(200).json({
       message: 'Comment deleted'
+    });
+  }
+
+  /**
+   * @param {object} req
+   * @param {object} res
+   * @returns {object} returns an object containing an article's statistics
+   */
+  static async readingStats(req, res) {
+    const slugId = req.params.articleSlug;
+
+    const findArticle = await Article.findOne({ where: { slug: slugId } });
+
+    if (!findArticle) {
+      return res.status(404).json({
+        message: 'Article not found'
+      });
+    }
+
+    const statistics = await Statistic.findOne({ where: { articleSlug: slugId } });
+
+    if (!statistics) {
+      return res.status(404).json({
+        message: 'The article has never been read so far'
+      });
+    }
+
+    return res.status(200).json({
+      message: 'Reading statistics retrieved',
+      statistics
     });
   }
 }
