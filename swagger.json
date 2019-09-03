@@ -1515,7 +1515,7 @@
                         "description": "Comment not found"
                     }
                 }
-            } 
+            }
         },
         "/api/v1/comments/{id}/dislike": {
             "put": {
@@ -1558,7 +1558,7 @@
                         "description": "Comment not found"
                     }
                 }
-            } 
+            }
         },
         "/api/v1/articles/{articleId}/rate": {
             "post": {
@@ -2469,7 +2469,7 @@
                 }
             }
         },
-        "/api/v1/users/{role}/roles": {
+        "/api/v1/users/{role}/permissions": {
             "post": {
                 "tags": [
                     "Users"
@@ -2572,7 +2572,7 @@
                 }
             }
         },
-        "/api/v1/users/{permissionId}/roles": {
+        "/api/v1/users/{permissionId}/permissions": {
             "patch": {
                 "tags": [
                     "Users"

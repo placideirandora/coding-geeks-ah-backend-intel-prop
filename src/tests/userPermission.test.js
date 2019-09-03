@@ -24,7 +24,7 @@ before((done) => {
 describe('POST /api/v1/users/:role/role', () => {
   it('Should be able to create a permission', (done) => {
     chai.request(app)
-      .post('/api/v1/users/admin/roles')
+      .post('/api/v1/users/admin/permissions')
       .set('Authorization', userToken1)
       .send({
         permission: 'Create a user'
@@ -40,7 +40,7 @@ describe('POST /api/v1/users/:role/role', () => {
   });
   it('Should not be able to create a permission if permission has less than 5 charcacters', (done) => {
     chai.request(app)
-      .post('/api/v1/users/admin/roles')
+      .post('/api/v1/users/admin/permissions')
       .set('Authorization', userToken1)
       .send({
         permission: 'Cre'
@@ -56,7 +56,7 @@ describe('POST /api/v1/users/:role/role', () => {
   });
   it('Should not be able to create a permission if permission not provided', (done) => {
     chai.request(app)
-      .post('/api/v1/users/admin/roles')
+      .post('/api/v1/users/admin/permissions')
       .set('Authorization', userToken1)
       .send({})
       .end((err, res) => {
@@ -70,7 +70,7 @@ describe('POST /api/v1/users/:role/role', () => {
   });
   it('Should not be able to create a permission if role is not valid', (done) => {
     chai.request(app)
-      .post('/api/v1/users/fakeuser/roles')
+      .post('/api/v1/users/fakeuser/permissions')
       .set('Authorization', userToken1)
       .send({
         permission: 'create a user'
@@ -86,7 +86,7 @@ describe('POST /api/v1/users/:role/role', () => {
   });
   it('Should not be able to create a permission if it is already defined', (done) => {
     chai.request(app)
-      .post('/api/v1/users/admin/roles')
+      .post('/api/v1/users/admin/permissions')
       .set('Authorization', userToken1)
       .send({
         permission: 'Create a user'
@@ -102,7 +102,7 @@ describe('POST /api/v1/users/:role/role', () => {
   });
   it('Should be able to return all permissions of a specific role', (done) => {
     chai.request(app)
-      .get('/api/v1/users/admin/roles')
+      .get('/api/v1/users/admin/permissions')
       .set('Authorization', userToken1)
       .end((err, res) => {
         if (err) done(err);
@@ -116,7 +116,7 @@ describe('POST /api/v1/users/:role/role', () => {
   });
   it('Should be able to update a permission', (done) => {
     chai.request(app)
-      .patch('/api/v1/users/1/roles')
+      .patch('/api/v1/users/1/permissions')
       .set('Authorization', userToken1)
       .send({
         permission: 'Update a user'
@@ -132,7 +132,7 @@ describe('POST /api/v1/users/:role/role', () => {
   });
   it('Should not be able to update a permission if permissionId is not a number', (done) => {
     chai.request(app)
-      .patch('/api/v1/users/NaN/roles')
+      .patch('/api/v1/users/NaN/permissions')
       .set('Authorization', userToken1)
       .send({
         permission: 'Update a user'
@@ -148,7 +148,7 @@ describe('POST /api/v1/users/:role/role', () => {
   });
   it('Should be able to delete permission', (done) => {
     chai.request(app)
-      .delete('/api/v1/users/1/roles')
+      .delete('/api/v1/users/1/permissions')
       .set('Authorization', userToken1)
       .end((err, res) => {
         if (err) done(err);

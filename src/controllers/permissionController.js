@@ -3,7 +3,7 @@ import { Role, Permission } from '../sequelize/models';
 /**
  * @description Users role and thier permission
  */
-class roleController {
+class permissionController {
   /**
    *
    * @param {object} req
@@ -115,4 +115,4 @@ class roleController {
   }
 }
 
-export default roleController;
+export default permissionController;
