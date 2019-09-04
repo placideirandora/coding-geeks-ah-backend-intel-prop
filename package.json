@@ -12,7 +12,9 @@
     "test": "cross-env NODE_ENV=test nyc --reporter=text mocha  --require @babel/register --require @babel/polyfill  ./src/tests/*.js --timeout 50000 --exit",
     "down": "cross-env NODE_ENV=test node_modules/.bin/sequelize db:migrate:undo",
     "migrate": "cross-env NODE_ENV=test node_modules/.bin/sequelize db:migrate",
-    "seed": "node_modules/.bin/sequelize db:seed:all"
+    "seed": "node_modules/.bin/sequelize db:seed:all",
+    "create:db": "cross-env NODE_ENV=test node_modules/.bin/sequelize db:create authors_haven_test",
+    "drop:db": "cross-env NODE_ENV=test node_modules/.bin/sequelize db:drop authors_haven_test"
   },
   "engines": {
     "node": "10.16.0"

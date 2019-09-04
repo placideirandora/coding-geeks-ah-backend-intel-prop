@@ -3,7 +3,6 @@ import uniqid from 'uniqid';
 import { config } from 'dotenv';
 import cloudinary from 'cloudinary';
 import Sequelize from 'sequelize';
-import { User } from '../../sequelize/models';
 
 config();
 const { Op } = Sequelize;
@@ -37,21 +36,30 @@ const uploadImage = async (filename) => {
  * @description filters query parameters
  * @param {string} title
  * @param {string} author
- * @param {object} tag
+ * @param {object} tagList
  * @returns {object} filtered wuery params
  */
-const queryFilterer = (title) => {
+const queryFilterer = (title, author, tagList) => {
   const queries = {
-    title: {
-      [Op.iLike]: `%${title}%`
+    query: {
+      title: {
+        [Op.iLike]: `%${title}%`
+      },
+      where: Sequelize.where(Sequelize.fn('concat',
+        Sequelize.col('author.firstName'), ' ',
+        Sequelize.col('author.lastName')), {
+        [Op.iLike]: `%${author}%`
+      }),
+      tagList: {
+        [Op.overlap]: [`${tagList}`]
+      }
     }
-    // where: Sequelize.where(Sequelize.fn('concat', Sequelize.col('User.firstName'), ' ', Sequelize.col('User.lastName')), {
-    //   [Op.iLike]: `%${author}%`
-
   };
-  // if (!author) delete queries.query.where;
+  if (!author) delete queries.query.where;
+  if (!title) delete queries.query.title;
+  if (!tagList) delete queries.query.tagList;
   return {
-    where: { ...queries }
+    where: (title || author || tagList) ? { ...queries.query } : undefined
   };
 };
 

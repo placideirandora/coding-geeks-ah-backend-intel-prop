@@ -2,6 +2,14 @@ export default {
   validArticle: {
     title: 'Growth mindset',
     description: 'How to demonstrate growth mindsewt',
+    tags: 'education',
+    category: 'Eductaion',
+    body:
+      'is simply dummy text of the printing and typesetting industry Lorem Ipsum has'
+  },
+  validArticleMine: {
+    title: 'Testing my article Now',
+    description: 'This is just a test of ratings',
     category: 'Eductaion',
     body:
       'is simply dummy text of the printing and typesetting industry Lorem Ipsum has'

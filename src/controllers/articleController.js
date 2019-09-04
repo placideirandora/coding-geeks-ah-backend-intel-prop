@@ -1,7 +1,6 @@
 /* eslint-disable no-shadow */
 /* eslint-disable max-len */
 import { config } from 'dotenv';
-import { Op } from 'sequelize';
 import {
   User, Article, Reaction, Comment, Share
 } from '../sequelize/models';
@@ -87,11 +86,11 @@ class ArticleController {
    */
   static async getAllArticles(req, res) {
     try {
-      const { title } = req.query;
+      const { title, author, tagList } = req.query;
       let page = parseInt(req.query.page, 10);
       let limit = parseInt(req.query.limit, 10);
-      const filter = queryFilterer(title);
-      console.log(filter);
+      const { where } = queryFilterer(title, author, tagList);
+
       if (!page) {
         page = 1;
       }
@@ -105,16 +104,28 @@ class ArticleController {
         limit = 10;
       }
 
-      const { count } = await Article.findAndCountAll(filter);
+
+      const { count } = await Article.findAndCountAll({
+        include: [
+          {
+            model: User,
+            as: 'author'
+          }
+        ],
+        where
+      });
+
       if (!count) {
         return res.status(404).json({
           message: 'No articles found at the moment! please come back later'
         });
       }
+
       const pages = Math.ceil(count / limit);
       if (page > pages) {
         page = pages;
       }
+
       const previous = page === 1 ? 1 : page - 1;
       const next = page === pages ? page : page + 1;
 
@@ -122,24 +133,17 @@ class ArticleController {
       const articles = await Article.findAll({
         offset,
         limit,
-        where: {
-          [Op.or]: [
-            {
-              title: {
-                [Op.iLike]: `%${title}%`
-              }
-            }
-          ]
-        },
         order: [['createdAt', 'DESC']],
         include: [
           {
             model: User,
             as: 'author',
-            attributes: ['userName', 'bio', 'image']
+            attributes: ['userName', 'bio', 'image', 'firstName', 'lastName']
           }
-        ]
+        ],
+        where
       });
+
       const previousURL = new URL(`?page=${previous}&limit=${limit}`, `${process.env.APP_URL}/articles`);
       const nextURL = new URL(`?page=${next}&limit=${limit}`, `${process.env.APP_URL}/articles`);
       const firstPage = new URL(`?page=1&limit=${limit}`, `${process.env.APP_URL}/articles`);
