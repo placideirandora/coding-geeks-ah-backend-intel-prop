@@ -809,6 +809,79 @@
                 }
             }
         },
+        "/api/v1/users/{username}/block": {
+            "put": {
+                "tags": [
+                    "Users"
+                ],
+                "description": "Super admin and admin should be able to block a user",
+                "parameters": [
+                    {
+                        "name": "Authorization",
+                        "in": "header",
+                        "description": "Super admin or admin's token"
+                    },
+                    {
+                        "name": "username",
+                        "in": "path",
+                        "description": "User to be blocked",
+                        "type": "string"
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "User blocked"
+                    },
+                    "400": {
+                        "description": "User already blocked"
+                    },
+                    "404": {
+                        "description": "User not found"
+                    },
+                    "401": {
+                        "description": "Unauthorized Access"
+                    }
+                }
+            }
+        },
+        "/api/v1/users/{username}/unblock": {
+            "put": {
+                "tags": [
+                    "Users"
+                ],
+                "description": "Super admin and admin should be able to unblock a blocked user",
+                "parameters": [
+                    {
+                        "name": "Authorization",
+                        "in": "header",
+                        "description": "Super admin or admin's token"
+                    },
+                    {
+                        "name": "username",
+                        "in": "path",
+                        "description": "User to be unblocked",
+                        "type": "string"
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "User unblocked"
+                    },
+                    "404": {
+                        "description": "User not found"
+                    },
+                    "401": {
+                        "description": "Unauthorized Access"
+                    }
+                }
+            }
+        },
         "/api/v1/profiles/{username}": {
             "put": {
                 "tags": [
@@ -2113,6 +2186,79 @@
                         "schema": {
                             "$ref": "#/definitions/Error"
                         }
+                    }
+                }
+            }
+        },
+        "/api/v1/articles/{articleSlug}/block": {
+            "put": {
+                "tags": [
+                    "Articles"
+                ],
+                "description": "Super admin and admin should be able to block a reported article",
+                "parameters": [
+                    {
+                        "name": "Authorization",
+                        "in": "header",
+                        "description": "Super admin or admin's token"
+                    },
+                    {
+                        "name": "articleSlug",
+                        "in": "path",
+                        "description": "Slug of an article to block",
+                        "type": "string"
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Article blocked"
+                    },
+                    "400": {
+                        "description": "Article already blocked"
+                    },
+                    "404": {
+                        "description": "Article not found"
+                    },
+                    "401": {
+                        "description": "Unauthorized Access"
+                    }
+                }
+            }
+        },
+        "/api/v1/articles/{articleSlug}/unblock": {
+            "put": {
+                "tags": [
+                    "Articles"
+                ],
+                "description": "Super admin and admin should be able to unblock a reported article",
+                "parameters": [
+                    {
+                        "name": "Authorization",
+                        "in": "header",
+                        "description": "Super admin or admin's token"
+                    },
+                    {
+                        "name": "articleSlug",
+                        "in": "path",
+                        "description": "Slug of an article to unblock",
+                        "type": "string"
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Article unblocked"
+                    },
+                    "404": {
+                        "description": "Article not found"
+                    },
+                    "401": {
+                        "description": "Unauthorized Access"
                     }
                 }
             }

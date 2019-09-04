@@ -50,7 +50,11 @@ module.exports = (sequelize, DataTypes) => {
       dislikes: {
         type: DataTypes.INTEGER,
         defaultValue: 0
-      }
+      },
+      blocked: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: false
+      },
     },
     {
       timeStamps: true,

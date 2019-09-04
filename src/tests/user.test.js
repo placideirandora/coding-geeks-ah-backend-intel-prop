@@ -675,6 +675,23 @@ describe('POST /api/v1/users/login', () => {
         done();
       });
   });
+  it('Should not login the user when they are blocked', (done) => {
+    chai
+      .request(app)
+      .post('/api/v1/users/login')
+      .send({
+        email: 'cypg@gmail.com',
+        password: 'kangaWu-j00p!b0L',
+      })
+      .end((err, res) => {
+        if (err) done(err);
+        expect(res).have.status(401);
+        expect(res).to.be.an('object');
+        expect(res.body).to.have.key('error');
+        expect(res.body.error).to.deep.equal('Your account was blocked');
+        done();
+      });
+  });
 });
 describe('POST /api/v1/users/login', () => {
   it('Should return error message when user introduces undefined field', () => {
@@ -1100,6 +1117,71 @@ describe('DELETE /api/v1/users/:username', () => {
         expect(res.body).to.have.keys('message');
         expect(res.body.message)
           .to.deep.equal('User sudi successfully deleted');
+        done();
+      });
+  });
+});
+
+describe('Block and unblock a user', () => {
+  it('Should block a user', (done) => {
+    chai.request(app)
+      .put('/api/v1/users/kate/block')
+      .set('Authorization', superAdminToken)
+      .end((err, res) => {
+        expect(res).to.have.status(200);
+        expect(res).to.be.an('object');
+        expect(res.body).to.have.keys('message', 'blockedUser');
+        expect(res.body.message).to.deep.equal('User blocked');
+        expect(res.body.blockedUser).to.be.an('object');
+        done();
+      });
+  });
+  it('Should not block a user when they are already blocked', (done) => {
+    chai.request(app)
+      .put('/api/v1/users/cypg/block')
+      .set('Authorization', superAdminToken)
+      .end((err, res) => {
+        expect(res).to.have.status(400);
+        expect(res).to.be.an('object');
+        expect(res.body).to.have.keys('message');
+        expect(res.body.message).to.deep.equal('The user is already blocked');
+        done();
+      });
+  });
+  it('Should not block a user when they do not exist', (done) => {
+    chai.request(app)
+      .put('/api/v1/users/someone/block')
+      .set('Authorization', superAdminToken)
+      .end((err, res) => {
+        expect(res).to.have.status(404);
+        expect(res).to.be.an('object');
+        expect(res.body).to.have.keys('message');
+        expect(res.body.message).to.deep.equal('User not found');
+        done();
+      });
+  });
+  it('Should unblock a user', (done) => {
+    chai.request(app)
+      .put('/api/v1/users/kate/unblock')
+      .set('Authorization', superAdminToken)
+      .end((err, res) => {
+        expect(res).to.have.status(200);
+        expect(res).to.be.an('object');
+        expect(res.body).to.have.keys('message', 'unblockedUser');
+        expect(res.body.message).to.deep.equal('User unblocked');
+        expect(res.body.unblockedUser).to.be.an('object');
+        done();
+      });
+  });
+  it('Should not unblock a user twice', (done) => {
+    chai.request(app)
+      .put('/api/v1/users/kate/unblock')
+      .set('Authorization', superAdminToken)
+      .end((err, res) => {
+        expect(res).to.have.status(404);
+        expect(res).to.be.an('object');
+        expect(res.body).to.have.keys('message');
+        expect(res.body.message).to.deep.equal('User not found in the blocked users');
         done();
       });
   });
