@@ -86,6 +86,7 @@ before((done) => {
       done();
     });
 });
+
 describe('POST AND GET /api/v1/articles', () => {
   it('Should receive a message if no articles found', (done) => {
     chai
@@ -103,6 +104,8 @@ describe('POST AND GET /api/v1/articles', () => {
         done();
       });
   });
+});
+describe('POST AND GET /api/v1/articles', () => {
   it('Should return error if wrong content-type is used', (done) => {
     chai
       .request(app)
@@ -907,7 +910,7 @@ describe('UPDATE /api/v1/articles/:slug', () => {
         expect(res).have.status(403);
         expect(res.body).to.have.key('error');
         expect(res.body.error).to.deep.equal(
-          'Sorry! You are not allowed to make changes to this resource'
+          'Sorry! You are not allowed to view or make changes to this resource'
         );
         done();
       });
@@ -1099,7 +1102,7 @@ describe('POST /api/v1/articles/{articleId}/rate', () => {
   it('Should not be able to rate the article which does not exist', (done) => {
     chai
       .request(app)
-      .post('/api/v1/articles/11/rate')
+      .post('/api/v1/articles/5098/rate')
       .set('Authorization', userToken2)
       .send({ rate: 3 })
       .end((err, res) => {
@@ -1164,7 +1167,7 @@ describe('GET /api/v1/articles/{articleId}/rate', () => {
         expect(res).have.status(404);
         expect(res).to.be.an('object');
         expect(res.body).to.have.key('error');
-        expect(res.body.error).to.deep.equal('Article not found');
+        expect(res.body.error).to.deep.equal('Sorry! The specified article does not exist');
         done();
       });
   });
@@ -1241,7 +1244,7 @@ describe('DELETE /api/v1/articles/:slug', () => {
         expect(res).have.status(403);
         expect(res.body).to.have.key('error');
         expect(res.body.error).to.deep.equal(
-          'Sorry! You are not allowed to make changes to this resource'
+          'Sorry! You are not allowed to view or make changes to this resource'
         );
         done();
       });
