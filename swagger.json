@@ -458,7 +458,7 @@
                 }
             }
         },
-        "/api/v1/send-email": {
+        "/api/v1/users/send-email": {
             "post": {
                 "tags": [
                     "Users"
@@ -514,7 +514,7 @@
                 }
             }
         },
-        "/api/v1/reset-password/{token}": {
+        "/api/v1/users/reset-password/{token}": {
             "post": {
                 "tags": [
                     "Users"
@@ -781,7 +781,7 @@
                 }
             }
         },
-        "/api/v1/verify-email/{token}": {
+        "/api/v1/users/verify-email/{token}": {
             "post": {
                 "tags": [
                     "Users"

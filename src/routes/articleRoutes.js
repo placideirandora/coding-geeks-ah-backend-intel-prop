@@ -1,0 +1,44 @@
+import express from 'express';
+import connectmultiparty from 'connect-multiparty';
+import Article from '../controllers/articleController';
+import verifyToken from '../middleware/verifyToken';
+import Validation from '../middleware/validation';
+import ContentType from '../middleware/contentType';
+import ArticleMiddleware from '../middleware/articleMiddleware';
+import { isOwner, isAdmin } from '../middleware/findOwner';
+import articleRate from '../controllers/ratingController';
+import { checkAdmin } from '../middleware/adminPermissions';
+import Report from '../controllers/reportController';
+import Highlights from '../controllers/higlightController';
+import * as permission from '../middleware/permissions';
+import checkPermissions from '../middleware/checkPermissions';
+
+const articlesRouter = express.Router();
+
+const connectMulti = connectmultiparty();
+
+articlesRouter.post('/', [verifyToken, permission.createArticle, checkPermissions, connectMulti, Validation.createArticleValidation, ContentType, Validation.imageValidation], Article.createArticle);
+articlesRouter.get('/', ArticleMiddleware.validQueries, Article.getAllArticles);
+articlesRouter.get('/:slug', Article.getSingleArticle);
+articlesRouter.post('/:articleId/rate', [verifyToken, Validation.idValidation, ArticleMiddleware.checkRatedArticle], articleRate.rateArticle);
+articlesRouter.get('/:articleId/rate', [verifyToken, Validation.idValidation, isOwner], articleRate.getArticleRating);
+articlesRouter.put('/:articleSlug/like', verifyToken, Article.likeArticle);
+articlesRouter.put('/:articleSlug/dislike', verifyToken, Article.dislikeArticle);
+articlesRouter.post('/:articleSlug/comments', [verifyToken, Validation.commentValidation], Article.commentArticle);
+articlesRouter.get('/:articleSlug/comments', verifyToken, Article.retrieveComments);
+articlesRouter.patch('/:articleSlug/comments/:commentId', verifyToken, Validation.commentValidation, Validation.commentParamsValidation, Article.updateComment);
+articlesRouter.delete('/:articleSlug/comments/:commentId', verifyToken, Validation.commentParamsValidation, Article.deleteComment);
+articlesRouter.delete('/:slug', [verifyToken, permission.deleteArticle, checkPermissions, isOwner], Article.deteleArticle);
+articlesRouter.put('/:slug', [verifyToken, permission.updateArticle, checkPermissions, isOwner, connectMulti, Validation.updateArticleValidation, ContentType, Validation.imageValidation], Article.updateArticle);
+articlesRouter.post('/:slug/share/:option', [verifyToken, ArticleMiddleware.validPlatform], Article.shareArticle);
+articlesRouter.get('/:articleSlug/statistics', verifyToken, Article.readingStats);
+articlesRouter.post('/:articleSlug/reports', [verifyToken, Validation.reportValidation], Report.createReport);
+articlesRouter.get('/reports/all', [verifyToken, checkAdmin, permission.readReport, checkPermissions], Report.getAllReports);
+articlesRouter.get('/:articleSlug/reports', [verifyToken, checkAdmin, permission.readReport, checkPermissions], Report.getArticleReports);
+articlesRouter.delete('/:articleSlug/reports/:reportId', [verifyToken, Validation.reportParamsValidation], Report.deleteReport);
+articlesRouter.get('/:articleSlug/reports/:reportId', [verifyToken, checkAdmin, permission.readReport, checkPermissions, Validation.reportParamsValidation], Report.getSingleReport);
+articlesRouter.post('/:slug/highlights', verifyToken, Validation.highlightValidation, Highlights.highlightText);
+articlesRouter.put('/:articleSlug/block', [verifyToken, checkAdmin], Article.blockArticle);
+articlesRouter.put('/:articleSlug/unblock', [verifyToken, checkAdmin], Article.unblockArticle);
+articlesRouter.get('/:articleSlug/comments/:commentId/history', [verifyToken, isAdmin], Article.commentHistory);
+export default articlesRouter;

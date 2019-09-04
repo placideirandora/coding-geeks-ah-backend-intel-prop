@@ -59,7 +59,7 @@ class ArticleController {
             id: article.id,
             slug,
             title: article.title,
-            description: article.title,
+            description,
             body: article.body,
             category,
             images,

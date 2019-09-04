@@ -8,7 +8,7 @@ import session from 'express-session';
 import { config } from 'dotenv';
 import SwaggerDocument from '../swagger.json';
 import db from './sequelize/models';
-import router from './routes/routes';
+import router from './routes';
 import passConfig from './config/passport/passport';
 import './helpers/notification/eventEmitter';
 import './helpers/notification/eventListener';
@@ -33,7 +33,7 @@ app.use(morgan('dev'));
 
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(SwaggerDocument));
 
-app.use(router);
+app.use('/api/v1', router);
 
 app.get('/', (req, res) => {
   res.status(200).json({
