@@ -6,6 +6,13 @@ export default {
     body:
       'is simply dummy text of the printing and typesetting industry Lorem Ipsum has'
   },
+  anotherArticle: {
+    title: 'Growth mindset other',
+    description: 'How to demonstrate growth mindsewt other',
+    category: 'Eductaion',
+    body:
+      'is simply dummy text of the printing and typesetting industry Lorem Ipsum has. Other'
+  },
   lessCategory: {
     title: 'Growth mindset',
     description: 'How to demonstrate growth mindsewt',
@@ -38,6 +45,14 @@ export default {
   validArticle1: {
     id: 1,
     title: 'Growth mindset',
+    description: 'How to demonstrate growth mindsewt',
+    tags: 'Fixed mind, Confidence, low self-esteem',
+    category: 'Eductaion',
+    body:
+      'is simply dummy text of the printing and typesetting industry Lorem Ipsum has'
+  },
+  missingTitle: {
+    id: 1,
     description: 'How to demonstrate growth mindsewt',
     tags: 'Fixed mind, Confidence, low self-esteem',
     category: 'Eductaion',

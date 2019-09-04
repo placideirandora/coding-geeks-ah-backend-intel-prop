@@ -19,6 +19,7 @@ import Notification from '../controllers/notificationController';
 import findOwner from '../middleware/findOwner';
 import Bookmark from '../controllers/bookmarkController';
 import findUser from '../middleware/findUser';
+import Highlights from '../controllers/higlightController';
 import Report from '../controllers/reportController';
 import CommentReaction from '../controllers/commentController';
 
@@ -76,6 +77,7 @@ router.patch('/api/v1/profiles/notifications/read/all', verifyToken, Notificatio
 router.post('/api/v1/bookmarks/:slug', [verifyToken, findUser], Bookmark.createBookmark);
 router.get('/api/v1/bookmarks', [verifyToken, findUser], Bookmark.getBookmarks);
 router.delete('/api/v1/bookmarks/:slug', [verifyToken, findUser], Bookmark.deleteBookmark);
+router.post('/api/v1/articles/:slug/highlights', verifyToken, Validation.highlightValidation, Highlights.highlightText);
 router.get('/api/v1/articles/:articleSlug/statistics', verifyToken, Article.readingStats);
 router.post('/api/v1/articles/:articleSlug/reports', [verifyToken, Validation.reportValidation], Report.createReport);
 router.get('/api/v1/articles/reports/all', [verifyToken, checkAdmin], Report.getAllReports);

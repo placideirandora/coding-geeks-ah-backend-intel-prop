@@ -206,6 +206,21 @@ export default {
     }
     next();
   },
+
+  highlightValidation(req, res, next) {
+    const highlightSchema = Joi.object().keys({
+      startIndex: validationRules.start,
+      stopIndex: validationRules.stop,
+      comment: validationRules.comments
+    });
+    const { error } = Joi.validate(req.body, highlightSchema, options);
+    if (error) {
+      return res.status(400).json({
+        error: error.details[0].message.replace(/\\|(")/g, '')
+      });
+    }
+    next();
+  },
   reportParamsValidation(req, res, next) {
     const reportParamsSchema = Joi.object().keys({
       reportId: validationRules.reportId,
