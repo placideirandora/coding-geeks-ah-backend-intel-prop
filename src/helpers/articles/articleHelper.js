@@ -37,7 +37,7 @@ const uploadImage = async (filename) => {
  * @param {string} title
  * @param {string} author
  * @param {object} tagList
- * @returns {object} filtered wuery params
+ * @returns {object} filtered query params
  */
 const queryFilterer = (title, author, tagList) => {
   const queries = {
