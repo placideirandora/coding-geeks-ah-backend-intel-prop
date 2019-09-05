@@ -17,6 +17,16 @@ export const up = queryInterface => queryInterface.bulkInsert('Users', [{
   password: bcrypt.hashSync('gotoBora-j00p!b0L', 10),
   role: 'user',
   verified: true
+},
+{
+  firstName: 'Cyprien',
+  lastName: 'NDAYIZEYE',
+  userName: 'cypg',
+  email: 'cypg@gmail.com',
+  password: bcrypt.hashSync('kangaWu-j00p!b0L', 10),
+  role: 'user',
+  verified: true,
+  blocked: true
 }], {});
 
 export const down = queryInterface => queryInterface.bulkDelete('Users', null, {});

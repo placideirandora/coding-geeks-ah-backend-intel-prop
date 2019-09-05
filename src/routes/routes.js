@@ -92,4 +92,8 @@ router.get('/api/v1/users/:role/permissions', [verifyToken, checkAdmin, Validati
 router.patch('/api/v1/users/:permissionId/permissions', [verifyToken, adminPermission, Validation.permissionValidation, Validation.idPermissionValidation], Role.updatePermission);
 router.delete('/api/v1/users/:permissionId/permissions', [verifyToken, adminPermission, Validation.idPermissionValidation], Role.deletePermission);
 
+router.put('/api/v1/articles/:articleSlug/block', [verifyToken, checkAdmin], Article.blockArticle);
+router.put('/api/v1/articles/:articleSlug/unblock', [verifyToken, checkAdmin], Article.unblockArticle);
+router.put('/api/v1/users/:username/block', [verifyToken, checkAdmin], UserAuth.blockerUser);
+router.put('/api/v1/users/:username/unblock', [verifyToken, checkAdmin], UserAuth.unblockerUser);
 export default router;

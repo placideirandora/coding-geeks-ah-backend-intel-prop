@@ -289,6 +289,84 @@ class Authentication {
   }
 
   /**
+   * @param {object} req
+   * @param {object} res
+   * @returns {object} returns an object containing a blocked user
+   */
+  static async blockerUser(req, res) {
+    const user = req.params.username;
+
+    const findUser = await User.findOne({ where: { userName: user, role: 'user' } });
+
+    if (!findUser) {
+      return res.status(404).json({
+        message: 'User not found'
+      });
+    }
+
+    const alreadyBlocked = await User.findOne({ where: { userName: user, blocked: true } });
+
+    if (alreadyBlocked) {
+      return res.status(400).json({
+        message: 'The user is already blocked'
+      });
+    }
+
+    await User.update({ blocked: true }, { where: { userName: user } });
+
+    const blockedUser = await User.findOne({ where: { userName: user, role: 'user' } });
+
+    const {
+      firstName, lastName, userName, blocked
+    } = blockedUser;
+
+    return res.status(200).json({
+      message: 'User blocked',
+      blockedUser: {
+        firstName,
+        lastName,
+        userName,
+        blocked
+      }
+    });
+  }
+
+  /**
+   * @param {object} req
+   * @param {object} res
+   * @returns {object} returns an object containing an unblocked user
+   */
+  static async unblockerUser(req, res) {
+    const user = req.params.username;
+
+    const findUser = await User.findOne({ where: { userName: user, blocked: true } });
+
+    if (!findUser) {
+      return res.status(404).json({
+        message: 'User not found in the blocked users'
+      });
+    }
+
+    await User.update({ blocked: false }, { where: { userName: user } });
+
+    const unblockedUser = await User.findOne({ where: { userName: user, role: 'user' } });
+
+    const {
+      firstName, lastName, userName, blocked
+    } = unblockedUser;
+
+    return res.status(200).json({
+      message: 'User unblocked',
+      unblockedUser: {
+        firstName,
+        lastName,
+        userName,
+        blocked
+      }
+    });
+  }
+
+  /**
    * @description user logout
    * @param {object} req
    * @param {object} res
