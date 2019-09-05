@@ -1241,6 +1241,20 @@
                     "Articles"
                 ],
                 "description": "Fetch all user articles",
+                "parameters": [
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "type": "integer",
+                        "description": "The page to be loaded"
+                    },
+                    {
+                        "name": "limit",
+                        "in": "query",
+                        "type": "integer",
+                        "description": "The numbers of items to return"
+                    }
+                ],
                 "produces": [
                     "application/json"
                 ],
@@ -1650,6 +1664,18 @@
                         "in": "path",
                         "description": "id of the article you want to rate",
                         "type": "integer"
+                    },
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "type": "integer",
+                        "description": "The page to be loaded"
+                    },
+                    {
+                        "name": "limit",
+                        "in": "query",
+                        "type": "integer",
+                        "description": "The numbers of items to return"
                     }
                 ],
                 "produces": [
@@ -1818,6 +1844,43 @@
                     },
                     "404": {
                         "description": "Article Not Found"
+                    },
+                    "401": {
+                        "description": "Unauthorized Access"
+                    }
+                }
+            }
+        },
+        "/api/v1/articles/{articleSlug}/statistics": {
+            "get": {
+                "tags": [
+                    "Articles"
+                ],
+                "summary": "Retrieve an article's reading statistics",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "Authorization",
+                        "in": "header",
+                        "description": "Token",
+                        "required": true
+                    },
+                    {
+                        "name": "articleSlug",
+                        "in": "path",
+                        "description": "A slug of an article",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Reading statistics retrieved"
+                    },
+                    "404": {
+                        "description": "Reading statistics/Article not found"
                     },
                     "401": {
                         "description": "Unauthorized Access"
@@ -2289,6 +2352,102 @@
                                 }
                             }
                         }
+                    }
+                }
+            }
+        },
+        "/api/v1/articles/{slug}/highlights": {
+            "post": {
+                "tags": [
+                    "Highlights"
+                ],
+                "description": "User can highlight a text of an article and comment on it",
+                "parameters": [
+                    {
+                        "name": "Authorization",
+                        "in": "header",
+                        "description": "The user token"
+                    },
+                    {
+                        "name": "slug",
+                        "in": "path",
+                        "description": "Slug of an article to hightlight",
+                        "type": "string"
+                    },
+                    {
+                        "name": "Highliht",
+                        "in": "body",
+                        "description": "Highlight a text",
+                        "schema": {
+                            "required": [
+                                "startIndex",
+                                "text"
+                            ],
+                            "properties": {
+                                "startIndex": {
+                                    "type": "integer"
+                                },
+                                "text": {
+                                    "type": "string"
+                                },
+                                "comment": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Commented on the article"
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "404": {
+                        "description": "Article Not Found"
+                    },
+                    "401": {
+                        "description": "Unauthorized Access"
+                    }
+                }
+            },
+            "get": {
+                "tags": [
+                    "Articles"
+                ],
+                "summary": "Retrieve an article's comments",
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Article successfully highlighted",
+                        "schema": {
+                            "properties": {
+                                "data": {
+                                    "$ref": "#/definitions/Highlight"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Missing fields or invalid value",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "403": {
+                        "description": "Unauthorized access",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "200": {
+                        "description": "Highlight successfully deleted"
                     }
                 }
             }
@@ -2858,6 +3017,34 @@
             "properties": {
                 "permission": {
                     "type": "string"
+                }
+            }
+        },
+        "Highlight": {
+            "properties": {
+                "id": {
+                    "type": "integer"
+                },
+                "articleId": {
+                    "type": "integer"
+                },
+                "userId": {
+                    "type": "string"
+                },
+                "startIndex": {
+                    "type": "integer"
+                },
+                "text": {
+                    "type": "string"
+                },
+                "comment": {
+                    "type": "string"
+                },
+                "updatedAt": {
+                    "type": "date"
+                },
+                "createdAt": {
+                    "type": "date"
                 }
             }
         },

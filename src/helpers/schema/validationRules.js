@@ -235,11 +235,16 @@ export default {
     }),
   updateTitle: Joi.string().trim()
     .min(10),
+
   updateBody: Joi.string().trim(),
+
   updateDescription: Joi.string().trim()
     .min(10),
+
   category: Joi.string(),
+
   tags: Joi.string(),
+
   roles: Joi.string()
     .required()
     .valid('user', 'admin')
@@ -258,6 +263,7 @@ export default {
     }),
   articleId: Joi.number(),
   id: Joi.number(),
+
   commentId: Joi.number().integer()
     .required(),
   reason: Joi.string().trim()
@@ -280,6 +286,43 @@ export default {
     .required(),
   articleSlug: Joi.string()
     .required(),
+
+  comments: Joi.string().strict().trim()
+    .error((errors) => {
+      errors.forEach((err) => {
+        switch (err.type) {
+          case 'string.base':
+            err.message = 'Comment must be a string';
+            break;
+        }
+      });
+      return errors;
+    }),
+
+  start: Joi.number().integer()
+    .required()
+    .error((errors) => {
+      errors.forEach((err) => {
+        switch (err.type) {
+          case 'any.required':
+            err.message = 'Start Index is required';
+            break;
+        }
+      });
+      return errors;
+    }),
+  stop: Joi.number().integer()
+    .required()
+    .error((errors) => {
+      errors.forEach((err) => {
+        switch (err.type) {
+          case 'any.required':
+            err.message = 'Stop Index is required';
+            break;
+        }
+      });
+      return errors;
+    }),
   roleAsParam: Joi.string()
     .valid('user', 'admin', 'super-admin')
     .error((errors) => {
@@ -310,4 +353,5 @@ export default {
     }),
   permissionId: Joi.number().integer()
     .required(),
+
 };
