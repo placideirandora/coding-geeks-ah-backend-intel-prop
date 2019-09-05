@@ -322,6 +322,36 @@ export default {
         }
       });
       return errors;
-    })
+    }),
+  roleAsParam: Joi.string()
+    .valid('user', 'admin', 'super-admin')
+    .error((errors) => {
+      errors.forEach((err) => {
+        switch (err.type) {
+          case 'any.allowOnly':
+            err.message = 'Role must be either user, admin or super-admin';
+            break;
+        }
+      });
+      return errors;
+    }),
+  permission: Joi.string().trim()
+    .required()
+    .min(5)
+    .error((errors) => {
+      errors.forEach((err) => {
+        switch (err.type) {
+          case 'any.required':
+            err.message = 'Permission is required';
+            break;
+          case 'string.min':
+            err.message = 'Permission must have atleast 5 characters';
+            break;
+        }
+      });
+      return errors;
+    }),
+  permissionId: Joi.number().integer()
+    .required(),
 
 };

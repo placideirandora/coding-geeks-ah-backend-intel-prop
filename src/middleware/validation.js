@@ -234,4 +234,40 @@ export default {
     }
     next();
   },
+  RoleParamsValidation(req, res, next) {
+    const roleParamsSchema = Joi.object().keys({
+      role: validationRules.roleAsParam,
+    });
+    const { error } = Joi.validate(req.params, roleParamsSchema, options);
+    if (error) {
+      return res.status(400).json({
+        error: error.details[0].message.replace(/\\|(")/g, '')
+      });
+    }
+    next();
+  },
+  permissionValidation(req, res, next) {
+    const permissionSchema = Joi.object().keys({
+      permission: validationRules.permission,
+    });
+    const { error } = Joi.validate(req.body, permissionSchema, options);
+    if (error) {
+      return res.status(400).json({
+        error: error.details[0].message.replace(/\\|(")/g, '')
+      });
+    }
+    next();
+  },
+  idPermissionValidation(req, res, next) {
+    const idSchema = Joi.object().keys({
+      permissionId: validationRules.permissionId,
+    });
+    const { error } = Joi.validate(req.params, idSchema, options);
+    if (error) {
+      return res.status(400).json({
+        error: error.details[0].message.replace(/\\|(")/g, '')
+      });
+    }
+    next();
+  },
 };
