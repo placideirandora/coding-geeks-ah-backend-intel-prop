@@ -7,6 +7,7 @@ const commentHistoryCreate = async (req, findCommenter) => {
     userId: req.userData.id,
     articleSlug: findCommenter.articleSlug,
     editedComment: findCommenter.dataValues.comment,
+    currentComment: req.body.comment,
     commentId: findCommenter.dataValues.id
   });
   return commentHistoryCreate;

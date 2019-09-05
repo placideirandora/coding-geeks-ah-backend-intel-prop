@@ -14,6 +14,9 @@ export default (sequelize, DataTypes) => {
       },
       editedComment: {
         type: DataTypes.STRING
+      },
+      currentComment: {
+        type: DataTypes.STRING
       }
     }, {
       timeStamps: true

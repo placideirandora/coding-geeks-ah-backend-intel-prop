@@ -30,6 +30,9 @@ export const up = (queryInterface, Sequelize) => queryInterface.createTable('com
   editedComment: {
     type: Sequelize.STRING
   },
+  currentComment: {
+    type: Sequelize.STRING
+  },
   createdAt: {
     allowNull: false,
     type: Sequelize.DATE

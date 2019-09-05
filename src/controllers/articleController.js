@@ -732,7 +732,6 @@ class ArticleController {
   }
 
   /**
-<<<<<<< HEAD
    * @param {object} req
    * @param {object} res
    * @returns {object} returns an object containing a blocked article response
