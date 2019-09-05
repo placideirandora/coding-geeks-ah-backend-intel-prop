@@ -108,7 +108,11 @@ class ArticleController {
         ],
         where
       });
+<<<<<<< HEAD
       if (!data || !data.length) {
+=======
+      if (!data) {
+>>>>>>> 4a51977d688960cd5fc754c745f0381b9023e18b
         return res.status(404).json({
           message: 'No articles found at the moment! please come back later'
         });
