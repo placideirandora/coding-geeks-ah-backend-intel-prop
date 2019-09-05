@@ -501,7 +501,7 @@ describe('POST AND GET /api/v1/articles', () => {
         expect(res).have.status(400);
         expect(res).to.be.an('object');
         expect(res.body.error)
-          .to.deep.equal('invalid query parameter. Only allowed page, limit, author, title and tagList');
+          .to.deep.equal('invalid query parameter. Only allowed page, limit, author, title and tags');
         done();
       });
   });
@@ -640,7 +640,7 @@ describe('POST AND GET /api/v1/articles', () => {
   it('Should filter articles if title and author are provided in search', (done) => {
     chai
       .request(app)
-      .get('/api/v1/articles?tagList=education')
+      .get('/api/v1/articles?tags=education')
       .set('Authorization', userToken1)
       .end((err, res) => {
         if (err) done(err);

@@ -36,10 +36,10 @@ const uploadImage = async (filename) => {
  * @description filters query parameters
  * @param {string} title
  * @param {string} author
- * @param {object} tagList
+ * @param {object} tags
  * @returns {object} filtered query params
  */
-const queryFilterer = (title, author, tagList) => {
+const queryFilterer = (title, author, tags) => {
   const queries = {
     query: {
       title: {
@@ -47,20 +47,22 @@ const queryFilterer = (title, author, tagList) => {
       },
       where: Sequelize.where(Sequelize.fn('concat',
         Sequelize.col('author.firstName'), ' ',
-        Sequelize.col('author.lastName')), {
+        Sequelize.col('author.lastName'), ' ',
+        Sequelize.col('author.userName')), {
         [Op.iLike]: `%${author}%`
       }),
       tagList: {
-        [Op.overlap]: [`${tagList}`]
+        [Op.contains]: `${tags}`.toLocaleLowerCase().trim().split(/[ ,]+/)
       },
       blocked: false
     }
   };
   if (!author) delete queries.query.where;
   if (!title) delete queries.query.title;
-  if (!tagList) delete queries.query.tagList;
+  if (!tags) delete queries.query.tagList;
   return {
-    where: (title || author || tagList) ? { ...queries.query } : undefined
+    where: (title || author || tags)
+      ? { ...queries.query } : undefined
   };
 };
 
