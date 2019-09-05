@@ -18,6 +18,7 @@ let userToken3;
 let userToken4;
 let articleSlug;
 const invalidSlug = 'article-not-found';
+let superAdminToken;
 
 before(async () => {
   const { password } = dummyUser.newUserForReport;
@@ -77,6 +78,20 @@ before((done) => {
     .end((err, res) => {
       if (err) done(err);
       userToken4 = res.body.data.token;
+      done();
+    });
+});
+before((done) => {
+  const user = {
+    email: 'eric.malaba@gmail.com',
+    password: 'Superadmin12',
+  };
+  chai.request(app)
+    .post('/api/v1/users/login')
+    .send(user)
+    .end((err, res) => {
+      if (err) done(err);
+      superAdminToken = res.body.data.token;
       done();
     });
 });
@@ -275,16 +290,64 @@ describe('POST /api/v1/articles/:articleSlug/reports', () => {
         done();
       });
   });
-  it('Should be able to delete report of a specific article', (done) => {
+  it('Should block an article', (done) => {
     chai.request(app)
-      .delete(`/api/v1/articles/${articleSlug}/reports/1`)
-      .set('Authorization', userToken2)
+      .put(`/api/v1/articles/${articleSlug}/block`)
+      .set('Authorization', superAdminToken)
       .end((err, res) => {
-        if (err) done(err);
         expect(res).to.have.status(200);
-        expect(res.body).to.be.an('object');
+        expect(res).to.be.an('object');
+        expect(res.body).to.have.keys('message', 'blockedArticle');
+        expect(res.body.message).to.deep.equal('Article blocked');
+        expect(res.body.blockedArticle).to.be.an('object');
+        done();
+      });
+  });
+  it('Should not block an article when it is already blocked', (done) => {
+    chai.request(app)
+      .put(`/api/v1/articles/${articleSlug}/block`)
+      .set('Authorization', superAdminToken)
+      .end((err, res) => {
+        expect(res).to.have.status(400);
+        expect(res).to.be.an('object');
         expect(res.body).to.have.keys('message');
-        expect(res.body.message).to.deep.equal('Report deleted Successfully');
+        expect(res.body.message).to.deep.equal('The article is already blocked');
+        done();
+      });
+  });
+  it('Should not block an article which does not exist', (done) => {
+    chai.request(app)
+      .put(`/api/v1/articles/${invalidSlug}/block`)
+      .set('Authorization', superAdminToken)
+      .end((err, res) => {
+        expect(res).to.have.status(404);
+        expect(res).to.be.an('object');
+        expect(res.body).to.have.keys('message');
+        expect(res.body.message).to.deep.equal('Article not found in the reported articles');
+        done();
+      });
+  });
+  it('Should unblock an article', (done) => {
+    chai.request(app)
+      .put(`/api/v1/articles/${articleSlug}/unblock`)
+      .set('Authorization', superAdminToken)
+      .end((err, res) => {
+        expect(res).to.have.status(200);
+        expect(res).to.be.an('object');
+        expect(res.body).to.have.keys('message');
+        expect(res.body.message).to.deep.equal('Article unblocked');
+        done();
+      });
+  });
+  it('Should not unblock an article twice', (done) => {
+    chai.request(app)
+      .put(`/api/v1/articles/${articleSlug}/unblock`)
+      .set('Authorization', superAdminToken)
+      .end((err, res) => {
+        expect(res).to.have.status(404);
+        expect(res).to.be.an('object');
+        expect(res.body).to.have.keys('message');
+        expect(res.body.message).to.deep.equal('Article not found in the blocked articles');
         done();
       });
   });

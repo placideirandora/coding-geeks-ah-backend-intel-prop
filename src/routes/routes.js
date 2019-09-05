@@ -86,4 +86,8 @@ router.delete('/api/v1/articles/:articleSlug/reports/:reportId', verifyToken, Va
 router.get('/api/v1/articles/:articleSlug/reports/:reportId', [verifyToken, checkAdmin, Validation.reportParamsValidation], Report.getSingleReport);
 router.put('/api/v1/comments/:id/like', [verifyToken, findUser, Validation.idInParamsValidation], CommentReaction.likeComment);
 router.put('/api/v1/comments/:id/dislike', [verifyToken, findUser, Validation.idInParamsValidation], CommentReaction.dislikeComment);
+router.put('/api/v1/articles/:articleSlug/block', [verifyToken, checkAdmin], Article.blockArticle);
+router.put('/api/v1/articles/:articleSlug/unblock', [verifyToken, checkAdmin], Article.unblockArticle);
+router.put('/api/v1/users/:username/block', [verifyToken, checkAdmin], UserAuth.blockerUser);
+router.put('/api/v1/users/:username/unblock', [verifyToken, checkAdmin], UserAuth.unblockerUser);
 export default router;
