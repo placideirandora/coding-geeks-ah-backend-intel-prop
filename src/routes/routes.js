@@ -22,6 +22,7 @@ import findUser from '../middleware/findUser';
 import Highlights from '../controllers/higlightController';
 import Report from '../controllers/reportController';
 import CommentReaction from '../controllers/commentController';
+import Role from '../controllers/permissionController';
 
 
 const router = express.Router();
@@ -86,6 +87,11 @@ router.delete('/api/v1/articles/:articleSlug/reports/:reportId', verifyToken, Va
 router.get('/api/v1/articles/:articleSlug/reports/:reportId', [verifyToken, checkAdmin, Validation.reportParamsValidation], Report.getSingleReport);
 router.put('/api/v1/comments/:id/like', [verifyToken, findUser, Validation.idInParamsValidation], CommentReaction.likeComment);
 router.put('/api/v1/comments/:id/dislike', [verifyToken, findUser, Validation.idInParamsValidation], CommentReaction.dislikeComment);
+router.post('/api/v1/users/:role/permissions', [verifyToken, adminPermission, Validation.permissionValidation, Validation.RoleParamsValidation], Role.createPermision);
+router.get('/api/v1/users/:role/permissions', [verifyToken, checkAdmin, Validation.RoleParamsValidation], Role.getRolePermissions);
+router.patch('/api/v1/users/:permissionId/permissions', [verifyToken, adminPermission, Validation.permissionValidation, Validation.idPermissionValidation], Role.updatePermission);
+router.delete('/api/v1/users/:permissionId/permissions', [verifyToken, adminPermission, Validation.idPermissionValidation], Role.deletePermission);
+
 router.put('/api/v1/articles/:articleSlug/block', [verifyToken, checkAdmin], Article.blockArticle);
 router.put('/api/v1/articles/:articleSlug/unblock', [verifyToken, checkAdmin], Article.unblockArticle);
 router.put('/api/v1/users/:username/block', [verifyToken, checkAdmin], UserAuth.blockerUser);
