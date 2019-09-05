@@ -4,7 +4,7 @@ import { config } from 'dotenv';
 import {
   User, Article, Reaction, Comment, Share, Statistic, Report
 } from '../sequelize/models';
-import { slugGen, uploadImage } from '../helpers/articles/articleHelper';
+import { slugGen, uploadImage, queryFilterer } from '../helpers/articles/articleHelper';
 import readTime from '../helpers/articles/readTimeForArticle';
 import ShareArticleHelper from '../helpers/articles/shareHelper';
 import recordStats from '../helpers/articles/recordStats';
@@ -90,6 +90,8 @@ class ArticleController {
     try {
       const page = parseInt(req.query.page, 10);
       const limit = parseInt(req.query.limit, 10);
+      const { title, author, tagList } = req.query;
+      const { where } = queryFilterer(title, author, tagList);
 
       const {
         data, previous, next, pages, pageLimit, currentPage
@@ -101,20 +103,22 @@ class ArticleController {
           {
             model: User,
             as: 'author',
-            attributes: ['userName', 'bio', 'image']
+            attributes: ['userName', 'bio', 'image', 'firstName', 'lastName']
           }
         ],
-        where: { blocked: false }
+        where
       });
-      if (!data) {
+      if (!data || !data.length) {
         return res.status(404).json({
           message: 'No articles found at the moment! please come back later'
         });
       }
+
       const previousURL = new URL(`?page=${previous}&limit=${pageLimit}`, `${process.env.APP_URL}/articles`);
       const nextURL = new URL(`?page=${next}&limit=${pageLimit}`, `${process.env.APP_URL}/articles`);
       const firstPage = new URL(`?page=1&limit=${pageLimit}`, `${process.env.APP_URL}/articles`);
       const lastPage = new URL(`?page=${pages}&limit=${pageLimit}`, `${process.env.APP_URL}/articles`);
+
       data.map((article) => {
         const readTimeOfArticle = readTime(article.body);
         article.get().readTime = readTimeOfArticle;

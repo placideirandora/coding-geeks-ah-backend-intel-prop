@@ -52,5 +52,23 @@ class ArticleMiddleware {
     }
     return res.status(400).json({ error: 'invalid platform in path' });
   }
+
+  /**
+ * @description checks if query params provided are valid
+ * @param {object} req
+ * @param {object} res
+ * @param {object} next
+ * @returns { object } error if query is invalid
+ */
+  static validQueries(req, res, next) {
+    const validParams = ['page', 'limit', 'author', 'title', 'tagList'];
+    if (req.query && Object.keys(req.query).filter(e => !validParams.includes(e)).length) {
+      return res.status(400).json({
+        error:
+          'invalid query parameter. Only allowed page, limit, author, title and tagList'
+      });
+    }
+    next();
+  }
 }
 export default ArticleMiddleware;

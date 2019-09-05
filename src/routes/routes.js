@@ -55,7 +55,7 @@ router.delete('/api/v1/users/:username', verifyToken, UserAuth.deleteUser);
 router.patch('/api/v1/users/:username', verifyToken, adminPermission, Validation.updateRoleValidation, UserAuth.updateRole);
 router.get('/api/v1/articles/:slug', Article.getSingleArticle);
 router.post('/api/v1/articles', [verifyToken, connectMulti, Validation.createArticleValidation, ContentType, Validation.imageValidation], Article.createArticle);
-router.get('/api/v1/articles', Article.getAllArticles);
+router.get('/api/v1/articles', ArticleMiddleware.validQueries, Article.getAllArticles);
 router.post('/api/v1/articles/:articleId/rate', [verifyToken, Validation.idValidation, ArticleMiddleware.checkRatedArticle], articleRate.rateArticle);
 router.get('/api/v1/articles/:articleId/rate', [verifyToken, Validation.idValidation, findOwner], articleRate.getArticleRating);
 router.put('/api/v1/articles/:articleSlug/like', verifyToken, Article.likeArticle);

@@ -23,7 +23,9 @@ let userToken4;
 let articleSlug;
 let articleSlug2;
 let newArticleSlug;
+let slugMe;
 let commentId;
+let toRate;
 const invalidArticleSlug = 'something-new-w2zjzvm6o5sgad456';
 
 before(async () => {
@@ -460,6 +462,20 @@ describe('POST AND GET /api/v1/articles', () => {
         done();
       });
   });
+  it('Should return error if invalid query parameters areprovided', (done) => {
+    chai
+      .request(app)
+      .get('/api/v1/articles?invalid=true')
+      .set('Authorization', userToken1)
+      .end((err, res) => {
+        if (err) done(err);
+        expect(res).have.status(400);
+        expect(res).to.be.an('object');
+        expect(res.body.error)
+          .to.deep.equal('invalid query parameter. Only allowed page, limit, author, title and tagList');
+        done();
+      });
+  });
   it('Should return the previous page', (done) => {
     chai
       .request(app)
@@ -561,6 +577,48 @@ describe('POST AND GET /api/v1/articles', () => {
           'author',
           'readTime'
         );
+        done();
+      });
+  });
+  it('Should filter articles if title is not not provided in search', (done) => {
+    chai
+      .request(app)
+      .get('/api/v1/articles?author=eric')
+      .set('Authorization', userToken1)
+      .end((err, res) => {
+        if (err) done(err);
+        expect(res).have.status(200);
+        expect(res).to.be.an('object');
+        expect(res.body)
+          .to.have.keys('articles', 'firstPage', 'lastPage', 'currentPage', 'nextPage', 'previousPage');
+        done();
+      });
+  });
+  it('Should filter articles if title and author are provided in search', (done) => {
+    chai
+      .request(app)
+      .get('/api/v1/articles?author=eric&title=Growth')
+      .set('Authorization', userToken1)
+      .end((err, res) => {
+        if (err) done(err);
+        expect(res).have.status(200);
+        expect(res).to.be.an('object');
+        expect(res.body)
+          .to.have.keys('articles', 'firstPage', 'lastPage', 'currentPage', 'nextPage', 'previousPage');
+        done();
+      });
+  });
+  it('Should filter articles if title and author are provided in search', (done) => {
+    chai
+      .request(app)
+      .get('/api/v1/articles?tagList=education')
+      .set('Authorization', userToken1)
+      .end((err, res) => {
+        if (err) done(err);
+        expect(res).have.status(200);
+        expect(res).to.be.an('object');
+        expect(res.body)
+          .to.have.keys('articles', 'firstPage', 'lastPage', 'currentPage', 'nextPage', 'previousPage');
         done();
       });
   });
@@ -1127,7 +1185,73 @@ describe('POST /api/v1/articles/{articleId}/rate', () => {
         done();
       });
   });
+
+  it('Should create and return an article', (done) => {
+    chai
+      .request(app)
+      .post('/api/v1/articles')
+      .set('Authorization', userToken2)
+      .field(dummyArticle.validArticleMine)
+      .attach('image', fs.readFileSync('src/tests/dummyData/avatar.jpg'), 'avatar.jpg')
+      .end((err, res) => {
+        if (err) done(err);
+        expect(res).have.status(201);
+        expect(res.body.article).to.have.property('images');
+        toRate = res.body.article.id;
+        expect(res.body).to.have.key('article');
+        slugMe = res.body.article.slug;
+        done();
+      });
+  });
+  it('Should successfully rate an article', (done) => {
+    chai
+      .request(app)
+      .post(`/api/v1/articles/${toRate}/rate`)
+      .set('Authorization', userToken1)
+      .send({ rate: 3 })
+      .end((err, res) => {
+        if (err) done(err);
+        expect(res).have.status(201);
+        expect(res).to.be.an('object');
+        expect(res.body).to.have.keys('message', 'data');
+        expect(res.body.message).to.deep.equal('Successfully rated this article');
+        done();
+      });
+  });
+  it('Should return a particluar article', (done) => {
+    chai
+      .request(app)
+      .get(`/api/v1/articles/${slugMe}`)
+      .set('Authorization', userToken1)
+      .end((err, res) => {
+        if (err) done(err);
+        expect(res).have.status(200);
+        expect(res).to.be.an('object');
+        expect(res.body).to.have.keys('article');
+        expect(res.body.article).to.have.keys(
+          'id',
+          'slug',
+          'title',
+          'description',
+          'body',
+          'blocked',
+          'category',
+          'tagList',
+          'images',
+          'authorId',
+          'likes',
+          'dislikes',
+          'createdAt',
+          'updatedAt',
+          'author',
+          'averageRatings',
+          'readTime'
+        );
+        done();
+      });
+  });
 });
+
 
 // getting ratings
 describe('GET /api/v1/articles/{articleId}/rate', () => {
