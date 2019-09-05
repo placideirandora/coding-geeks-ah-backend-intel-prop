@@ -17,7 +17,7 @@ const isOwner = async (req, res, next) => {
     });
   }
   const isAuthor = foundArticle.authorId === userId;
-  if ((!isAuthor) && (role !== ('admin' || 'super-admin'))) {
+  if ((!isAuthor) && ((role !== 'admin') && (role !== 'super-admin'))) {
     return res.status(403).json({
       error: 'Sorry! You are not allowed to view or make changes to this resource'
     });
@@ -27,4 +27,14 @@ const isOwner = async (req, res, next) => {
   next();
 };
 
-export default isOwner;
+const isAdmin = async (req, res, next) => {
+  const { role } = req.userData;
+  if (role !== 'admin' && role !== 'super-admin') {
+    return res.status(403).json({
+      error: 'Sorry! You are not allowed to view this resource'
+    });
+  }
+  next();
+};
+
+export { isOwner, isAdmin };

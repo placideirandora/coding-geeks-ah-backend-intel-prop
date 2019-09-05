@@ -1561,6 +1561,53 @@
                 }
             }
         },
+        "/api/v1/articles/{articleSlug}/comments/{commentId}/history": {
+            "get": {
+                "tags": [
+                    "Articles"
+                ],
+                "summary": "admin view comment edit history",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "Authorization",
+                        "in": "header",
+                        "description": "Token",
+                        "required": true
+                    },
+                    {
+                        "name": "articleSlug",
+                        "in": "path",
+                        "description": "A slug of an article",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "commentId",
+                        "in": "path",
+                        "description": "An identifier of a comment",
+                        "required": true,
+                        "type": "integer"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successfully comment edit history retrieved"
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "404": {
+                        "description": "Comment not found"
+                    },
+                    "401": {
+                        "description": "Unauthorized Access"
+                    }
+                }
+            }
+        },
         "/api/v1/comments/{id}/like": {
             "put": {
                 "tags": [
