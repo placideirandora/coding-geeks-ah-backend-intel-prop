@@ -88,6 +88,7 @@ before((done) => {
       done();
     });
 });
+
 describe('POST AND GET /api/v1/articles', () => {
   it('Should receive a message if no articles found', (done) => {
     chai
@@ -105,6 +106,8 @@ describe('POST AND GET /api/v1/articles', () => {
         done();
       });
   });
+});
+describe('POST AND GET /api/v1/articles', () => {
   it('Should return error if wrong content-type is used', (done) => {
     chai
       .request(app)
@@ -459,6 +462,20 @@ describe('POST AND GET /api/v1/articles', () => {
         done();
       });
   });
+  it('Should return error if invalid query parameters areprovided', (done) => {
+    chai
+      .request(app)
+      .get('/api/v1/articles?invalid=true')
+      .set('Authorization', userToken1)
+      .end((err, res) => {
+        if (err) done(err);
+        expect(res).have.status(400);
+        expect(res).to.be.an('object');
+        expect(res.body.error)
+          .to.deep.equal('invalid query parameter. Only allowed page, limit, author, title and tagList');
+        done();
+      });
+  });
   it('Should return the previous page', (done) => {
     chai
       .request(app)
@@ -554,6 +571,7 @@ describe('POST AND GET /api/v1/articles', () => {
           'authorId',
           'likes',
           'dislikes',
+          'blocked',
           'createdAt',
           'updatedAt',
           'author',
@@ -626,6 +644,7 @@ describe('POST AND GET /api/v1/articles', () => {
           'authorId',
           'likes',
           'dislikes',
+          'blocked',
           'createdAt',
           'updatedAt',
           'author',
@@ -1141,7 +1160,7 @@ describe('POST /api/v1/articles/{articleId}/rate', () => {
   it('Should not be able to rate the article which does not exist', (done) => {
     chai
       .request(app)
-      .post('/api/v1/articles/11/rate')
+      .post('/api/v1/articles/5098/rate')
       .set('Authorization', userToken2)
       .send({ rate: 3 })
       .end((err, res) => {
@@ -1215,6 +1234,7 @@ describe('POST /api/v1/articles/{articleId}/rate', () => {
           'title',
           'description',
           'body',
+          'blocked',
           'category',
           'tagList',
           'images',

@@ -2,7 +2,7 @@
 /* eslint-disable max-len */
 import { config } from 'dotenv';
 import {
-  User, Article, Reaction, Comment, Share, Statistic
+  User, Article, Reaction, Comment, Share, Statistic, Report
 } from '../sequelize/models';
 import { slugGen, uploadImage, queryFilterer } from '../helpers/articles/articleHelper';
 import readTime from '../helpers/articles/readTimeForArticle';
@@ -108,8 +108,7 @@ class ArticleController {
         ],
         where
       });
-      console.log(data);
-      if (!data.length) {
+      if (!data || !data.length) {
         return res.status(404).json({
           message: 'No articles found at the moment! please come back later'
         });
@@ -151,7 +150,7 @@ class ArticleController {
       const {
         title, description, body, tags, category
       } = req.body;
-      const originalArticle = await Article.findOne({ where: { slug: req.userData.slug } });
+      const originalArticle = await Article.findOne({ where: { slug: req.userData.slug, blocked: false } });
       if (title) {
         article.title = title.trim();
         article.slug = slugGen(title.trim());
@@ -164,7 +163,7 @@ class ArticleController {
         article.images = await uploadImage(req.files.image);
       }
       const updatedArticle = await Article.update(article, {
-        where: { slug: req.userData.slug },
+        where: { slug: req.userData.slug, blocked: false },
         returning: true,
         plain: true
       });
@@ -190,7 +189,7 @@ class ArticleController {
   static async deteleArticle(req, res) {
     try {
       const deleted = await Article.destroy({
-        where: { id: req.userData.articleId }
+        where: { id: req.userData.articleId, blocked: false }
       });
       if (deleted) {
         return res.status(200).json({
@@ -215,7 +214,7 @@ class ArticleController {
       const likeVote = 1;
       const dislikeVote = 0;
 
-      const findArticle = await Article.findOne({ where: { slug: slugId } });
+      const findArticle = await Article.findOne({ where: { slug: slugId, blocked: false } });
 
       if (!findArticle) {
         return res.status(404).json({
@@ -357,7 +356,7 @@ class ArticleController {
       const likeVote = 1;
       const dislikeVote = 0;
 
-      const findArticle = await Article.findOne({ where: { slug: slugId } });
+      const findArticle = await Article.findOne({ where: { slug: slugId, blocked: false } });
 
       if (!findArticle) {
         return res.status(404).json({
@@ -494,7 +493,7 @@ class ArticleController {
   static async getSingleArticle(req, res) {
     try {
       const article = await Article.findOne({
-        where: { slug: req.params.slug },
+        where: { slug: req.params.slug, blocked: false },
         include: [
           {
             model: User,
@@ -730,6 +729,63 @@ class ArticleController {
     return res.status(200).json({
       message: 'Reading statistics retrieved',
       statistics
+    });
+  }
+
+  /**
+   * @param {object} req
+   * @param {object} res
+   * @returns {object} returns an object containing a blocked article response
+   */
+  static async blockArticle(req, res) {
+    const slugId = req.params.articleSlug;
+
+    const findArticle = await Report.findOne({ where: { slug: slugId } });
+
+    if (!findArticle) {
+      return res.status(404).json({
+        message: 'Article not found in the reported articles'
+      });
+    }
+
+    const alreadyBlocked = await Article.findOne({ where: { slug: slugId, blocked: true } });
+
+    if (alreadyBlocked) {
+      return res.status(400).json({
+        message: 'The article is already blocked'
+      });
+    }
+
+    await Article.update({ blocked: true }, { where: { slug: slugId } });
+
+    return res.status(200).json({
+      message: 'Article blocked',
+      blockedArticle: findArticle
+    });
+  }
+
+  /**
+   * @param {object} req
+   * @param {object} res
+   * @returns {object} returns an object containing a unblocked article response
+   */
+  static async unblockArticle(req, res) {
+    const slugId = req.params.articleSlug;
+
+    const findArticle = await Article.findOne({ where: { slug: slugId, blocked: true } });
+
+    if (!findArticle) {
+      return res.status(404).json({
+        message: 'Article not found in the blocked articles'
+      });
+    }
+
+    await Report.destroy({ where: { slug: slugId } });
+
+    await Article.update({ blocked: false }, { where: { slug: slugId } });
+
+    return res.status(200).json({
+      message: 'Article unblocked',
     });
   }
 }

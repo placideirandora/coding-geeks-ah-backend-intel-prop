@@ -44,6 +44,12 @@ const passportConfig = () => {
                 'Please verify your account first. Visit your email to verify'
             });
           }
+          if (user.blocked) {
+            return done({
+              message:
+                'Your account was blocked'
+            });
+          }
           return done(null, user);
         } catch (err) {
           return done(err);

@@ -59,6 +59,10 @@ export default (sequelize, DataTypes) => {
         type: DataTypes.BOOLEAN,
         defaultValue: true
       },
+      blocked: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: false
+      },
       createdAt: {
         allowNull: true,
         type: DataTypes.DATE,
@@ -80,6 +84,7 @@ export default (sequelize, DataTypes) => {
     User.hasMany(models.Reaction, { foreignKey: 'userId', as: 'LikerOrDisliker', onDelete: 'CASCADE' });
     User.hasMany(models.Comment, { foreignKey: 'userId', as: 'Commenter', onDelete: 'CASCADE' });
     User.hasMany(models.Bookmark, { foreignKey: 'userId', onDelete: 'CASCADE' });
+    User.hasMany(models.Highlight, { foreignKey: 'userId', onDelete: 'CASCADE' });
     User.hasMany(models.Statistic, { foreignKey: 'authorId', as: 'ArticleOwner', onDelete: 'CASCADE' });
     User.hasMany(models.Report, { foreignKey: 'reporterId', as: 'reporter', onDelete: 'CASCADE' });
     User.hasMany(models.CommentReaction, { foreignKey: 'userId', onDelete: 'CASCADE' });

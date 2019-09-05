@@ -52,7 +52,8 @@ const queryFilterer = (title, author, tagList) => {
       }),
       tagList: {
         [Op.overlap]: [`${tagList}`]
-      }
+      },
+      blocked: false
     }
   };
   if (!author) delete queries.query.where;

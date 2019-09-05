@@ -809,6 +809,79 @@
                 }
             }
         },
+        "/api/v1/users/{username}/block": {
+            "put": {
+                "tags": [
+                    "Users"
+                ],
+                "description": "Super admin and admin should be able to block a user",
+                "parameters": [
+                    {
+                        "name": "Authorization",
+                        "in": "header",
+                        "description": "Super admin or admin's token"
+                    },
+                    {
+                        "name": "username",
+                        "in": "path",
+                        "description": "User to be blocked",
+                        "type": "string"
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "User blocked"
+                    },
+                    "400": {
+                        "description": "User already blocked"
+                    },
+                    "404": {
+                        "description": "User not found"
+                    },
+                    "401": {
+                        "description": "Unauthorized Access"
+                    }
+                }
+            }
+        },
+        "/api/v1/users/{username}/unblock": {
+            "put": {
+                "tags": [
+                    "Users"
+                ],
+                "description": "Super admin and admin should be able to unblock a blocked user",
+                "parameters": [
+                    {
+                        "name": "Authorization",
+                        "in": "header",
+                        "description": "Super admin or admin's token"
+                    },
+                    {
+                        "name": "username",
+                        "in": "path",
+                        "description": "User to be unblocked",
+                        "type": "string"
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "User unblocked"
+                    },
+                    "404": {
+                        "description": "User not found"
+                    },
+                    "401": {
+                        "description": "Unauthorized Access"
+                    }
+                }
+            }
+        },
         "/api/v1/profiles/{username}": {
             "put": {
                 "tags": [
@@ -2143,6 +2216,79 @@
                 }
             }
         },
+        "/api/v1/articles/{articleSlug}/block": {
+            "put": {
+                "tags": [
+                    "Articles"
+                ],
+                "description": "Super admin and admin should be able to block a reported article",
+                "parameters": [
+                    {
+                        "name": "Authorization",
+                        "in": "header",
+                        "description": "Super admin or admin's token"
+                    },
+                    {
+                        "name": "articleSlug",
+                        "in": "path",
+                        "description": "Slug of an article to block",
+                        "type": "string"
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Article blocked"
+                    },
+                    "400": {
+                        "description": "Article already blocked"
+                    },
+                    "404": {
+                        "description": "Article not found"
+                    },
+                    "401": {
+                        "description": "Unauthorized Access"
+                    }
+                }
+            }
+        },
+        "/api/v1/articles/{articleSlug}/unblock": {
+            "put": {
+                "tags": [
+                    "Articles"
+                ],
+                "description": "Super admin and admin should be able to unblock a reported article",
+                "parameters": [
+                    {
+                        "name": "Authorization",
+                        "in": "header",
+                        "description": "Super admin or admin's token"
+                    },
+                    {
+                        "name": "articleSlug",
+                        "in": "path",
+                        "description": "Slug of an article to unblock",
+                        "type": "string"
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Article unblocked"
+                    },
+                    "404": {
+                        "description": "Article not found"
+                    },
+                    "401": {
+                        "description": "Unauthorized Access"
+                    }
+                }
+            }
+        },
         "/api/v1/articles/{slug}": {
             "put": {
                 "tags": [
@@ -2352,6 +2498,102 @@
                                 }
                             }
                         }
+                    }
+                }
+            }
+        },
+        "/api/v1/articles/{slug}/highlights": {
+            "post": {
+                "tags": [
+                    "Highlights"
+                ],
+                "description": "User can highlight a text of an article and comment on it",
+                "parameters": [
+                    {
+                        "name": "Authorization",
+                        "in": "header",
+                        "description": "The user token"
+                    },
+                    {
+                        "name": "slug",
+                        "in": "path",
+                        "description": "Slug of an article to hightlight",
+                        "type": "string"
+                    },
+                    {
+                        "name": "Highliht",
+                        "in": "body",
+                        "description": "Highlight a text",
+                        "schema": {
+                            "required": [
+                                "startIndex",
+                                "text"
+                            ],
+                            "properties": {
+                                "startIndex": {
+                                    "type": "integer"
+                                },
+                                "text": {
+                                    "type": "string"
+                                },
+                                "comment": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Commented on the article"
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "404": {
+                        "description": "Article Not Found"
+                    },
+                    "401": {
+                        "description": "Unauthorized Access"
+                    }
+                }
+            },
+            "get": {
+                "tags": [
+                    "Articles"
+                ],
+                "summary": "Retrieve an article's comments",
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Article successfully highlighted",
+                        "schema": {
+                            "properties": {
+                                "data": {
+                                    "$ref": "#/definitions/Highlight"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Missing fields or invalid value",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "403": {
+                        "description": "Unauthorized access",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "200": {
+                        "description": "Highlight successfully deleted"
                     }
                 }
             }
@@ -2699,6 +2941,34 @@
                 },
                 "reporter": {
                     "type": "string"
+                }
+            }
+        },
+        "Highlight": {
+            "properties": {
+                "id": {
+                    "type": "integer"
+                },
+                "articleId": {
+                    "type": "integer"
+                },
+                "userId": {
+                    "type": "string"
+                },
+                "startIndex": {
+                    "type": "integer"
+                },
+                "text": {
+                    "type": "string"
+                },
+                "comment": {
+                    "type": "string"
+                },
+                "updatedAt": {
+                    "type": "date"
+                },
+                "createdAt": {
+                    "type": "date"
                 }
             }
         },

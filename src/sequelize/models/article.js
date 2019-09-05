@@ -50,7 +50,11 @@ module.exports = (sequelize, DataTypes) => {
       dislikes: {
         type: DataTypes.INTEGER,
         defaultValue: 0
-      }
+      },
+      blocked: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: false
+      },
     },
     {
       timeStamps: true,
@@ -64,6 +68,7 @@ module.exports = (sequelize, DataTypes) => {
     Article.hasMany(models.Reaction, { foreignKey: 'articleId', as: 'Article', onDelete: 'CASCADE' });
     Article.hasMany(models.Comment, { foreignKey: 'articleId', as: 'ArticleComment', onDelete: 'CASCADE' });
     Article.hasMany(models.Bookmark, { foreignKey: 'articleId', onDelete: 'CASCADE' });
+    Article.hasMany(models.Highlight, { foreignKey: 'articleId', onDelete: 'CASCADE' });
     Article.hasMany(models.Statistic, { foreignKey: 'articleId', as: 'ArticleStats', onDelete: 'CASCADE' });
     Article.hasMany(models.Report, { foreignKey: 'articleId', as: 'reportedArticle', onDelete: 'CASCADE' });
   };
