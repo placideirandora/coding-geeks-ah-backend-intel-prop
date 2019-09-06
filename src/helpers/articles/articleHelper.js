@@ -60,9 +60,9 @@ const queryFilterer = (title, author, tags) => {
   if (!author) delete queries.query.where;
   if (!title) delete queries.query.title;
   if (!tags) delete queries.query.tagList;
+
   return {
-    where: (title || author || tags)
-      ? { ...queries.query } : undefined
+    where: { ...queries.query }
   };
 };
 
