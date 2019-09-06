@@ -41,7 +41,7 @@ class ArticleController {
         body: body.trim()
       };
       if (req.body.tags) {
-        payload.tagList = req.body.tags.trim().split(/[ ,]+/);
+        payload.tagList = req.body.tags.toLowerCase().trim().split(/[ ,]+/);
       }
       if (req.body.category) {
         payload.category = req.body.category.trim();
@@ -92,8 +92,8 @@ class ArticleController {
     try {
       const page = parseInt(req.query.page, 10);
       const limit = parseInt(req.query.limit, 10);
-      const { title, author, tagList } = req.query;
-      const { where } = queryFilterer(title, author, tagList);
+      const { title, author, tags } = req.query;
+      const { where } = queryFilterer(title, author, tags);
 
       const {
         data, previous, next, pages, pageLimit, currentPage
