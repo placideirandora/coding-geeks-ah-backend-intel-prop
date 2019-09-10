@@ -15,9 +15,11 @@ class permissionController {
     const newPermission = req.body.permission;
 
     const { id } = await Role.findOne({ where: { role } });
-    const permission = await Permission.findOne({ where: { roleId: id } });
+    const permission = await Permission.findOne({
+      where: { roleId: id, permission: newPermission }
+    });
 
-    if (permission && permission.roleId === id && permission.permission === newPermission) {
+    if (permission) {
       return res.status(409).json({
         error: 'This permission is already defined'
       });

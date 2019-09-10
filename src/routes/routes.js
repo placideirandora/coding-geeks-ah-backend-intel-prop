@@ -23,14 +23,15 @@ import Highlights from '../controllers/higlightController';
 import Report from '../controllers/reportController';
 import CommentReaction from '../controllers/commentController';
 import Role from '../controllers/permissionController';
-
+import * as permission from '../middleware/permissions';
+import checkPermissions from '../middleware/checkPermissions';
 
 const router = express.Router();
 
 const connectMulti = connectmultiparty();
 
 router.post('/api/v1/users/signup', Validation.signupValidation, UserAuth.signup);
-router.post('/api/v1/users', verifyToken, adminPermission, Validation.signupValidation, UserAuth.signup);
+router.post('/api/v1/users', verifyToken, adminPermission, permission.createUser, checkPermissions, Validation.signupValidation, UserAuth.signup);
 router.get('/api/v1/profiles/:username', Profile.user);
 router.get('/api/v1/profiles', verifyToken, Profile.fetchProfiles);
 router.put('/api/v1/profiles/:username', [verifyToken, connectMulti, canEditProfile, Validation.profileValidation, Validation.imageValidation], Profile.editProfile);
@@ -51,10 +52,10 @@ router.get('/api/v1/auth/twitter/test', twitterRequest, UserAuth.twitterLogin);
 router.get('/api/v1/auth/twitter/callback', passport.authenticate('twitter'), UserAuth.twitterLogin);
 router.post('/api/v1/users/logout', [verifyToken], UserAuth.logout);
 router.post('/api/v1/users/login', Validation.loginValidation, UserAuth.login);
-router.delete('/api/v1/users/:username', verifyToken, UserAuth.deleteUser);
-router.patch('/api/v1/users/:username', verifyToken, adminPermission, Validation.updateRoleValidation, UserAuth.updateRole);
+router.delete('/api/v1/users/:username', verifyToken, permission.deleteUser, checkPermissions, UserAuth.deleteUser);
+router.patch('/api/v1/users/:username', verifyToken, adminPermission, permission.updateUserRole, checkPermissions, Validation.updateRoleValidation, UserAuth.updateRole);
 router.get('/api/v1/articles/:slug', Article.getSingleArticle);
-router.post('/api/v1/articles', [verifyToken, connectMulti, Validation.createArticleValidation, ContentType, Validation.imageValidation], Article.createArticle);
+router.post('/api/v1/articles', [verifyToken, permission.createArticle, checkPermissions, connectMulti, Validation.createArticleValidation, ContentType, Validation.imageValidation], Article.createArticle);
 router.get('/api/v1/articles', ArticleMiddleware.validQueries, Article.getAllArticles);
 router.post('/api/v1/articles/:articleId/rate', [verifyToken, Validation.idValidation, ArticleMiddleware.checkRatedArticle], articleRate.rateArticle);
 router.get('/api/v1/articles/:articleId/rate', [verifyToken, Validation.idValidation, isOwner], articleRate.getArticleRating);
@@ -69,8 +70,8 @@ router.post('/api/v1/profiles/:userName/follow', verifyToken, UserFollow.followU
 router.delete('/api/v1/profiles/:userName/unfollow', verifyToken, UserFollow.unFollowUser);
 router.get('/api/v1/profiles/:userName/following', verifyToken, UserFollow.getFollowingList);
 router.get('/api/v1/profiles/:userName/followers', verifyToken, UserFollow.getFollowersList);
-router.delete('/api/v1/articles/:slug', [verifyToken, isOwner], Article.deteleArticle);
-router.put('/api/v1/articles/:slug', [verifyToken, isOwner, connectMulti, Validation.updateArticleValidation, ContentType, Validation.imageValidation], Article.updateArticle);
+router.delete('/api/v1/articles/:slug', [verifyToken, permission.deleteArticle, checkPermissions, isOwner], Article.deteleArticle);
+router.put('/api/v1/articles/:slug', [verifyToken, permission.updateArticle, checkPermissions, isOwner, connectMulti, Validation.updateArticleValidation, ContentType, Validation.imageValidation], Article.updateArticle);
 router.post('/api/v1/articles/:slug/share/:option', [verifyToken, ArticleMiddleware.validPlatform], Article.shareArticle);
 router.patch('/api/v1/profiles/:username/notifications/:subscribe', [verifyToken, canEditProfile], Notification.optInOutNotificatation);
 router.get('/api/v1/profiles/notifications/all', verifyToken, Notification.getNotification);
@@ -82,10 +83,10 @@ router.delete('/api/v1/bookmarks/:slug', [verifyToken, findUser], Bookmark.delet
 router.post('/api/v1/articles/:slug/highlights', verifyToken, Validation.highlightValidation, Highlights.highlightText);
 router.get('/api/v1/articles/:articleSlug/statistics', verifyToken, Article.readingStats);
 router.post('/api/v1/articles/:articleSlug/reports', [verifyToken, Validation.reportValidation], Report.createReport);
-router.get('/api/v1/articles/reports/all', [verifyToken, checkAdmin], Report.getAllReports);
-router.get('/api/v1/articles/:articleSlug/reports', [verifyToken, checkAdmin], Report.getArticleReports);
+router.get('/api/v1/articles/reports/all', [verifyToken, checkAdmin, permission.readReport, checkPermissions], Report.getAllReports);
+router.get('/api/v1/articles/:articleSlug/reports', [verifyToken, checkAdmin, permission.readReport, checkPermissions], Report.getArticleReports);
 router.delete('/api/v1/articles/:articleSlug/reports/:reportId', verifyToken, Validation.reportParamsValidation, Report.deleteReport);
-router.get('/api/v1/articles/:articleSlug/reports/:reportId', [verifyToken, checkAdmin, Validation.reportParamsValidation], Report.getSingleReport);
+router.get('/api/v1/articles/:articleSlug/reports/:reportId', [verifyToken, permission.readReport, checkPermissions, checkAdmin, Validation.reportParamsValidation], Report.getSingleReport);
 router.put('/api/v1/comments/:id/like', [verifyToken, findUser, Validation.idInParamsValidation], CommentReaction.likeComment);
 router.put('/api/v1/comments/:id/dislike', [verifyToken, findUser, Validation.idInParamsValidation], CommentReaction.dislikeComment);
 router.post('/api/v1/users/:role/permissions', [verifyToken, adminPermission, Validation.permissionValidation, Validation.RoleParamsValidation], Role.createPermision);
@@ -93,8 +94,8 @@ router.get('/api/v1/users/:role/permissions', [verifyToken, checkAdmin, Validati
 router.patch('/api/v1/users/:permissionId/permissions', [verifyToken, adminPermission, Validation.permissionValidation, Validation.idPermissionValidation], Role.updatePermission);
 router.delete('/api/v1/users/:permissionId/permissions', [verifyToken, adminPermission, Validation.idPermissionValidation], Role.deletePermission);
 
-router.put('/api/v1/articles/:articleSlug/block', [verifyToken, checkAdmin], Article.blockArticle);
-router.put('/api/v1/articles/:articleSlug/unblock', [verifyToken, checkAdmin], Article.unblockArticle);
-router.put('/api/v1/users/:username/block', [verifyToken, checkAdmin], UserAuth.blockerUser);
-router.put('/api/v1/users/:username/unblock', [verifyToken, checkAdmin], UserAuth.unblockerUser);
+router.put('/api/v1/articles/:articleSlug/block', [verifyToken, checkAdmin, permission.updateArticle, checkPermissions], Article.blockArticle);
+router.put('/api/v1/articles/:articleSlug/unblock', [verifyToken, checkAdmin, permission.updateArticle, checkPermissions], Article.unblockArticle);
+router.put('/api/v1/users/:username/block', [verifyToken, checkAdmin, permission.updateUser, checkPermissions], UserAuth.blockerUser);
+router.put('/api/v1/users/:username/unblock', [verifyToken, checkAdmin, permission.updateUser, checkPermissions], UserAuth.unblockerUser);
 export default router;
