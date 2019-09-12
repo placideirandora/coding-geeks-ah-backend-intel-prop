@@ -1,40 +1,40 @@
 // Permissions for create
 const createUser = (req, res, next) => {
-  req.permissions = 'create user';
+  req.permissions = 'CREATE_USER';
   next();
 };
 const createArticle = (req, res, next) => {
-  req.permissions = 'create article';
+  req.permissions = 'CREATE_ARTICLE';
   next();
 };
 
 // Permissions for update
 const updateUser = (req, res, next) => {
-  req.permissions = 'update user';
+  req.permissions = 'UPDATE_USER';
   next();
 };
 const updateUserRole = (req, res, next) => {
-  req.permissions = 'update user role';
+  req.permissions = 'UPDATE_USER_ROLE';
   next();
 };
 const updateArticle = (req, res, next) => {
-  req.permissions = 'update article';
+  req.permissions = 'UPDATE_ARTICLE';
   next();
 };
 
 // Permissions for delete
 const deleteUser = (req, res, next) => {
-  req.permissions = 'delete user';
+  req.permissions = 'DELETE_USER';
   next();
 };
 const deleteArticle = (req, res, next) => {
-  req.permissions = 'delete article';
+  req.permissions = 'DELETE_ARTICLE';
   next();
 };
 
 // Permissions for read
 const readReport = (req, res, next) => {
-  req.permissions = 'read report';
+  req.permissions = 'READ_REPORT';
   next();
 };
 

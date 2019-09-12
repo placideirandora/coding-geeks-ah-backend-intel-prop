@@ -1,57 +1,51 @@
 export const up = queryInterface => queryInterface.bulkInsert('Permissions', [{
   roleId: 1,
-  permission: 'create user',
+  permission: 'CREATE_USER',
   createdAt: new Date(),
   updatedAt: new Date()
 },
 {
   roleId: 1,
-  permission: 'update user role',
+  permission: 'UPDATE_USER_ROLE',
   createdAt: new Date(),
   updatedAt: new Date()
 },
 {
   roleId: 1,
-  permission: 'update user',
+  permission: 'UPDATE_USER',
   createdAt: new Date(),
   updatedAt: new Date()
 },
 {
   roleId: 1,
-  permission: 'delete user',
+  permission: 'DELETE_USER',
   createdAt: new Date(),
   updatedAt: new Date()
 },
 {
   roleId: 1,
-  permission: 'create article',
+  permission: 'CREATE_ARTICLE',
   createdAt: new Date(),
   updatedAt: new Date()
 },
 {
   roleId: 1,
-  permission: 'delete article',
+  permission: 'DELETE_ARTICLE',
   createdAt: new Date(),
   updatedAt: new Date()
 },
 {
   roleId: 1,
-  permission: 'update article',
+  permission: 'UPDATE_ARTICLE',
   createdAt: new Date(),
   updatedAt: new Date()
 },
 {
   roleId: 1,
-  permission: 'read report',
+  permission: 'READ_REPORT',
   createdAt: new Date(),
   updatedAt: new Date()
-},
-{
-  roleId: 1,
-  permission: 'update profile',
-  createdAt: new Date(),
-  updatedAt: new Date()
-},
+}
 ], {});
 
 export const down = queryInterface => queryInterface.bulkDelete('Permissions', null, {});

@@ -86,7 +86,7 @@ router.post('/api/v1/articles/:articleSlug/reports', [verifyToken, Validation.re
 router.get('/api/v1/articles/reports/all', [verifyToken, checkAdmin, permission.readReport, checkPermissions], Report.getAllReports);
 router.get('/api/v1/articles/:articleSlug/reports', [verifyToken, checkAdmin, permission.readReport, checkPermissions], Report.getArticleReports);
 router.delete('/api/v1/articles/:articleSlug/reports/:reportId', verifyToken, Validation.reportParamsValidation, Report.deleteReport);
-router.get('/api/v1/articles/:articleSlug/reports/:reportId', [verifyToken, permission.readReport, checkPermissions, checkAdmin, Validation.reportParamsValidation], Report.getSingleReport);
+router.get('/api/v1/articles/:articleSlug/reports/:reportId', [verifyToken, checkAdmin, permission.readReport, checkPermissions, Validation.reportParamsValidation], Report.getSingleReport);
 router.put('/api/v1/comments/:id/like', [verifyToken, findUser, Validation.idInParamsValidation], CommentReaction.likeComment);
 router.put('/api/v1/comments/:id/dislike', [verifyToken, findUser, Validation.idInParamsValidation], CommentReaction.dislikeComment);
 router.post('/api/v1/users/:role/permissions', [verifyToken, adminPermission, Validation.permissionValidation, Validation.RoleParamsValidation], Role.createPermision);
