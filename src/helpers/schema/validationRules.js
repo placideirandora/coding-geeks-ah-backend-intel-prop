@@ -335,17 +335,13 @@ export default {
       });
       return errors;
     }),
-  permission: Joi.string().trim()
-    .required()
-    .min(5)
+  permission: Joi.string()
+    .valid('CREATE_USER', 'CREATE_ARTICLE', 'UPDATE_USER', 'UPDATE_USER_ROLE', 'UPDATE_ARTICLE', 'DELETE_USER', 'DELETE_ARTICLE', 'READ_REPORT', 'CREATE_ADMIN')
     .error((errors) => {
       errors.forEach((err) => {
         switch (err.type) {
-          case 'any.required':
-            err.message = 'Permission is required';
-            break;
-          case 'string.min':
-            err.message = 'Permission must have atleast 5 characters';
+          case 'any.allowOnly':
+            err.message = 'Invalid permission';
             break;
         }
       });
