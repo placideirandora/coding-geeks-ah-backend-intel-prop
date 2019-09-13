@@ -3,7 +3,7 @@ const checkAdmin = (req, res, next) => {
 
   if (userRole !== 'admin' && userRole !== 'super-admin') {
     return res.status(403).json({
-      error: 'Unathorized access'
+      error: 'You do not have enough priveledges to continue'
     });
   }
   next();
@@ -14,7 +14,7 @@ const adminPermission = (req, res, next) => {
 
   if (userRole !== 'super-admin') {
     return res.status(403).json({
-      error: 'You do not have permission to perform this action'
+      error: 'You do not have enough priveledges to continue'
     });
   }
   next();

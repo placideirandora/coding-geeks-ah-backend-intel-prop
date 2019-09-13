@@ -1035,7 +1035,7 @@ describe('PATCH /api/v1/users/:username', () => {
         expect(res).to.be.an('object');
         expect(res.body).to.have.keys('error');
         expect(res.body.error)
-          .to.deep.equal('You do not have permission to perform this action');
+          .to.deep.equal('You do not have enough priveledges to continue');
         done();
       });
   });

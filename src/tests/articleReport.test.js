@@ -259,7 +259,7 @@ describe('POST /api/v1/articles/:articleSlug/reports', () => {
         expect(res).to.have.status(403);
         expect(res.body).to.be.an('object');
         expect(res.body).to.have.keys('error');
-        expect(res.body.error).to.deep.equal('Unathorized access');
+        expect(res.body.error).to.deep.equal('You do not have enough priveledges to continue');
         done();
       });
   });

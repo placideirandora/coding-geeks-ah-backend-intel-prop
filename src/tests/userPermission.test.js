@@ -27,7 +27,7 @@ describe('POST /api/v1/users/:role/role', () => {
       .post('/api/v1/users/admin/permissions')
       .set('Authorization', userToken1)
       .send({
-        permission: 'Create a user'
+        permission: 'CREATE_ADMIN'
       })
       .end((err, res) => {
         if (err) done(err);
@@ -38,7 +38,7 @@ describe('POST /api/v1/users/:role/role', () => {
         done();
       });
   });
-  it('Should not be able to create a permission if permission has less than 5 charcacters', (done) => {
+  it('Should not be able to create a permission if permission is not valid', (done) => {
     chai.request(app)
       .post('/api/v1/users/admin/permissions')
       .set('Authorization', userToken1)
@@ -50,21 +50,7 @@ describe('POST /api/v1/users/:role/role', () => {
         expect(res).to.have.status(400);
         expect(res.body).to.be.an('object');
         expect(res.body).to.have.keys('error');
-        expect(res.body.error).to.deep.equal('Permission must have atleast 5 characters');
-        done();
-      });
-  });
-  it('Should not be able to create a permission if permission not provided', (done) => {
-    chai.request(app)
-      .post('/api/v1/users/admin/permissions')
-      .set('Authorization', userToken1)
-      .send({})
-      .end((err, res) => {
-        if (err) done(err);
-        expect(res).to.have.status(400);
-        expect(res.body).to.be.an('object');
-        expect(res.body).to.have.keys('error');
-        expect(res.body.error).to.deep.equal('Permission is required');
+        expect(res.body.error).to.deep.equal('Invalid permission');
         done();
       });
   });
@@ -73,7 +59,7 @@ describe('POST /api/v1/users/:role/role', () => {
       .post('/api/v1/users/fakeuser/permissions')
       .set('Authorization', userToken1)
       .send({
-        permission: 'create a user'
+        permission: 'CREATE_USER'
       })
       .end((err, res) => {
         if (err) done(err);
@@ -89,7 +75,7 @@ describe('POST /api/v1/users/:role/role', () => {
       .post('/api/v1/users/admin/permissions')
       .set('Authorization', userToken1)
       .send({
-        permission: 'Create a user'
+        permission: 'CREATE_USER'
       })
       .end((err, res) => {
         if (err) done(err);
@@ -119,7 +105,7 @@ describe('POST /api/v1/users/:role/role', () => {
       .patch('/api/v1/users/1/permissions')
       .set('Authorization', userToken1)
       .send({
-        permission: 'Update a user'
+        permission: 'UPDATE_USER'
       })
       .end((err, res) => {
         if (err) done(err);
@@ -135,7 +121,7 @@ describe('POST /api/v1/users/:role/role', () => {
       .patch('/api/v1/users/NaN/permissions')
       .set('Authorization', userToken1)
       .send({
-        permission: 'Update a user'
+        permission: 'UPDATE_USER'
       })
       .end((err, res) => {
         if (err) done(err);
