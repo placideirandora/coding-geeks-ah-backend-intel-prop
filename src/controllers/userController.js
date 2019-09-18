@@ -293,7 +293,7 @@ class Authentication {
    * @param {object} res
    * @returns {object} returns an object containing a blocked user
    */
-  static async blockerUser(req, res) {
+  static async blockUser(req, res) {
     const user = req.params.username;
 
     const findUser = await User.findOne({ where: { userName: user, role: 'user' } });
@@ -336,7 +336,7 @@ class Authentication {
    * @param {object} res
    * @returns {object} returns an object containing an unblocked user
    */
-  static async unblockerUser(req, res) {
+  static async unblockUser(req, res) {
     const user = req.params.username;
 
     const findUser = await User.findOne({ where: { userName: user, blocked: true } });
