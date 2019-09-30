@@ -5,6 +5,7 @@ import morgan from 'morgan';
 import bodyParser from 'body-parser';
 import passport from 'passport';
 import session from 'express-session';
+import cors from 'cors';
 import { config } from 'dotenv';
 import SwaggerDocument from '../swagger.json';
 import db from './sequelize/models';
@@ -21,13 +22,16 @@ SocketIO(app);
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
+app.use(cors());
 app.use(passport.initialize());
 passConfig(passport);
-app.use(session({
-  secret: process.env.SESSION_KEY,
-  resave: true,
-  saveUninitialized: true
-}));
+app.use(
+  session({
+    secret: process.env.SESSION_KEY,
+    resave: true,
+    saveUninitialized: true
+  })
+);
 
 app.use(morgan('dev'));
 
