@@ -495,10 +495,10 @@ describe('POST /api/v1/users', () => {
   });
 });
 // Test for user reset password
-describe('POST /api/v1/send-email', () => {
+describe('POST /api/v1/users/send-email', () => {
   it('Should send email to the user with an existing Email', (done) => {
     chai.request(app)
-      .post('/api/v1/send-email')
+      .post('/api/v1/users/send-email')
       .send(dummyUser.emailForSend)
       .end((err, res) => {
         if (err) done(err);
@@ -510,10 +510,10 @@ describe('POST /api/v1/send-email', () => {
       });
   });
 });
-describe('POST /api/v1/send-email', () => {
+describe('POST /api/v1/users/send-email', () => {
   it('Should not send email to the user if Email does no exist', (done) => {
     chai.request(app)
-      .post('/api/v1/send-email')
+      .post('/api/v1/users/send-email')
       .send(dummyUser.unexestingEmailForSend)
       .end((err, res) => {
         if (err) done(err);
@@ -525,10 +525,10 @@ describe('POST /api/v1/send-email', () => {
       });
   });
 });
-describe('POST /api/v1/send-email', () => {
+describe('POST /api/v1/users/send-email', () => {
   it('Should not send email to the user if Email is invalid', (done) => {
     chai.request(app)
-      .post('/api/v1/send-email')
+      .post('/api/v1/users/send-email')
       .send(dummyUser.invalidEmailForSend)
       .end((err, res) => {
         if (err) done(err);
@@ -540,10 +540,10 @@ describe('POST /api/v1/send-email', () => {
       });
   });
 });
-describe('POST /api/v1/reset-password/:token', () => {
+describe('POST /api/v1/users/reset-password/:token', () => {
   it('Should reset password of the user up on valid data', (done) => {
     chai.request(app)
-      .post(`/api/v1/reset-password/${userToken}`)
+      .post(`/api/v1/users/reset-password/${userToken}`)
       .send(dummyUser.resetPassword)
       .end((err, res) => {
         if (err) done(err);
@@ -558,7 +558,7 @@ describe('POST /api/v1/reset-password/:token', () => {
 describe('POST /api/v1/reset-password/:token', () => {
   it('Should not reset password of the user if token is invalid', (done) => {
     chai.request(app)
-      .post('/api/v1/reset-password/DQyMn0.spxg5wNgLosMvKOTsqNpoTnzitdxvBD7y9-fbC1elpc')
+      .post('/api/v1/users/reset-password/DQyMn0.spxg5wNgLosMvKOTsqNpoTnzitdxvBD7y9-fbC1elpc')
       .send(dummyUser.resetPassword)
       .end((err, res) => {
         if (err) done(err);
@@ -570,10 +570,10 @@ describe('POST /api/v1/reset-password/:token', () => {
       });
   });
 });
-describe('POST /api/v1/reset-password/:token', () => {
+describe('POST /api/v1/users/reset-password/:token', () => {
   it('Should return error if user tries to reset password with invalid password', (done) => {
     chai.request(app)
-      .post(`/api/v1/reset-password/${userToken}`)
+      .post(`/api/v1/users/reset-password/${userToken}`)
       .send(dummyUser.invalidResetPassword)
       .end((err, res) => {
         if (err) done(err);
@@ -587,10 +587,10 @@ describe('POST /api/v1/reset-password/:token', () => {
       });
   });
 });
-describe('POST /api/v1/reset-password/:token', () => {
+describe('POST /api/v1/users/reset-password/:token', () => {
   it('Should return error if user tries to reset password without password', (done) => {
     chai.request(app)
-      .post(`/api/v1/reset-password/${userToken}`)
+      .post(`/api/v1/users/reset-password/${userToken}`)
       .send(dummyUser.resetMissingPassword)
       .end((err, res) => {
         if (err) done(err);
@@ -602,10 +602,10 @@ describe('POST /api/v1/reset-password/:token', () => {
       });
   });
 });
-describe('POST /api/v1/reset-password/:token', () => {
+describe('POST /api/v1/users/reset-password/:token', () => {
   it('Should return error if user tries to reset password password not matching', (done) => {
     chai.request(app)
-      .post(`/api/v1/reset-password/${userToken}`)
+      .post(`/api/v1/users/reset-password/${userToken}`)
       .send(dummyUser.resetPasswordUnmatch)
       .end((err, res) => {
         if (err) done(err);
@@ -617,10 +617,10 @@ describe('POST /api/v1/reset-password/:token', () => {
       });
   });
 });
-describe('POST /api/v1/reset-password/:token', () => {
+describe('POST /api/v1/users/reset-password/:token', () => {
   it('Should return error if user tries to reset password without confirmin password', (done) => {
     chai.request(app)
-      .post(`/api/v1/reset-password/${userToken}`)
+      .post(`/api/v1/users/reset-password/${userToken}`)
       .send(dummyUser.resetMissingConfirmPassword)
       .end((err, res) => {
         if (err) done(err);
@@ -632,10 +632,10 @@ describe('POST /api/v1/reset-password/:token', () => {
       });
   });
 });
-describe('POST /api/v1/reset-password/:token', () => {
+describe('POST /api/v1/users/reset-password/:token', () => {
   it('Should return error if user tries to reset password with Invalid confirmin password', (done) => {
     chai.request(app)
-      .post(`/api/v1/reset-password/${userToken}`)
+      .post(`/api/v1/users/reset-password/${userToken}`)
       .send(dummyUser.numresetConfirmPassword)
       .end((err, res) => {
         if (err) done(err);
