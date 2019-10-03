@@ -24,7 +24,7 @@ export const up = (queryInterface, Sequelize) => queryInterface.createTable('Use
     unique: true,
   },
   password: {
-    allowNull: false,
+    allowNull: true,
     type: Sequelize.STRING,
   },
   role: {
