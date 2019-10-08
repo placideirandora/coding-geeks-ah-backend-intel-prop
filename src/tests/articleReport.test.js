@@ -1,6 +1,5 @@
 import chaiHttp from 'chai-http';
 import chai from 'chai';
-import fs from 'fs';
 import app from '../index';
 import dummy from './dummyData';
 import { User } from '../sequelize/models';
@@ -101,8 +100,7 @@ describe('POST /api/v1/articles/:articleSlug/reports', () => {
       .request(app)
       .post('/api/v1/articles')
       .set('Authorization', userToken3)
-      .field(dummyArticle.validArticle)
-      .attach('image', fs.readFileSync('src/tests/dummyData/avatar.jpg'), 'avatar.jpg')
+      .send(dummyArticle.validArticle)
       .end((err, res) => {
         if (err) done(err);
         articleSlug = res.body.article.slug;

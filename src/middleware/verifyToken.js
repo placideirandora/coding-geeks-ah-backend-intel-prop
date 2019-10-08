@@ -12,7 +12,10 @@ const verifyToken = async (req, res, next) => {
       }
       if (token) {
         const identifier = token.match(/\d+/g).join('');
-        const droppedToken = await DroppedToken.findOne({ where: { identifier }, logging: false });
+        const droppedToken = await DroppedToken.findOne({
+          where: { identifier },
+          logging: false
+        });
 
         // Return user logged out message
         if (droppedToken) {
