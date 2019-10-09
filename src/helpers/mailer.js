@@ -6,7 +6,7 @@ config();
 
 const sendEmail = async (action, to, token) => {
   const {
-    SENDGRID_API_KEY, EMAIL_SENDER, APP_URL, NODE_ENV
+    SENDGRID_API_KEY, EMAIL_SENDER, APP_URL, FRONTEND_URL, NODE_ENV
   } = process.env;
   mailer.setApiKey(SENDGRID_API_KEY);
   const verifySubject = 'Welcome to Authors Haven';
@@ -14,7 +14,7 @@ const sendEmail = async (action, to, token) => {
   const verifyLink = `${APP_URL}/verify-email/${token}`;
   const resetSubject = 'Reset your password - Authors Haven';
   const resetContent = '<h2>Reset Password</h2><p style="font-size: 1rem;">Please Reset your password by visiting the following link:</p>';
-  const resetLink = `${APP_URL}/reset-password/${token}`;
+  const resetLink = `${FRONTEND_URL}/reset-password/${token}`;
   const notifySubject = 'Notification - New Article';
   const notifyContent = `<h2>${token.ownerId} published new article</h2><p style="font-size: 1rem;">Please Click on a link below to read the article:</p>`;
   const notifyLink = `${token.url}`;
