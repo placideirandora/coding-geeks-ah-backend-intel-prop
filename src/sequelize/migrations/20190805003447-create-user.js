@@ -16,7 +16,7 @@ export const up = (queryInterface, Sequelize) => queryInterface.createTable('Use
   userName: {
     allowNull: false,
     type: Sequelize.STRING,
-    unique: true,
+    unique: false,
   },
   email: {
     allowNull: false,
@@ -24,7 +24,7 @@ export const up = (queryInterface, Sequelize) => queryInterface.createTable('Use
     unique: true,
   },
   password: {
-    allowNull: false,
+    allowNull: true,
     type: Sequelize.STRING,
   },
   role: {

@@ -516,7 +516,7 @@ describe('POST AND GET /api/v1/articles', () => {
         expect(res).to.be.an('object');
         expect(res.body)
           .to.have.keys('articles', 'firstPage', 'lastPage', 'currentPage', 'nextPage', 'previousPage');
-        expect(res.body.previousPage).to.deep.equal('http://localhost:3000/api/v1/articles?page=1&limit=1');
+        expect(res.body.previousPage).to.deep.equal('http://localhost:4000/api/v1/articles?page=1&limit=1');
         done();
       });
   });
