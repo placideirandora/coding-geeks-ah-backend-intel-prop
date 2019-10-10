@@ -1,6 +1,5 @@
 import chaiHttp from 'chai-http';
 import chai from 'chai';
-import fs from 'fs';
 import app from '../index';
 import dummy from './dummyData';
 
@@ -32,8 +31,7 @@ describe('POST AND GET AND DELETE /api/v1/Bookmarks', () => {
       .request(app)
       .post('/api/v1/articles')
       .set('Authorization', userToken1)
-      .field(dummyArticle.validArticle)
-      .attach('image', fs.readFileSync('src/tests/dummyData/avatar.jpg'), 'avatar.jpg')
+      .send(dummyArticle.validArticle)
       .end((err, res) => {
         if (err) done(err);
         articleSlug = res.body.article.slug;

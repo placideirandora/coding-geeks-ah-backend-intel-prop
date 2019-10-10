@@ -104,7 +104,8 @@ export default {
       description: validationRules.description,
       body: validationRules.body,
       category: validationRules.category,
-      tags: validationRules.tags
+      tags: validationRules.tags,
+      image: validationRules.image
     });
     const { error } = Joi.validate(req.body, createArticleSchema, options);
     if (error) {
@@ -120,7 +121,8 @@ export default {
       description: validationRules.updateDescription,
       body: validationRules.updateBody,
       category: validationRules.category,
-      tags: validationRules.tags
+      tags: validationRules.tags,
+      image: validationRules.image
     });
     const { error } = Joi.validate(req.body, updateArticleSchema, options);
     if (error) {
@@ -144,7 +146,7 @@ export default {
   },
   idInParamsValidation(req, res, next) {
     const idSchema = Joi.object().keys({
-      id: validationRules.id,
+      id: validationRules.id
     });
 
     const { error } = Joi.validate(req.params, idSchema, options);
@@ -157,7 +159,7 @@ export default {
   },
   idValidation(req, res, next) {
     const idSchema = Joi.object().keys({
-      articleId: validationRules.id,
+      articleId: validationRules.id
     });
 
     const { error } = Joi.validate(req.params, idSchema, options);
@@ -196,7 +198,7 @@ export default {
   commentParamsValidation(req, res, next) {
     const commentParamsSchema = Joi.object().keys({
       commentId: validationRules.commentId,
-      articleSlug: validationRules.articleSlug,
+      articleSlug: validationRules.articleSlug
     });
     const { error } = Joi.validate(req.params, commentParamsSchema, options);
     if (error) {
@@ -236,7 +238,7 @@ export default {
   },
   RoleParamsValidation(req, res, next) {
     const roleParamsSchema = Joi.object().keys({
-      role: validationRules.roleAsParam,
+      role: validationRules.roleAsParam
     });
     const { error } = Joi.validate(req.params, roleParamsSchema, options);
     if (error) {
@@ -248,7 +250,7 @@ export default {
   },
   permissionValidation(req, res, next) {
     const permissionSchema = Joi.object().keys({
-      permission: validationRules.permission,
+      permission: validationRules.permission
     });
     const { error } = Joi.validate(req.body, permissionSchema, options);
     if (error) {
@@ -260,7 +262,7 @@ export default {
   },
   idPermissionValidation(req, res, next) {
     const idSchema = Joi.object().keys({
-      permissionId: validationRules.permissionId,
+      permissionId: validationRules.permissionId
     });
     const { error } = Joi.validate(req.params, idSchema, options);
     if (error) {
@@ -269,5 +271,5 @@ export default {
       });
     }
     next();
-  },
+  }
 };

@@ -1,9 +1,7 @@
 import express from 'express';
-import connectmultiparty from 'connect-multiparty';
 import Article from '../controllers/articleController';
 import verifyToken from '../middleware/verifyToken';
 import Validation from '../middleware/validation';
-import ContentType from '../middleware/contentType';
 import ArticleMiddleware from '../middleware/articleMiddleware';
 import { isOwner, isAdmin } from '../middleware/findOwner';
 import articleRate from '../controllers/ratingController';
@@ -15,9 +13,7 @@ import checkPermissions from '../middleware/checkPermissions';
 
 const articlesRouter = express.Router();
 
-const connectMulti = connectmultiparty();
-
-articlesRouter.post('/', [verifyToken, permission.createArticle, checkPermissions, connectMulti, Validation.createArticleValidation, ContentType, Validation.imageValidation], Article.createArticle);
+articlesRouter.post('/', [verifyToken, permission.createArticle, checkPermissions, Validation.createArticleValidation], Article.createArticle);
 articlesRouter.get('/', ArticleMiddleware.validQueries, Article.getAllArticles);
 articlesRouter.get('/:slug', Article.getSingleArticle);
 articlesRouter.post('/:articleId/rate', [verifyToken, Validation.idValidation, ArticleMiddleware.checkRatedArticle], articleRate.rateArticle);
@@ -29,7 +25,7 @@ articlesRouter.get('/:articleSlug/comments', verifyToken, Article.retrieveCommen
 articlesRouter.patch('/:articleSlug/comments/:commentId', verifyToken, Validation.commentValidation, Validation.commentParamsValidation, Article.updateComment);
 articlesRouter.delete('/:articleSlug/comments/:commentId', verifyToken, Validation.commentParamsValidation, Article.deleteComment);
 articlesRouter.delete('/:slug', [verifyToken, permission.deleteArticle, checkPermissions, isOwner], Article.deteleArticle);
-articlesRouter.put('/:slug', [verifyToken, permission.updateArticle, checkPermissions, isOwner, connectMulti, Validation.updateArticleValidation, ContentType, Validation.imageValidation], Article.updateArticle);
+articlesRouter.put('/:slug', [verifyToken, permission.updateArticle, checkPermissions, isOwner, Validation.updateArticleValidation], Article.updateArticle);
 articlesRouter.post('/:slug/share/:option', [verifyToken, ArticleMiddleware.validPlatform], Article.shareArticle);
 articlesRouter.get('/:articleSlug/statistics', verifyToken, Article.readingStats);
 articlesRouter.post('/:articleSlug/reports', [verifyToken, Validation.reportValidation], Report.createReport);

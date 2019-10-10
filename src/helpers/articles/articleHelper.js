@@ -1,16 +1,16 @@
 import slugify from 'slug';
 import uniqid from 'uniqid';
 import { config } from 'dotenv';
-import cloudinary from 'cloudinary';
+// import cloudinary from 'cloudinary';
 import Sequelize from 'sequelize';
 
 config();
 const { Op } = Sequelize;
-cloudinary.config({
-  cloud_name: process.env.CLOUDINARY_NAME,
-  api_key: process.env.CLOUDINARY_API_KEY,
-  api_secret: process.env.CLOUDINARY_SECRET_KEY,
-});
+// cloudinary.config({
+//   cloud_name: process.env.CLOUDINARY_NAME,
+//   api_key: process.env.CLOUDINARY_API_KEY,
+//   api_secret: process.env.CLOUDINARY_SECRET_KEY,
+// });
 
 /**
  * @description creates a slug for articles
@@ -25,12 +25,12 @@ const slugGen = title => `${slugify(title, { lower: true })}-${uniqid.process()}
  * @param {object} filename
  * @returns {object} image url from cloudinary
  */
-const uploadImage = async (filename) => {
-  if (filename) {
-    const url = await cloudinary.v2.uploader.upload(filename.path);
-    return url.secure_url;
-  }
-};
+// const uploadImage = async (filename) => {
+//   if (filename) {
+//     const url = await cloudinary.v2.uploader.upload(filename.path);
+//     return url.secure_url;
+//   }
+// };
 
 /**
  * @description filters query parameters
@@ -66,4 +66,4 @@ const queryFilterer = (title, author, tags) => {
   };
 };
 
-export { slugGen, uploadImage, queryFilterer };
+export { slugGen, queryFilterer };
