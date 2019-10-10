@@ -1,10 +1,12 @@
 import chaiHttp from 'chai-http';
-import { config } from 'dotenv';
+import dotenv from 'dotenv';
 import chai from 'chai';
 import app from '../index';
 import dummy from './dummyData';
 import { Follow } from '../sequelize/models';
 import { genToken } from '../helpers/auth';
+
+dotenv.config();
 
 chai.use(chaiHttp);
 const { expect } = chai;
