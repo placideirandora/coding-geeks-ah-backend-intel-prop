@@ -57,7 +57,7 @@ app.use((error, req, res, next) => {
   });
 });
 
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 4000;
 
 db.sequelize.sync({ alter: false }).then(() => {
   console.log('Database Connected!');
