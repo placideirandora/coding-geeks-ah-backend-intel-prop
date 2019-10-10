@@ -25,9 +25,10 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cors());
 app.use(passport.initialize());
 passConfig(passport);
+
 app.use(
   session({
-    secret: process.env.SESSION_KEY,
+    secret: process.env.SECRET_KEY,
     resave: true,
     saveUninitialized: true
   })
@@ -56,7 +57,7 @@ app.use((error, req, res, next) => {
   });
 });
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 5000;
 
 db.sequelize.sync({ alter: false }).then(() => {
   console.log('Database Connected!');

@@ -4,22 +4,24 @@ export default {
     description: 'How to demonstrate growth mindsewt',
     tags: 'education',
     category: 'Eductaion',
-    body:
-      'is simply dummy text of the printing and typesetting industry Lorem Ipsum has'
+    body: 'is simply dummy text of the printing and typesetting industry Lorem Ipsum has',
+    image: 'https://res.cloudinary.com/jkadhuwa/image/upload/v1567676475/sphnqrtavsckekqbmzbg.jpg'
   },
   validArticleMine: {
     title: 'Testing my article Now',
     description: 'This is just a test of ratings',
     category: 'Eductaion',
     body:
-      'is simply dummy text of the printing and typesetting industry Lorem Ipsum has'
+      'is simply dummy text of the printing and typesetting industry Lorem Ipsum has',
+    image: 'https://res.cloudinary.com/jkadhuwa/image/upload/v1567676475/sphnqrtavsckekqbmzbg.jpg'
   },
   anotherArticle: {
     title: 'Growth mindset other',
     description: 'How to demonstrate growth mindsewt other',
     category: 'Eductaion',
     body:
-      'is simply dummy text of the printing and typesetting industry Lorem Ipsum has. Other'
+      'is simply dummy text of the printing and typesetting industry Lorem Ipsum has. Other',
+    image: 'https://res.cloudinary.com/jkadhuwa/image/upload/v1567676475/sphnqrtavsckekqbmzbg.jpg'
   },
   lessCategory: {
     title: 'Growth mindset',
@@ -41,7 +43,8 @@ export default {
     tags: 'Fixed mind, Confidence, low self-esteem, being super-cool',
     category: 'Public speaking',
     body:
-      'Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical'
+      'Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical',
+    image: 'https://res.cloudinary.com/jkadhuwa/image/upload/v1567676475/sphnqrtavsckekqbmzbg.jpg'
   },
   updateArticleLessTitle: {
     description: 'How to demonstrate growth mindset from a new perspective',
@@ -99,11 +102,11 @@ export default {
   },
   updateMissingBody: {
     description: 'How to demonstrate growth mindsewt',
-    tags: 'Bango, Hip-Hop, R&B',
+    tags: 'Bango, Hip-Hop, R&B'
   },
   updateMissingtags: {
     description: 'How to demonstrate growth mindsewt',
-    category: 'Music',
+    category: 'Music'
   },
   updateMissingCategory: {
     tags: 'Bango, Hip-Hop, R&B',

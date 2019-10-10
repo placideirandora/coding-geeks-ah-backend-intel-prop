@@ -2,9 +2,16 @@
 /* eslint-disable max-len */
 import { config } from 'dotenv';
 import {
-  User, Article, Reaction, Comment, Share, Statistic, Report, CommentHistory
+  User,
+  Article,
+  Reaction,
+  Comment,
+  Share,
+  Statistic,
+  Report,
+  CommentHistory
 } from '../sequelize/models';
-import { slugGen, uploadImage, queryFilterer } from '../helpers/articles/articleHelper';
+import { slugGen, queryFilterer } from '../helpers/articles/articleHelper';
 import readTime from '../helpers/articles/readTimeForArticle';
 import ShareArticleHelper from '../helpers/articles/shareHelper';
 import recordStats from '../helpers/articles/recordStats';
@@ -41,12 +48,17 @@ class ArticleController {
         body: body.trim()
       };
       if (req.body.tags) {
-        payload.tagList = req.body.tags.toLowerCase().trim().split(/[ ,]+/);
+        payload.tagList = req.body.tags
+          .toLowerCase()
+          .trim()
+          .split(/[ ,]+/);
       }
       if (req.body.category) {
         payload.category = req.body.category.trim();
       }
-      payload.images = await uploadImage(req.files.image);
+      if (req.body.image) {
+        payload.images = req.body.image;
+      }
       payload.slug = slugGen(title);
       payload.authorId = id;
       const article = await Article.create(payload);
@@ -77,7 +89,8 @@ class ArticleController {
       }
     } catch (err) {
       return res.status(400).json({
-        error: 'Please ensure Title or Description is not more than 255 characters'
+        error:
+          'Please ensure Title or Description is not more than 255 characters'
       });
     }
   }
@@ -96,7 +109,12 @@ class ArticleController {
       const { where } = queryFilterer(title, author, tags);
 
       const {
-        data, previous, next, pages, pageLimit, currentPage
+        data,
+        previous,
+        next,
+        pages,
+        pageLimit,
+        currentPage
       } = await Paginator(Article, {
         page,
         limit,
@@ -116,10 +134,22 @@ class ArticleController {
         });
       }
 
-      const previousURL = new URL(`?page=${previous}&limit=${pageLimit}`, `${process.env.APP_URL}/articles`);
-      const nextURL = new URL(`?page=${next}&limit=${pageLimit}`, `${process.env.APP_URL}/articles`);
-      const firstPage = new URL(`?page=1&limit=${pageLimit}`, `${process.env.APP_URL}/articles`);
-      const lastPage = new URL(`?page=${pages}&limit=${pageLimit}`, `${process.env.APP_URL}/articles`);
+      const previousURL = new URL(
+        `?page=${previous}&limit=${pageLimit}`,
+        `${process.env.APP_URL}/articles`
+      );
+      const nextURL = new URL(
+        `?page=${next}&limit=${pageLimit}`,
+        `${process.env.APP_URL}/articles`
+      );
+      const firstPage = new URL(
+        `?page=1&limit=${pageLimit}`,
+        `${process.env.APP_URL}/articles`
+      );
+      const lastPage = new URL(
+        `?page=${pages}&limit=${pageLimit}`,
+        `${process.env.APP_URL}/articles`
+      );
 
       data.map((article) => {
         const readTimeOfArticle = readTime(article.body);
@@ -150,20 +180,24 @@ class ArticleController {
     try {
       const article = {};
       const {
-        title, description, body, tags, category
+        title, description, body, tags, category, image
       } = req.body;
-      const originalArticle = await Article.findOne({ where: { slug: req.userData.slug, blocked: false } });
+      const originalArticle = await Article.findOne({
+        where: { slug: req.userData.slug, blocked: false }
+      });
       if (title) {
         article.title = title.trim();
         article.slug = slugGen(title.trim());
       }
-      article.description = description ? description.trim() : originalArticle.description;
+      article.description = description
+        ? description.trim()
+        : originalArticle.description;
       article.body = body ? body.trim() : originalArticle.body;
-      article.tagList = tags ? tags.trim().split(/[ ,]+/) : originalArticle.tags;
+      article.tagList = tags
+        ? tags.trim().split(/[ ,]+/)
+        : originalArticle.tags;
       article.category = category ? category.trim() : originalArticle.category;
-      if (req.files.image) {
-        article.images = await uploadImage(req.files.image);
-      }
+      article.images = image ? image.trim() : originalArticle.images;
       const updatedArticle = await Article.update(article, {
         where: { slug: req.userData.slug, blocked: false },
         returning: true,
@@ -216,7 +250,9 @@ class ArticleController {
       const likeVote = 1;
       const dislikeVote = 0;
 
-      const findArticle = await Article.findOne({ where: { slug: slugId, blocked: false } });
+      const findArticle = await Article.findOne({
+        where: { slug: slugId, blocked: false }
+      });
 
       if (!findArticle) {
         return res.status(404).json({
@@ -291,14 +327,20 @@ class ArticleController {
           );
 
           if (removeDislike) {
-            await Article.decrement({ dislikes: 1 }, { where: { slug: slugId } });
+            await Article.decrement(
+              { dislikes: 1 },
+              { where: { slug: slugId } }
+            );
             const likeArticleAgain = await Reaction.update(
               { likes: likeVote },
               { where: { articleSlug: slugId, userId: liker } }
             );
 
             if (likeArticleAgain) {
-              await Article.increment({ likes: 1 }, { where: { slug: slugId } });
+              await Article.increment(
+                { likes: 1 },
+                { where: { slug: slugId } }
+              );
               const updatedArticle = await Reaction.findOne({
                 where: { articleSlug: slugId, userId: liker }
               });
@@ -358,7 +400,9 @@ class ArticleController {
       const likeVote = 1;
       const dislikeVote = 0;
 
-      const findArticle = await Article.findOne({ where: { slug: slugId, blocked: false } });
+      const findArticle = await Article.findOne({
+        where: { slug: slugId, blocked: false }
+      });
 
       if (!findArticle) {
         return res.status(404).json({
@@ -408,7 +452,10 @@ class ArticleController {
             const updatedArticle = await Reaction.findOne({
               where: { articleSlug: slugId, userId: disliker }
             });
-            await Article.decrement({ dislikes: 1 }, { where: { slug: slugId } });
+            await Article.decrement(
+              { dislikes: 1 },
+              { where: { slug: slugId } }
+            );
 
             const { articleSlug, userId, dislikes } = updatedArticle;
 
@@ -439,7 +486,10 @@ class ArticleController {
             );
 
             if (dislikeArticleAgain) {
-              await Article.increment({ dislikes: 1 }, { where: { slug: slugId } });
+              await Article.increment(
+                { dislikes: 1 },
+                { where: { slug: slugId } }
+              );
               const updatedArticle = await Reaction.findOne({
                 where: { articleSlug: slugId, userId: disliker }
               });
@@ -463,7 +513,10 @@ class ArticleController {
           );
 
           if (dislikeArticleAgain) {
-            await Article.increment({ dislikes: 1 }, { where: { slug: slugId } });
+            await Article.increment(
+              { dislikes: 1 },
+              { where: { slug: slugId } }
+            );
             const updatedArticle = await Reaction.findOne({
               where: { articleSlug: slugId, userId: disliker }
             });
@@ -524,17 +577,19 @@ class ArticleController {
   }
 
   /**
- * @param  {object} req - Request object
- * @param {object} res - Response object
- * @returns {object} response
- *  @static
- */
+   * @param  {object} req - Request object
+   * @param {object} res - Response object
+   * @returns {object} response
+   *  @static
+   */
   static async shareArticle(req, res) {
     const { option } = req.params;
     const { slug } = req.params;
     const { id } = req.userData;
     const article = await ShareArticleHelper.findArticleBySlug(req.params.slug);
-    if (!article) { return res.status(404).json({ error: 'article not found' }); }
+    if (!article) {
+      return res.status(404).json({ error: 'article not found' });
+    }
     const result = await ShareArticleHelper.shareArticle(req);
     if (result) {
       const createShare = await Share.create({
@@ -545,7 +600,12 @@ class ArticleController {
         createdAt: new Date(),
         updatedAt: new Date()
       });
-      return res.status(201).json({ message: `Successfully shared the article on ${option}`, share: createShare });
+      return res
+        .status(201)
+        .json({
+          message: `Successfully shared the article on ${option}`,
+          share: createShare
+        });
     }
   }
 
@@ -576,7 +636,7 @@ class ArticleController {
       articleId: id,
       articleSlug: slugId,
       userId: commenter,
-      comment: comment.trim(),
+      comment: comment.trim()
     });
 
     return res.status(201).json({
@@ -618,7 +678,9 @@ class ArticleController {
 
     comment = comment.trim();
 
-    const findCommenter = await Comment.findOne({ where: { articleSlug: slugId, userId: commenter, id: specificComment } });
+    const findCommenter = await Comment.findOne({
+      where: { articleSlug: slugId, userId: commenter, id: specificComment }
+    });
 
     if (!findCommenter) {
       return res.status(404).json({
@@ -627,7 +689,9 @@ class ArticleController {
     }
 
     await Comment.update({ comment }, { where: { id: specificComment } });
-    const updatedComment = await Comment.findOne({ where: { id: specificComment } });
+    const updatedComment = await Comment.findOne({
+      where: { id: specificComment }
+    });
     await commentHistoryCreate(req, findCommenter);
 
     return res.status(200).json({
@@ -639,7 +703,7 @@ class ArticleController {
         likes: updatedComment.likes,
         dislikes: updatedComment.dislikes,
         updatedAt: updatedComment.updatedAt,
-        createdAt: updatedComment.createdAt,
+        createdAt: updatedComment.createdAt
       }
     });
   }
@@ -692,7 +756,9 @@ class ArticleController {
       });
     }
 
-    const removeComment = await Comment.destroy({ where: { articleSlug: slugId, userId: commenter, id: specificComment } });
+    const removeComment = await Comment.destroy({
+      where: { articleSlug: slugId, userId: commenter, id: specificComment }
+    });
 
     if (!removeComment) {
       return res.status(404).json({
@@ -721,7 +787,9 @@ class ArticleController {
       });
     }
 
-    const statistics = await Statistic.findOne({ where: { articleSlug: slugId } });
+    const statistics = await Statistic.findOne({
+      where: { articleSlug: slugId }
+    });
 
     if (!statistics) {
       return res.status(404).json({
@@ -751,7 +819,9 @@ class ArticleController {
       });
     }
 
-    const alreadyBlocked = await Article.findOne({ where: { slug: slugId, blocked: true } });
+    const alreadyBlocked = await Article.findOne({
+      where: { slug: slugId, blocked: true }
+    });
 
     if (alreadyBlocked) {
       return res.status(400).json({
@@ -775,7 +845,9 @@ class ArticleController {
   static async unblockArticle(req, res) {
     const slugId = req.params.articleSlug;
 
-    const findArticle = await Article.findOne({ where: { slug: slugId, blocked: true } });
+    const findArticle = await Article.findOne({
+      where: { slug: slugId, blocked: true }
+    });
 
     if (!findArticle) {
       return res.status(404).json({
@@ -788,7 +860,7 @@ class ArticleController {
     await Article.update({ blocked: false }, { where: { slug: slugId } });
 
     return res.status(200).json({
-      message: 'Article unblocked',
+      message: 'Article unblocked'
     });
   }
 
@@ -800,12 +872,22 @@ class ArticleController {
    */
   static async commentHistory(req, res) {
     const { commentId } = req.params;
-    const findHistory = await CommentHistory.findAll({ where: { commentId }, order: [['updatedAt', 'DESC']] });
+    const findHistory = await CommentHistory.findAll({
+      where: { commentId },
+      order: [['updatedAt', 'DESC']]
+    });
     const history = findHistory.length;
     if (!history) {
-      return res.status(404).json({ message: 'No edit history for this comment!' });
+      return res
+        .status(404)
+        .json({ message: 'No edit history for this comment!' });
     }
-    return res.status(200).json({ message: 'Successfully comment edit history retrieved', data: { commentHistory: findHistory } });
+    return res
+      .status(200)
+      .json({
+        message: 'Successfully comment edit history retrieved',
+        data: { commentHistory: findHistory }
+      });
   }
 }
 
