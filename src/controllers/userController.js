@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 import { config } from 'dotenv';
 import bcrypt from 'bcrypt';
 import passport from 'passport';
@@ -92,9 +93,7 @@ class Authentication {
     const registeredUser = await User.findOne({ where: { email: userEmail } });
     if (registeredUser) {
       User.update({ verified: true }, { where: { email: userEmail } });
-      return res.status(200).json({
-        message: `You have successfully verified your email: ${userEmail}. You can now sign into your account!`
-      });
+      return res.redirect('https://coding-geeks-frontend-staging.herokuapp.com/login');
     }
   }
 
