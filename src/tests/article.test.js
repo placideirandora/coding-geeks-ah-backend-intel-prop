@@ -1,10 +1,12 @@
 import chaiHttp from 'chai-http';
+import dotenv from 'dotenv';
 import chai from 'chai';
-import fs from 'fs';
 import app from '../index';
 import dummy from './dummyData';
 import { Follow } from '../sequelize/models';
 import { genToken } from '../helpers/auth';
+
+dotenv.config();
 
 chai.use(chaiHttp);
 const { expect } = chai;
@@ -108,29 +110,12 @@ describe('POST AND GET /api/v1/articles', () => {
   });
 });
 describe('POST AND GET /api/v1/articles', () => {
-  it('Should return error if wrong content-type is used', (done) => {
-    chai
-      .request(app)
-      .post('/api/v1/articles')
-      .set('content-type', 'application/json')
-      .set('Authorization', userToken1)
-      .send(dummyArticle.validArticle)
-      .end((err, res) => {
-        if (err) done(err);
-        expect(res).have.status(415);
-        expect(res.body).to.have.keys('error');
-        expect(res.body.error).to.deep.equal(
-          'Wrong content-type. Please change it to multipart/form-data and try again.'
-        );
-        done();
-      });
-  });
   it('Should return error if provided token is invalid', (done) => {
     chai
       .request(app)
       .post('/api/v1/articles')
       .set('Authorization', invalidToken)
-      .field(dummyArticle.validArticle)
+      .send(dummyArticle.validArticle)
       .end((err, res) => {
         if (err) done(err);
         expect(res).have.status(403);
@@ -145,7 +130,7 @@ describe('POST AND GET /api/v1/articles', () => {
       .request(app)
       .post('/api/v1/articles')
       .set('Authorization', userToken1)
-      .field('title', '')
+      .send('title', '')
       .end((err, res) => {
         if (err) done(err);
         expect(res).have.status(400);
@@ -159,7 +144,7 @@ describe('POST AND GET /api/v1/articles', () => {
       .request(app)
       .post('/api/v1/articles')
       .set('Authorization', userToken1)
-      .field(dummyArticle.incompleteTitle)
+      .send(dummyArticle.incompleteTitle)
       .end((err, res) => {
         if (err) done(err);
         expect(res).have.status(400);
@@ -173,7 +158,7 @@ describe('POST AND GET /api/v1/articles', () => {
       .request(app)
       .post('/api/v1/articles')
       .set('Authorization', userToken1)
-      .field(dummyArticle.missingDescription)
+      .send(dummyArticle.missingDescription)
       .end((err, res) => {
         if (err) done(err);
         expect(res).have.status(400);
@@ -187,7 +172,7 @@ describe('POST AND GET /api/v1/articles', () => {
       .request(app)
       .post('/api/v1/articles')
       .set('Authorization', userToken1)
-      .field(dummyArticle.incompleteDescription)
+      .send(dummyArticle.incompleteDescription)
       .end((err, res) => {
         if (err) done(err);
         expect(res).have.status(400);
@@ -201,7 +186,7 @@ describe('POST AND GET /api/v1/articles', () => {
       .request(app)
       .post('/api/v1/articles')
       .set('Authorization', userToken1)
-      .field(dummyArticle.missingBody)
+      .send(dummyArticle.missingBody)
       .end((err, res) => {
         if (err) done(err);
         expect(res).have.status(400);
@@ -215,7 +200,7 @@ describe('POST AND GET /api/v1/articles', () => {
       .request(app)
       .post('/api/v1/articles')
       .set('Authorization', userToken2)
-      .field(dummyArticle.lessCategory)
+      .send(dummyArticle.lessCategory)
       .end((err, res) => {
         if (err) done(err);
         expect(res).have.status(201);
@@ -228,7 +213,7 @@ describe('POST AND GET /api/v1/articles', () => {
       .request(app)
       .post('/api/v1/articles')
       .set('Authorization', userToken1)
-      .field(dummyArticle.incorrectCategory)
+      .send(dummyArticle.incorrectCategory)
       .end((err, res) => {
         if (err) done(err);
         expect(res).have.status(400);
@@ -242,7 +227,7 @@ describe('POST AND GET /api/v1/articles', () => {
       .request(app)
       .post('/api/v1/articles')
       .set('Authorization', userToken1)
-      .field(dummyArticle.incorrectTagList)
+      .send(dummyArticle.incorrectTagList)
       .end((err, res) => {
         if (err) done(err);
         expect(res).have.status(400);
@@ -256,7 +241,7 @@ describe('POST AND GET /api/v1/articles', () => {
       .request(app)
       .post('/api/v1/articles')
       .set('Authorization', userToken2)
-      .field(dummyArticle.lessTags)
+      .send(dummyArticle.lessTags)
       .end((err, res) => {
         if (err) done(err);
         expect(res).have.status(201);
@@ -269,8 +254,7 @@ describe('POST AND GET /api/v1/articles', () => {
       .request(app)
       .post('/api/v1/articles')
       .set('Authorization', userToken1)
-      .field(dummyArticle.validArticle)
-      .attach('image', fs.readFileSync('src/tests/dummyData/avatar.jpg'), 'avatar.jpg')
+      .send(dummyArticle.validArticle)
       .end((err, res) => {
         articleSlug = res.body.article.slug;
         if (err) done(err);
@@ -287,8 +271,7 @@ describe('POST AND GET /api/v1/articles', () => {
       .request(app)
       .post('/api/v1/articles')
       .set('Authorization', userToken1)
-      .field(dummyArticle.validArticle)
-      .attach('image', fs.readFileSync('src/tests/dummyData/avatar.jpg'), 'avatar.jpg')
+      .send(dummyArticle.validArticle)
       .end((err, res) => {
         articleSlug = res.body.article.slug;
         if (err) done(err);
@@ -516,7 +499,7 @@ describe('POST AND GET /api/v1/articles', () => {
         expect(res).to.be.an('object');
         expect(res.body)
           .to.have.keys('articles', 'firstPage', 'lastPage', 'currentPage', 'nextPage', 'previousPage');
-        expect(res.body.previousPage).to.deep.equal('http://localhost:4000/api/v1/articles?page=1&limit=1');
+        expect(res.body.previousPage).to.deep.equal(`${process.env.ARTICLE_URL}?page=1&limit=1`);
         done();
       });
   });
@@ -764,8 +747,7 @@ describe('POST LIKES OR DISLIKES /api/v1/comments/id/{like/dislike}', () => {
       .request(app)
       .post('/api/v1/articles')
       .set('Authorization', userToken1)
-      .field(dummyArticle.validArticle)
-      .attach('image', fs.readFileSync('src/tests/dummyData/avatar.jpg'), 'avatar.jpg')
+      .send(dummyArticle.validArticle)
       .end((err, res) => {
         if (err) done(err);
         articleSlug = res.body.article.slug;
@@ -1020,7 +1002,7 @@ describe('UPDATE /api/v1/articles/:slug', () => {
       .request(app)
       .put(`/api/v1/articles/${articleSlug}`)
       .set('Authorization', userToken1)
-      .field(dummyArticle.incorrectCategory)
+      .send(dummyArticle.incorrectCategory)
       .end((err, res) => {
         if (err) done(err);
         expect(res).have.status(400);
@@ -1034,7 +1016,7 @@ describe('UPDATE /api/v1/articles/:slug', () => {
       .request(app)
       .put(`/api/v1/articles/${articleSlug}`)
       .set('Authorization', userToken1)
-      .field(dummyArticle.incorrectTagList)
+      .send(dummyArticle.incorrectTagList)
       .end((err, res) => {
         if (err) done(err);
         expect(res).have.status(400);
@@ -1048,7 +1030,7 @@ describe('UPDATE /api/v1/articles/:slug', () => {
       .request(app)
       .put(`/api/v1/articles/${articleSlug}`)
       .set('Authorization', userToken1)
-      .field(dummyArticle.updateArticleLessTitle)
+      .send(dummyArticle.updateArticleLessTitle)
       .end((err, res) => {
         if (err) done(err);
         expect(res).have.status(200);
@@ -1062,7 +1044,7 @@ describe('UPDATE /api/v1/articles/:slug', () => {
       .request(app)
       .put(`/api/v1/articles/${articleSlug}`)
       .set('Authorization', userToken1)
-      .field(dummyArticle.updateArticleLessTitle)
+      .send(dummyArticle.updateArticleLessTitle)
       .end((err, res) => {
         if (err) done(err);
         expect(res).have.status(200);
@@ -1075,7 +1057,7 @@ describe('UPDATE /api/v1/articles/:slug', () => {
       .request(app)
       .put(`/api/v1/articles/${articleSlug}`)
       .set('Authorization', userToken1)
-      .field(dummyArticle.updateMissingDesc)
+      .send(dummyArticle.updateMissingDesc)
       .end((err, res) => {
         if (err) done(err);
         expect(res).have.status(200);
@@ -1090,7 +1072,7 @@ describe('UPDATE /api/v1/articles/:slug', () => {
       .request(app)
       .put(`/api/v1/articles/${articleSlug}`)
       .set('Authorization', userToken1)
-      .field(dummyArticle.updateMissingtags)
+      .send(dummyArticle.updateMissingtags)
       .end((err, res) => {
         if (err) done(err);
         expect(res).have.status(200);
@@ -1103,7 +1085,7 @@ describe('UPDATE /api/v1/articles/:slug', () => {
       .request(app)
       .put(`/api/v1/articles/${articleSlug}`)
       .set('Authorization', userToken1)
-      .field(dummyArticle.updateMissingBody)
+      .send(dummyArticle.updateMissingBody)
       .end((err, res) => {
         if (err) done(err);
         expect(res).have.status(200);
@@ -1118,7 +1100,7 @@ describe('UPDATE /api/v1/articles/:slug', () => {
       .request(app)
       .put(`/api/v1/articles/${articleSlug}`)
       .set('Authorization', userToken1)
-      .field(dummyArticle.updateMissingtags)
+      .send(dummyArticle.updateMissingtags)
       .end((err, res) => {
         if (err) done(err);
         expect(res).have.status(200);
@@ -1131,7 +1113,7 @@ describe('UPDATE /api/v1/articles/:slug', () => {
       .request(app)
       .put(`/api/v1/articles/${articleSlug}`)
       .set('Authorization', userToken1)
-      .field(dummyArticle.updateMissingCategory)
+      .send(dummyArticle.updateMissingCategory)
       .end((err, res) => {
         if (err) done(err);
         expect(res).have.status(200);
@@ -1144,8 +1126,7 @@ describe('UPDATE /api/v1/articles/:slug', () => {
       .request(app)
       .put(`/api/v1/articles/${articleSlug}`)
       .set('Authorization', userToken1)
-      .field(dummyArticle.updateArticleWithTitle)
-      .attach('image', fs.readFileSync('src/tests/dummyData/avatar.jpg'), 'avatar.jpg')
+      .send(dummyArticle.updateArticleWithTitle)
       .end((err, res) => {
         if (err) done(err);
         expect(res).have.status(200);
@@ -1220,8 +1201,7 @@ describe('POST /api/v1/articles/{articleId}/rate', () => {
       .request(app)
       .post('/api/v1/articles')
       .set('Authorization', userToken2)
-      .field(dummyArticle.validArticleMine)
-      .attach('image', fs.readFileSync('src/tests/dummyData/avatar.jpg'), 'avatar.jpg')
+      .send(dummyArticle.validArticleMine)
       .end((err, res) => {
         if (err) done(err);
         expect(res).have.status(201);

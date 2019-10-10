@@ -2,6 +2,18 @@
 import Joi from 'joi';
 
 export default {
+  image: Joi.string()
+    .regex(/(.*)\.jpg|\.png|\.jpeg/)
+    .error((errors) => {
+      errors.forEach((err) => {
+        switch (err.type) {
+          case 'any.allowOnly':
+            err.message = 'Image must be of these format .jpg .png .jpeg';
+            break;
+        }
+      });
+      return errors;
+    }),
   firstName: Joi.string()
     .min(2)
     .required()
