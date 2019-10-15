@@ -246,10 +246,16 @@ class Authentication {
    * @returns {object} returns an object containing a facebook profile
    */
   static async facebookLogin(req, res) {
+    const data = {
+      message: 'Welcome, You have successfully logged in with Google!',
+      user: {
+        username: req.user.userName,
+        email: req.user.email
+      },
+      token: genToken(req.user),
+    };
     try {
-      const token = genToken(req.user);
-
-      return res.redirect(`${process.env.FRONTEND_URL}?token=${token}`);
+      return res.redirect(`${process.env.FRONTEND_URL}?token=${data.token}`);
     } catch (e) {
       return res.redirect(`${process.env.FRONTEND_URL}`);
     }
@@ -261,10 +267,16 @@ class Authentication {
    * @returns {object} returns an object containing a google profile
    */
   static async googleLogin(req, res) {
+    const data = {
+      message: 'Welcome, You have successfully logged in with Google!',
+      user: {
+        username: req.user.userName,
+        email: req.user.email
+      },
+      token: genToken(req.user),
+    };
     try {
-      const token = genToken(req.user);
-
-      return res.redirect(`${process.env.FRONTEND_URL}?token=${token}`);
+      return res.redirect(`${process.env.FRONTEND_URL}?token=${data.token}`);
     } catch (e) {
       return res.redirect(`${process.env.FRONTEND_URL}`);
     }
@@ -276,10 +288,16 @@ class Authentication {
    * @returns {object} returns an object containing a google profile
    */
   static async twitterLogin(req, res) {
+    const data = {
+      message: 'Welcome, You have successfully logged in with Google!',
+      user: {
+        username: req.user.userName,
+        email: req.user.email
+      },
+      token: genToken(req.user),
+    };
     try {
-      const token = genToken(req.user);
-
-      return res.redirect(`${process.env.FRONTEND_URL}?token=${token}`);
+      return res.redirect(`${process.env.FRONTEND_URL}?token=${data.token}`);
     } catch (e) {
       return res.redirect(`${process.env.FRONTEND_URL}`);
     }
