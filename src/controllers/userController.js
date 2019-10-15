@@ -254,9 +254,9 @@ class Authentication {
       token: genToken(req.user),
     };
     try {
-      return res.redirect(`${process.env.FRONTEND_URL}?token=${data.token}`);
+      return res.redirect(`${process.env.FRONTEND_URL_REDIRECT}?token=${data.token}`);
     } catch (e) {
-      return res.redirect(`${process.env.FRONTEND_URL}`);
+      return res.redirect(`${process.env.FRONTEND_URL_REDIRECT}`);
     }
   }
 
@@ -275,9 +275,9 @@ class Authentication {
       token: genToken(req.user),
     };
     try {
-      return res.redirect(`${process.env.FRONTEND_URL}?token=${data.token}`);
+      return res.redirect(`${process.env.FRONTEND_URL_REDIRECT}?token=${data.token}`);
     } catch (e) {
-      return res.redirect(`${process.env.FRONTEND_URL}`);
+      return res.redirect(`${process.env.FRONTEND_URL_REDIRECT}`);
     }
   }
 
@@ -296,9 +296,9 @@ class Authentication {
       token: genToken(req.user),
     };
     try {
-      return res.redirect(`${process.env.FRONTEND_URL}?token=${data.token}`);
+      return res.redirect(`${process.env.FRONTEND_URL_REDIRECT}?token=${data.token}`);
     } catch (e) {
-      return res.redirect(`${process.env.FRONTEND_URL}`);
+      return res.redirect(`${process.env.FRONTEND_URL_REDIRECT}`);
     }
   }
 
