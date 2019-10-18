@@ -14,14 +14,13 @@ export const up = (queryInterface, Sequelize) => queryInterface.createTable('Use
     type: Sequelize.STRING,
   },
   userName: {
-    allowNull: false,
     type: Sequelize.STRING,
     unique: false,
   },
   email: {
     allowNull: false,
     type: Sequelize.STRING,
-    unique: true,
+    unique: false,
   },
   password: {
     allowNull: true,

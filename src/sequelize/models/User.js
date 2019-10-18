@@ -17,12 +17,13 @@ export default (sequelize, DataTypes) => {
         type: DataTypes.STRING,
       },
       userName: {
-        allowNull: false,
         type: DataTypes.STRING,
+        unique: false,
       },
       email: {
         allowNull: true,
         type: DataTypes.STRING,
+        unique: false,
       },
       password: {
         allowNull: true,
