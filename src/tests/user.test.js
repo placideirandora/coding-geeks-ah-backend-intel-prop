@@ -441,7 +441,7 @@ describe('POST /api/v1/users', () => {
         expect(res).have.status(400);
         expect(res).to.be.an('object');
         expect(res.body).to.have.keys('error');
-        expect(res.body.error).to.deep.equal('Passwords must much');
+        expect(res.body.error).to.deep.equal('Passwords must match');
         done();
       });
   });
@@ -505,7 +505,7 @@ describe('POST /api/v1/users/send-email', () => {
         expect(res).have.status(200);
         expect(res).to.be.an('object');
         expect(res.body).to.have.keys('message');
-        expect(res.body.message).to.deep.equal('Email sent, please check your email');
+        expect(res.body.message).to.deep.equal('Link to reset your password sent, please check your email');
         done();
       });
   });
@@ -612,7 +612,7 @@ describe('POST /api/v1/users/reset-password/:token', () => {
         expect(res).have.status(400);
         expect(res).to.be.an('object');
         expect(res.body).to.have.keys('error');
-        expect(res.body.error).to.deep.equal('Passwords must much');
+        expect(res.body.error).to.deep.equal('Passwords must match');
         done();
       });
   });

@@ -117,7 +117,7 @@ class Authentication {
     await sendEmail(action, email, userToken);
 
     return res.status(200).json({
-      message: 'Email sent, please check your email'
+      message: 'Link to reset your password sent, please check your email'
     });
   }
 
