@@ -125,7 +125,7 @@ export default {
         // eslint-disable-next-line default-case
         switch (err.type) {
           case 'any.allowOnly':
-            err.message = 'Passwords must much';
+            err.message = 'Passwords must match';
             break;
           case 'any.required':
             err.message = 'Confirm password is required';
