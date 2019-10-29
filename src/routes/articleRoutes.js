@@ -21,7 +21,7 @@ articlesRouter.get('/:articleId/rate', [verifyToken, Validation.idValidation, is
 articlesRouter.put('/:articleSlug/like', verifyToken, Article.likeArticle);
 articlesRouter.put('/:articleSlug/dislike', verifyToken, Article.dislikeArticle);
 articlesRouter.post('/:articleSlug/comments', [verifyToken, Validation.commentValidation], Article.commentArticle);
-articlesRouter.get('/:articleSlug/comments', verifyToken, Article.retrieveComments);
+articlesRouter.get('/:articleSlug/comments', Article.retrieveComments);
 articlesRouter.patch('/:articleSlug/comments/:commentId', verifyToken, Validation.commentValidation, Validation.commentParamsValidation, Article.updateComment);
 articlesRouter.delete('/:articleSlug/comments/:commentId', verifyToken, Validation.commentParamsValidation, Article.deleteComment);
 articlesRouter.delete('/:slug', [verifyToken, permission.deleteArticle, checkPermissions, isOwner], Article.deteleArticle);

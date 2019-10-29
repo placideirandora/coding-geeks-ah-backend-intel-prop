@@ -11,7 +11,11 @@ import {
   Report,
   CommentHistory
 } from '../sequelize/models';
-import { slugGen, queryFilterer } from '../helpers/articles/articleHelper';
+import {
+  slugGen,
+  queryFilterer,
+  getCommentCount
+} from '../helpers/articles/articleHelper';
 import readTime from '../helpers/articles/readTimeForArticle';
 import ShareArticleHelper from '../helpers/articles/shareHelper';
 import recordStats from '../helpers/articles/recordStats';
@@ -62,9 +66,7 @@ class ArticleController {
       payload.slug = slugGen(title);
       payload.authorId = id;
       const article = await Article.create(payload);
-      const {
-        slug, category, images, tagList, authorId
-      } = article;
+      const { slug, category, images, tagList, authorId } = article;
       if (article) {
         return res.status(201).json({
           article: {
@@ -151,12 +153,22 @@ class ArticleController {
         `${process.env.APP_URL}/articles`
       );
 
-      data.map((article) => {
+      data.map(article => {
         const readTimeOfArticle = readTime(article.body);
         article.get().readTime = readTimeOfArticle;
         article.readTime = readTime;
         return true;
       });
+
+      await Promise.all(
+        data.map(async article => {
+          const commentCount = await Comment.count({
+            where: { articleSlug: article.slug }
+          });
+          article.get().commentCount = commentCount;
+          return article;
+        })
+      );
       res.status(200).json({
         firstPage,
         previousPage: previousURL,
@@ -179,9 +191,7 @@ class ArticleController {
   static async updateArticle(req, res) {
     try {
       const article = {};
-      const {
-        title, description, body, tags, category, image
-      } = req.body;
+      const { title, description, body, tags, category, image } = req.body;
       const originalArticle = await Article.findOne({
         where: { slug: req.userData.slug, blocked: false }
       });
@@ -563,8 +573,11 @@ class ArticleController {
         });
       }
       const averageRatings = await ArticleRatelehelper.getRatings(article.id);
+      const commentCount = await Comment.count({
+        where: { articleSlug: req.params.slug }
+      });
       article.get().averageRatings = averageRatings;
-
+      article.get().commentCount = commentCount;
       const readTimeOfArticle = readTime(article.body);
       article.get().readTime = readTimeOfArticle;
       recordStats(article);
@@ -600,12 +613,10 @@ class ArticleController {
         createdAt: new Date(),
         updatedAt: new Date()
       });
-      return res
-        .status(201)
-        .json({
-          message: `Successfully shared the article on ${option}`,
-          share: createShare
-        });
+      return res.status(201).json({
+        message: `Successfully shared the article on ${option}`,
+        share: createShare
+      });
     }
   }
 
@@ -882,12 +893,10 @@ class ArticleController {
         .status(404)
         .json({ message: 'No edit history for this comment!' });
     }
-    return res
-      .status(200)
-      .json({
-        message: 'Successfully comment edit history retrieved',
-        data: { commentHistory: findHistory }
-      });
+    return res.status(200).json({
+      message: 'Successfully comment edit history retrieved',
+      data: { commentHistory: findHistory }
+    });
   }
 }
 
