@@ -1,8 +1,10 @@
 import slugify from 'slug';
 import uniqid from 'uniqid';
 import { config } from 'dotenv';
+
 // import cloudinary from 'cloudinary';
 import Sequelize from 'sequelize';
+import Comment from '../../sequelize/models/comment';
 
 config();
 const { Op } = Sequelize;
@@ -18,7 +20,8 @@ const { Op } = Sequelize;
  * @returns {object} slug
  */
 
-const slugGen = title => `${slugify(title, { lower: true })}-${uniqid.process()}`;
+const slugGen = title =>
+  `${slugify(title, { lower: true })}-${uniqid.process()}`;
 
 /**
  * @description uploads images to cloudinary
@@ -45,14 +48,24 @@ const queryFilterer = (title, author, tags) => {
       title: {
         [Op.iLike]: `%${title}%`
       },
-      where: Sequelize.where(Sequelize.fn('concat',
-        Sequelize.col('author.firstName'), ' ',
-        Sequelize.col('author.lastName'), ' ',
-        Sequelize.col('author.userName')), {
-        [Op.iLike]: `%${author}%`
-      }),
+      where: Sequelize.where(
+        Sequelize.fn(
+          'concat',
+          Sequelize.col('author.firstName'),
+          ' ',
+          Sequelize.col('author.lastName'),
+          ' ',
+          Sequelize.col('author.userName')
+        ),
+        {
+          [Op.iLike]: `%${author}%`
+        }
+      ),
       tagList: {
-        [Op.contains]: `${tags}`.toLocaleLowerCase().trim().split(/[ ,]+/)
+        [Op.contains]: `${tags}`
+          .toLocaleLowerCase()
+          .trim()
+          .split(/[ ,]+/)
       },
       blocked: false
     }
@@ -66,4 +79,14 @@ const queryFilterer = (title, author, tags) => {
   };
 };
 
-export { slugGen, queryFilterer };
+const getCommentCount = async (slug) => {
+  try {
+    const commentCount = await Comment.count({
+      where: { articleSlug: slug }
+    });
+    return commentCount;
+  } catch (error) {
+    throw error;
+  }
+};
+export { slugGen, queryFilterer, getCommentCount };

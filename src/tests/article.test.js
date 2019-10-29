@@ -578,6 +578,7 @@ describe('POST AND GET /api/v1/articles', () => {
           'description',
           'body',
           'category',
+          'commentCount',
           'tagList',
           'images',
           'authorId',
@@ -651,6 +652,7 @@ describe('POST AND GET /api/v1/articles', () => {
           'description',
           'body',
           'category',
+          'commentCount',
           'tagList',
           'images',
           'authorId',
@@ -662,6 +664,7 @@ describe('POST AND GET /api/v1/articles', () => {
           'author',
           'averageRatings',
           'readTime'
+
         );
         done();
       });
@@ -1245,6 +1248,7 @@ describe('POST /api/v1/articles/{articleId}/rate', () => {
           'body',
           'blocked',
           'category',
+          'commentCount',
           'tagList',
           'images',
           'authorId',
