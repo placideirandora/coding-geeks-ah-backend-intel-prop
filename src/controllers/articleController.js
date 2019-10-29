@@ -11,11 +11,7 @@ import {
   Report,
   CommentHistory
 } from '../sequelize/models';
-import {
-  slugGen,
-  queryFilterer,
-  getCommentCount
-} from '../helpers/articles/articleHelper';
+import { slugGen, queryFilterer, getCommentCount } from '../helpers/articles/articleHelper';
 import readTime from '../helpers/articles/readTimeForArticle';
 import ShareArticleHelper from '../helpers/articles/shareHelper';
 import recordStats from '../helpers/articles/recordStats';
@@ -52,10 +48,7 @@ class ArticleController {
         body: body.trim()
       };
       if (req.body.tags) {
-        payload.tagList = req.body.tags
-          .toLowerCase()
-          .trim()
-          .split(/[ ,]+/);
+        payload.tagList = req.body.tags.toLowerCase().trim().split(/[ ,]+/);
       }
       if (req.body.category) {
         payload.category = req.body.category.trim();
@@ -66,7 +59,9 @@ class ArticleController {
       payload.slug = slugGen(title);
       payload.authorId = id;
       const article = await Article.create(payload);
-      const { slug, category, images, tagList, authorId } = article;
+      const {
+        slug, category, images, tagList, authorId
+      } = article;
       if (article) {
         return res.status(201).json({
           article: {
@@ -91,8 +86,7 @@ class ArticleController {
       }
     } catch (err) {
       return res.status(400).json({
-        error:
-          'Please ensure Title or Description is not more than 255 characters'
+        error: 'Please ensure Title or Description is not more than 255 characters'
       });
     }
   }
@@ -111,12 +105,7 @@ class ArticleController {
       const { where } = queryFilterer(title, author, tags);
 
       const {
-        data,
-        previous,
-        next,
-        pages,
-        pageLimit,
-        currentPage
+        data, previous, next, pages, pageLimit, currentPage
       } = await Paginator(Article, {
         page,
         limit,
@@ -144,16 +133,13 @@ class ArticleController {
         `?page=${next}&limit=${pageLimit}`,
         `${process.env.APP_URL}/articles`
       );
-      const firstPage = new URL(
-        `?page=1&limit=${pageLimit}`,
-        `${process.env.APP_URL}/articles`
-      );
+      const firstPage = new URL(`?page=1&limit=${pageLimit}`, `${process.env.APP_URL}/articles`);
       const lastPage = new URL(
         `?page=${pages}&limit=${pageLimit}`,
         `${process.env.APP_URL}/articles`
       );
 
-      data.map(article => {
+      data.map((article) => {
         const readTimeOfArticle = readTime(article.body);
         article.get().readTime = readTimeOfArticle;
         article.readTime = readTime;
@@ -161,7 +147,7 @@ class ArticleController {
       });
 
       await Promise.all(
-        data.map(async article => {
+        data.map(async (article) => {
           const commentCount = await Comment.count({
             where: { articleSlug: article.slug }
           });
@@ -175,6 +161,7 @@ class ArticleController {
         currentPage,
         nextPage: nextURL,
         lastPage,
+        count: data.length,
         articles: data
       });
     } catch (err) {
@@ -191,7 +178,9 @@ class ArticleController {
   static async updateArticle(req, res) {
     try {
       const article = {};
-      const { title, description, body, tags, category, image } = req.body;
+      const {
+        title, description, body, tags, category, image
+      } = req.body;
       const originalArticle = await Article.findOne({
         where: { slug: req.userData.slug, blocked: false }
       });
@@ -199,13 +188,9 @@ class ArticleController {
         article.title = title.trim();
         article.slug = slugGen(title.trim());
       }
-      article.description = description
-        ? description.trim()
-        : originalArticle.description;
+      article.description = description ? description.trim() : originalArticle.description;
       article.body = body ? body.trim() : originalArticle.body;
-      article.tagList = tags
-        ? tags.trim().split(/[ ,]+/)
-        : originalArticle.tags;
+      article.tagList = tags ? tags.trim().split(/[ ,]+/) : originalArticle.tags;
       article.category = category ? category.trim() : originalArticle.category;
       article.images = image ? image.trim() : originalArticle.images;
       const updatedArticle = await Article.update(article, {
@@ -337,20 +322,14 @@ class ArticleController {
           );
 
           if (removeDislike) {
-            await Article.decrement(
-              { dislikes: 1 },
-              { where: { slug: slugId } }
-            );
+            await Article.decrement({ dislikes: 1 }, { where: { slug: slugId } });
             const likeArticleAgain = await Reaction.update(
               { likes: likeVote },
               { where: { articleSlug: slugId, userId: liker } }
             );
 
             if (likeArticleAgain) {
-              await Article.increment(
-                { likes: 1 },
-                { where: { slug: slugId } }
-              );
+              await Article.increment({ likes: 1 }, { where: { slug: slugId } });
               const updatedArticle = await Reaction.findOne({
                 where: { articleSlug: slugId, userId: liker }
               });
@@ -462,10 +441,7 @@ class ArticleController {
             const updatedArticle = await Reaction.findOne({
               where: { articleSlug: slugId, userId: disliker }
             });
-            await Article.decrement(
-              { dislikes: 1 },
-              { where: { slug: slugId } }
-            );
+            await Article.decrement({ dislikes: 1 }, { where: { slug: slugId } });
 
             const { articleSlug, userId, dislikes } = updatedArticle;
 
@@ -496,10 +472,7 @@ class ArticleController {
             );
 
             if (dislikeArticleAgain) {
-              await Article.increment(
-                { dislikes: 1 },
-                { where: { slug: slugId } }
-              );
+              await Article.increment({ dislikes: 1 }, { where: { slug: slugId } });
               const updatedArticle = await Reaction.findOne({
                 where: { articleSlug: slugId, userId: disliker }
               });
@@ -523,10 +496,7 @@ class ArticleController {
           );
 
           if (dislikeArticleAgain) {
-            await Article.increment(
-              { dislikes: 1 },
-              { where: { slug: slugId } }
-            );
+            await Article.increment({ dislikes: 1 }, { where: { slug: slugId } });
             const updatedArticle = await Reaction.findOne({
               where: { articleSlug: slugId, userId: disliker }
             });
@@ -889,9 +859,7 @@ class ArticleController {
     });
     const history = findHistory.length;
     if (!history) {
-      return res
-        .status(404)
-        .json({ message: 'No edit history for this comment!' });
+      return res.status(404).json({ message: 'No edit history for this comment!' });
     }
     return res.status(200).json({
       message: 'Successfully comment edit history retrieved',
