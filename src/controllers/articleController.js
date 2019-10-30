@@ -705,7 +705,17 @@ class ArticleController {
       });
     }
 
-    const comments = await Comment.findAll({ where: { articleSlug: slugId } });
+    const comments = await Comment.findAll({
+      order: [['createdAt', 'DESC']],
+      include: [
+        {
+          model: User,
+          as: 'Commenter',
+          attributes: ['userName', 'image']
+        }
+      ],
+      where: { articleSlug: slugId }
+    });
 
     if (!comments.length) {
       return res.status(404).json({
