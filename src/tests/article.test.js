@@ -470,7 +470,7 @@ describe('POST AND GET /api/v1/articles', () => {
         expect(res).have.status(200);
         expect(res).to.be.an('object');
         expect(res.body)
-          .to.have.keys('articles', 'count', 'firstPage', 'lastPage', 'currentPage', 'nextPage', 'previousPage');
+          .to.have.keys('articles', 'articlesCount', 'firstPage', 'lastPage', 'currentPage', 'nextPage', 'previousPage');
         done();
       });
   });
@@ -498,7 +498,7 @@ describe('POST AND GET /api/v1/articles', () => {
         expect(res).have.status(200);
         expect(res).to.be.an('object');
         expect(res.body)
-          .to.have.keys('articles', 'count', 'firstPage', 'lastPage', 'currentPage', 'nextPage', 'previousPage');
+          .to.have.keys('articles', 'articlesCount', 'firstPage', 'lastPage', 'currentPage', 'nextPage', 'previousPage');
         expect(res.body.previousPage).to.deep.equal(`${process.env.ARTICLE_URL}?page=1&limit=1`);
         done();
       });
@@ -513,7 +513,7 @@ describe('POST AND GET /api/v1/articles', () => {
         expect(res).have.status(200);
         expect(res).to.be.an('object');
         expect(res.body)
-          .to.have.keys('articles', 'count', 'firstPage', 'lastPage', 'currentPage', 'nextPage', 'previousPage');
+          .to.have.keys('articles', 'articlesCount', 'firstPage', 'lastPage', 'currentPage', 'nextPage', 'previousPage');
         done();
       });
   });
@@ -527,7 +527,7 @@ describe('POST AND GET /api/v1/articles', () => {
         expect(res).have.status(200);
         expect(res).to.be.an('object');
         expect(res.body)
-          .to.have.keys('articles', 'count', 'firstPage', 'lastPage', 'currentPage', 'nextPage', 'previousPage');
+          .to.have.keys('articles', 'articlesCount', 'firstPage', 'lastPage', 'currentPage', 'nextPage', 'previousPage');
         done();
       });
   });
@@ -541,7 +541,7 @@ describe('POST AND GET /api/v1/articles', () => {
         expect(res).have.status(200);
         expect(res).to.be.an('object');
         expect(res.body)
-          .to.have.keys('articles', 'count', 'firstPage', 'lastPage', 'currentPage', 'nextPage', 'previousPage');
+          .to.have.keys('articles', 'articlesCount', 'firstPage', 'lastPage', 'currentPage', 'nextPage', 'previousPage');
         done();
       });
   });
@@ -555,7 +555,7 @@ describe('POST AND GET /api/v1/articles', () => {
         expect(res).have.status(200);
         expect(res).to.be.an('object');
         expect(res.body)
-          .to.have.keys('articles', 'count', 'firstPage', 'lastPage', 'currentPage', 'nextPage', 'previousPage');
+          .to.have.keys('articles', 'articlesCount', 'firstPage', 'lastPage', 'currentPage', 'nextPage', 'previousPage');
         done();
       });
   });
@@ -569,7 +569,7 @@ describe('POST AND GET /api/v1/articles', () => {
         expect(res).have.status(200);
         expect(res).to.be.an('object');
         expect(res.body)
-          .to.have.keys('articles', 'count', 'firstPage', 'lastPage', 'currentPage', 'nextPage', 'previousPage');
+          .to.have.keys('articles', 'articlesCount', 'firstPage', 'lastPage', 'currentPage', 'nextPage', 'previousPage');
         expect(res.body.articles).to.be.an('array');
         expect(res.body.articles[0]).to.have.keys(
           'id',
@@ -603,7 +603,7 @@ describe('POST AND GET /api/v1/articles', () => {
         expect(res).have.status(200);
         expect(res).to.be.an('object');
         expect(res.body)
-          .to.have.keys('articles', 'count', 'firstPage', 'lastPage', 'currentPage', 'nextPage', 'previousPage');
+          .to.have.keys('articles', 'articlesCount', 'firstPage', 'lastPage', 'currentPage', 'nextPage', 'previousPage');
         done();
       });
   });
@@ -617,7 +617,7 @@ describe('POST AND GET /api/v1/articles', () => {
         expect(res).have.status(200);
         expect(res).to.be.an('object');
         expect(res.body)
-          .to.have.keys('articles', 'count', 'firstPage', 'lastPage', 'currentPage', 'nextPage', 'previousPage');
+          .to.have.keys('articles', 'articlesCount', 'firstPage', 'lastPage', 'currentPage', 'nextPage', 'previousPage');
         done();
       });
   });
@@ -631,7 +631,7 @@ describe('POST AND GET /api/v1/articles', () => {
         expect(res).have.status(200);
         expect(res).to.be.an('object');
         expect(res.body)
-          .to.have.keys('articles', 'count', 'firstPage', 'lastPage', 'currentPage', 'nextPage', 'previousPage');
+          .to.have.keys('articles', 'articlesCount', 'firstPage', 'lastPage', 'currentPage', 'nextPage', 'previousPage');
         done();
       });
   });

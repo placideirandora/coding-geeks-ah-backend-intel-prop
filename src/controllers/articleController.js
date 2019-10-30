@@ -11,7 +11,7 @@ import {
   Report,
   CommentHistory
 } from '../sequelize/models';
-import { slugGen, queryFilterer, getCommentCount } from '../helpers/articles/articleHelper';
+import { slugGen, queryFilterer } from '../helpers/articles/articleHelper';
 import readTime from '../helpers/articles/readTimeForArticle';
 import ShareArticleHelper from '../helpers/articles/shareHelper';
 import recordStats from '../helpers/articles/recordStats';
@@ -138,6 +138,8 @@ class ArticleController {
         `?page=${pages}&limit=${pageLimit}`,
         `${process.env.APP_URL}/articles`
       );
+      const allArticles = await Article.findAll({ where: { blocked: false } });
+      const articlesCount = allArticles.length;
 
       data.map((article) => {
         const readTimeOfArticle = readTime(article.body);
@@ -161,7 +163,7 @@ class ArticleController {
         currentPage,
         nextPage: nextURL,
         lastPage,
-        count: data.length,
+        articlesCount,
         articles: data
       });
     } catch (err) {

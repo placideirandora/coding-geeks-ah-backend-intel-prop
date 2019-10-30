@@ -4,7 +4,6 @@ import { config } from 'dotenv';
 
 // import cloudinary from 'cloudinary';
 import Sequelize from 'sequelize';
-import Comment from '../../sequelize/models/comment';
 
 config();
 const { Op } = Sequelize;
@@ -20,8 +19,7 @@ const { Op } = Sequelize;
  * @returns {object} slug
  */
 
-const slugGen = title =>
-  `${slugify(title, { lower: true })}-${uniqid.process()}`;
+const slugGen = title => `${slugify(title, { lower: true })}-${uniqid.process()}`;
 
 /**
  * @description uploads images to cloudinary
@@ -62,10 +60,7 @@ const queryFilterer = (title, author, tags) => {
         }
       ),
       tagList: {
-        [Op.contains]: `${tags}`
-          .toLocaleLowerCase()
-          .trim()
-          .split(/[ ,]+/)
+        [Op.contains]: `${tags}`.toLocaleLowerCase().trim().split(/[ ,]+/)
       },
       blocked: false
     }
@@ -79,14 +74,4 @@ const queryFilterer = (title, author, tags) => {
   };
 };
 
-const getCommentCount = async (slug) => {
-  try {
-    const commentCount = await Comment.count({
-      where: { articleSlug: slug }
-    });
-    return commentCount;
-  } catch (error) {
-    throw error;
-  }
-};
-export { slugGen, queryFilterer, getCommentCount };
+export { slugGen, queryFilterer };
