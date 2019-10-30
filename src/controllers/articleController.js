@@ -632,7 +632,7 @@ class ArticleController {
         dislikes: articleComment.dislikes,
         updatedAt: articleComment.updatedAt,
         createdAt: articleComment.createdAt,
-        commenter: {
+        Commenter: {
           username: userName,
           image
         }
@@ -698,6 +698,8 @@ class ArticleController {
    */
   static async retrieveComments(req, res) {
     const slugId = req.params.articleSlug;
+    const page = parseInt(req.query.page, 10);
+    const limit = parseInt(req.query.limit, 10);
 
     const findArticle = await Article.findOne({ where: { slug: slugId } });
 
@@ -707,7 +709,11 @@ class ArticleController {
       });
     }
 
-    const comments = await Comment.findAll({
+    const {
+      data, pages
+    } = await Paginator(Comment, {
+      page,
+      limit,
       order: [['createdAt', 'DESC']],
       include: [
         {
@@ -719,7 +725,7 @@ class ArticleController {
       where: { articleSlug: slugId }
     });
 
-    if (!comments.length) {
+    if (!data || !data.length) {
       return res.status(404).json({
         message: 'The article has no comments at the moment'
       });
@@ -727,7 +733,8 @@ class ArticleController {
 
     return res.status(200).json({
       message: 'Comments retrieved',
-      comments
+      pages,
+      data
     });
   }
 
