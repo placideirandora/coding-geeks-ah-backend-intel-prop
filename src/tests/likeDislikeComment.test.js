@@ -107,8 +107,8 @@ describe('POST LIKES OR DISLIKES /api/v1/comments/id/{like/dislike}', () => {
       .end((err, res) => {
         if (err) done(err);
         expect(res).have.status(200);
-        expect(res.body.comments[0].likes).to.equal(1);
-        expect(res.body.comments[0].dislikes).to.equal(0);
+        expect(res.body.data[0].likes).to.equal(1);
+        expect(res.body.data[0].dislikes).to.equal(0);
         done();
       });
   });
@@ -184,8 +184,8 @@ describe('POST LIKES OR DISLIKES /api/v1/comments/id/{like/dislike}', () => {
       .end((err, res) => {
         if (err) done(err);
         expect(res).have.status(200);
-        expect(res.body.comments[0].likes).to.equal(1);
-        expect(res.body.comments[0].dislikes).to.equal(0);
+        expect(res.body.data[0].likes).to.equal(1);
+        expect(res.body.data[0].dislikes).to.equal(0);
         done();
       });
   });
@@ -229,8 +229,8 @@ describe('POST LIKES OR DISLIKES /api/v1/comments/id/{like/dislike}', () => {
       .end((err, res) => {
         if (err) done(err);
         expect(res).have.status(200);
-        expect(res.body.comments[0].likes).to.equal(0);
-        expect(res.body.comments[0].dislikes).to.equal(0);
+        expect(res.body.data[0].likes).to.equal(0);
+        expect(res.body.data[0].dislikes).to.equal(0);
         done();
       });
   });
