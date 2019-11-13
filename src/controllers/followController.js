@@ -110,14 +110,20 @@ class Following {
       });
     }
 
-    await Promise.all(followingList.map(async (follower) => {
-      const userInfo = await User.findOne({ where: { id: follower.following } });
-      userList.push({
-        id: userInfo.dataValues.id,
-        username: userInfo.dataValues.userName,
-      });
-      return userList;
-    }));
+    await Promise.all(
+      followingList.map(async (follower) => {
+        const userInfo = await User.findOne({ where: { id: follower.following } });
+        userList.push({
+          id: userInfo.dataValues.id,
+          username: userInfo.dataValues.userName,
+          firstName: userInfo.dataValues.firstName,
+          lastName: userInfo.dataValues.lastName,
+          image: userInfo.dataValues.image,
+          bio: userInfo.dataValues.bio
+        });
+        return userList;
+      })
+    );
     return res.status(200).json({
       data: userList
     });
@@ -151,14 +157,20 @@ class Following {
       });
     }
 
-    await Promise.all(followersList.map(async (follower) => {
-      const userInfo = await User.findOne({ where: { id: follower.follower } });
-      userList.push({
-        id: userInfo.dataValues.id,
-        username: userInfo.dataValues.userName,
-      });
-      return userList;
-    }));
+    await Promise.all(
+      followersList.map(async (follower) => {
+        const userInfo = await User.findOne({ where: { id: follower.follower } });
+        userList.push({
+          id: userInfo.dataValues.id,
+          username: userInfo.dataValues.userName,
+          firstName: userInfo.dataValues.firstName,
+          lastName: userInfo.dataValues.lastName,
+          image: userInfo.dataValues.image,
+          bio: userInfo.dataValues.bio
+        });
+        return userList;
+      })
+    );
     return res.status(200).json({
       data: userList
     });
