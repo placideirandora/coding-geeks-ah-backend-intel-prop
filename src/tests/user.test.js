@@ -821,7 +821,7 @@ describe('GET /api/v1/profiles/:userName/following', () => {
         expect(res).to.be.an('object');
         expect(res.body).to.have.keys('data');
         expect(res.body.data).to.be.an('array');
-        expect(res.body.data[0]).to.have.keys('id', 'username');
+        expect(res.body.data[0]).to.have.keys('id', 'username', 'bio', 'firstName', 'image', 'lastName');
         done();
       });
   });
@@ -836,7 +836,7 @@ describe('GET /api/v1/profiles/:userName/followers', () => {
         expect(res).to.be.an('object');
         expect(res.body).to.have.keys('data');
         expect(res.body.data).to.be.an('array');
-        expect(res.body.data[0]).to.have.keys('id', 'username');
+        expect(res.body.data[0]).to.have.keys('id', 'username', 'bio', 'firstName', 'image', 'lastName');
         done();
       });
   });
