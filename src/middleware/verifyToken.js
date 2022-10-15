@@ -3,6 +3,7 @@ import { DroppedToken } from '../sequelize/models';
 
 const verifyToken = async (req, res, next) => {
   const token = req.headers.authorization || req.params.token;
+  console.log('header:', req.headers.authorization, 'param:', req.params.token);
   if (!token) {
     res.status(401).json({ error: 'Please log in or Register' });
   } else {

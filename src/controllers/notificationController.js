@@ -53,7 +53,7 @@ class NotificationController {
    */
   static async getNotification(req, res) {
     const { id } = req.userData;
-    const userNotification = await Notification.findAll({ where: { userId: id } });
+    const userNotification = await Notification.findAll({ where: { userId: id, status: 'unread' } });
     if (userNotification.length === 0) {
       return res.status(404).json({
         message: 'No notification found at the moment'

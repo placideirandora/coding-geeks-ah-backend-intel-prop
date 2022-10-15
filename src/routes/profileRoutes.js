@@ -19,7 +19,7 @@ profilesRouter.get('/:userName/following', verifyToken, UserFollow.getFollowingL
 profilesRouter.get('/:userName/followers', verifyToken, UserFollow.getFollowersList);
 profilesRouter.patch('/:username/notifications/:subscribe', [verifyToken, canEditProfile], Notification.optInOutNotificatation);
 profilesRouter.get('/notifications/all', verifyToken, Notification.getNotification);
-profilesRouter.patch('/notifications/:id/read', verifyToken, Notification.readOneNotification);
+profilesRouter.post('/notifications/:id/read', verifyToken, Notification.readOneNotification);
 profilesRouter.patch('/notifications/read/all', verifyToken, Notification.readAllNotification);
 
 export default profilesRouter;
